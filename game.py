@@ -6,9 +6,10 @@ from game_config import *
 
 
 def main():
-     #Initialisations
+    #Initialisations
     pg.init()
 
+    GameConfig.init()
     play = True
 
 
@@ -19,6 +20,9 @@ def main():
 
 def game_loop(window):
     quitting = False
+    gameState = GameState()
     while not quitting:
         gameState.draw(window)
         pg.display.update()
+
+main()

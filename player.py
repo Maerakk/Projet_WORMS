@@ -20,19 +20,21 @@ class Player(pg.sprite.Sprite):
 
 
         #Emplacement
-        self.rect = pg.Rect(x,GameConfig.Y_PLATEFORM - GameConfig.PLAYER_H,
+        self.rect = pg.Rect(x,
+                            GameConfig.Y_PLATEFORM - GameConfig.PLAYER_H,
                             GameConfig.PLAYER_W,
                             GameConfig.PLAYER_H
                             )
-        pg.sprite.Sprite.__init__(self)
 
         #Vitesse
         self.vx = 0
         self.vy = 0
 
         #Sprite
-        pg.sprite.Sprite.__init__(self)
+        # pg.sprite.Sprite.__init__(self)
 
+    def draw(self,window):
+        window.blit(self.image,self.rect.topleft)
 
     def on_ground(self):
         return self.rect.bottom == GameConfig.Y_PLATEFORM

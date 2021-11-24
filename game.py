@@ -19,6 +19,8 @@ def game_loop(window):
     # it will be at the end of each while loop
 
     quitting = False
+
+    arme_thrown_1_Time = False
     # this is really the game loop
     while not quitting:
 
@@ -34,14 +36,17 @@ def game_loop(window):
         next_move = get_next_move()
 
         # we recalculate the game state
-        game_state.advance_state(next_move)
+        game_state.advance_state(next_move, next_move.shoot)
 
         # and we redraw the game
         game_state.draw(window)
+        game_state.player.draw(window)
+        game_state.arme.draw(window)
         pg.display.update()
 
         # tick
         pg.time.delay(20)
+
 
 def get_next_move():
     next_move = Move()
@@ -51,21 +56,32 @@ def get_next_move():
     if keys[pg.K_LEFT]:
         next_move.left = True
     if keys[pg.K_UP]:
-        print("ok")
         next_move.jump = True
+
+    if keys[pg.K_LCTRL]:
+        next_move.shoot = True
+
     return next_move
+
+
+
 
 
 def main():
     # Initialisations
     pg.init()
-
     GameConfig.init()
     play = True
+
+    # Fenêtre
+    pg.display.set_caption("WORMS")
 
     while play:
         window = pg.display.set_mode((GameConfig.WINDOW_W, GameConfig.WINDOW_H))
         game_loop(window)
+
+    pg.quit()
+    quit()
 
 
 main()

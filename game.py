@@ -1,22 +1,7 @@
 import pygame as pg
 from game_state import *
 from game_config import *
-
-
-
-
-def main():
-    #Initialisations
-    pg.init()
-
-    GameConfig.init()
-    play = True
-
-
-    while play:
-        window = pg.display.set_mode((GameConfig.WINDOW_W, GameConfig.WINDOW_H))
-        game_loop(window)
-
+from move import *
 
 
 def game_loop(window):
@@ -57,5 +42,30 @@ def game_loop(window):
 
         # tick
         pg.time.delay(20)
+
+def get_next_move():
+    next_move = Move()
+    keys = pg.key.get_pressed()
+    if keys[pg.K_RIGHT]:
+        next_move.right = True
+    if keys[pg.K_LEFT]:
+        next_move.left = True
+    if keys[pg.K_UP]:
+        print("ok")
+        next_move.jump = True
+    return next_move
+
+
+def main():
+    # Initialisations
+    pg.init()
+
+    GameConfig.init()
+    play = True
+
+    while play:
+        window = pg.display.set_mode((GameConfig.WINDOW_W, GameConfig.WINDOW_H))
+        game_loop(window)
+
 
 main()

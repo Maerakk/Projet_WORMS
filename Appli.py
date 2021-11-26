@@ -1,4 +1,4 @@
-from gameScreen import *
+from game_screen import *
 
 
 

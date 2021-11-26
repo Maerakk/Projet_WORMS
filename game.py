@@ -21,6 +21,7 @@ def game_loop(window):
     quitting = False
 
     arme_thrown_1_Time = False
+    shoot = False
     # this is really the game loop
     while not quitting:
 
@@ -34,8 +35,8 @@ def game_loop(window):
 
         # on each loop we get the next move
         next_move = get_next_move()
-
         # we recalculate the game state
+
         game_state.advance_state(next_move, next_move.shoot)
 
         # and we redraw the game
@@ -79,6 +80,7 @@ def main():
     while play:
         window = pg.display.set_mode((GameConfig.WINDOW_W, GameConfig.WINDOW_H))
         game_loop(window)
+        play = False
 
     pg.quit()
     quit()

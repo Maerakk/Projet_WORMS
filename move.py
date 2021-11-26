@@ -4,3 +4,4 @@ class Move:
         self.right = False
         self.jump = False
         self.shoot = False
+        self.shootFinished = False

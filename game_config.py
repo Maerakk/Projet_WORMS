@@ -1,9 +1,12 @@
 import pygame as pg
 
+from AppliConfig import AppliConfig
+
 
 class GameConfig:
-    WINDOW_H = 800
-    WINDOW_W = 1000
+
+    WINDOW_W = AppliConfig.WINDOW_W
+    WINDOW_H = AppliConfig.WINDOW_H
 
     Y_PLATEFORM = 716
 
@@ -25,6 +28,6 @@ class GameConfig:
 
     @staticmethod
     def init():
-        GameConfig.BACKGROUND_IMG = pg.image.load('assets/samoyed.png')
+        GameConfig.BACKGROUND_IMG = AppliConfig.BACKGROUND_IMG
         GameConfig.STANDING_IMG = pg.image.load('assets/standing.png')
         GameConfig.BAT_IMG = pg.image.load('assets/bat1.png')

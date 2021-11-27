@@ -13,7 +13,7 @@ class WelcomeScreen:
 
     def __init__(self):
         """
-        lors de l'instantiation on met le choit a Start
+        lors de l'instantiation on met le choix a Start
         c'est en effet le choix par défaut
         """
         self.choice = WelcomeScreen.START

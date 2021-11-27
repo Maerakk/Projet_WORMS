@@ -35,7 +35,7 @@ class Player(pg.sprite.Sprite):
         # il faudra essayer de mettre le terrain autre part afin de ne pas l'intégrer au joueur
         self.terrain = terrain
 
-        y = self.terrain.builder.lagrange(x)
+        y = self.terrain.builder.lagrange(x)+5
         # Emplacement
         # on place le joueur a une coordonnée x et au y sur le graph généré
         self.rect = pg.Rect(x,
@@ -108,7 +108,7 @@ class Player(pg.sprite.Sprite):
         self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)
         # et on regarde si sa nouvelle position touche le sol ou pas
         if self.on_ground():
-            # si ou, on vérifie qu'il n'est pas dans le sol (+5 pour éviter les fausses colisions)
+            # si oui, on vérifie qu'il n'est pas dans le sol (+5 pour éviter les fausses colisions)
             self.rect.bottom = self.terrain.builder.lagrange(self.rect.midbottom[0]) + 5
             # et on applique la force appliqué par le joueur sur le personnage
             # cette force pouvant etre 0 ou GameConfig.FORCE_JUMP

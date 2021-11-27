@@ -18,7 +18,7 @@ class GameScreen:
         # Initialisations
         GameConfig.init()
 
-    def process(self,window):
+    def process(self, window):
         """
         le process correspond à l'execution de la fenetre et du contenu
         dans cette fonction on va donc appeler la game loop
@@ -60,15 +60,18 @@ class GameScreen:
 
             # on each loop we get the next move
             next_move = self.get_next_move()
+            if next_move.shoot:
+                shoot = True
+
             # we recalculate the game state
 
             game_state.advance_state(next_move, next_move.shoot)
 
             # and we redraw the game
             game_state.draw(window)
+            if shoot:
+                game_state.draw_shoot(window)
             pg.display.update()
-
-
 
     def get_next_move(self):
         """
@@ -87,6 +90,7 @@ class GameScreen:
             next_move.shoot = True
 
         return next_move
+
 
 if __name__ == '__main__':
     """

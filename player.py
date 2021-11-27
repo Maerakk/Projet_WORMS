@@ -14,11 +14,14 @@ class Player(pg.sprite.Sprite):
     RIGHT = 1
     NONE = 0
 
+    X = 0
+
     def __init__(self, x, terrain):
 
         # instantiation du parent
         super().__init__()
 
+        self.X = x
         # Attributs
         # pour la geston des animation (inutile pour l'instant)
         self.sprite_count = 0

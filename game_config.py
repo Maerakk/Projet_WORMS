@@ -17,7 +17,7 @@ class GameConfig:
     PLAYER_W = 64
     PLAYER_H = 64
 
-    DT = 0.7
+    DT = 0.2
     FORCE_LEFT = -20
     FORCE_RIGHT = -FORCE_LEFT
 
@@ -37,3 +37,4 @@ class GameConfig:
         GameConfig.STANDING_IMG = pg.image.load('assets/standing.png')
         GameConfig.STANDING_MASK = pg.mask.from_surface(GameConfig.STANDING_IMG)
         GameConfig.BAT_IMG = pg.image.load('assets/bat1.png')
+        GameConfig.BAT_MASK = pg.mask.from_surface(GameConfig.BAT_IMG)

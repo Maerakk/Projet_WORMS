@@ -20,7 +20,7 @@ class GameState:
         """
         self.terrain = Terrain()
         self.player = Player(200,self.terrain)
-        self.arme = Arme(self.player)
+        self.arme = Arme(self.player,self.terrain)
 
     def draw(self, window):
         """
@@ -36,8 +36,8 @@ class GameState:
         # puis le joueur
         self.player.draw(window)
         # puis les armes
-        self.arme.draw(window)
-
+    def draw_shoot(self,window):
+        self.arme.projectile.draw(window)
     def advance_state(self, next_move,arme_thrown):
         """
         advance state permet d'effectuer les calculs pour faire avancer le jeu

@@ -17,7 +17,7 @@ class GameConfig:
     PLAYER_W = 64
     PLAYER_H = 64
 
-    DT = 0.2
+    DT = 1
     FORCE_LEFT = -20
     FORCE_RIGHT = -FORCE_LEFT
 

@@ -4,9 +4,8 @@ from game_config import GameConfig
 
 class Player(pg.sprite.Sprite):
     """
-    Cette classe représente un joueur
-    (dans le cas d'ajout de plusieurs personnages pour un joueur nous appellerons cette classe personnage
-    ou chat)
+    This class can represent a player
+    (if there is multiple players for one user we will make child classes called "cat" or "character")
     """
 
     # CONSTANTES
@@ -18,24 +17,24 @@ class Player(pg.sprite.Sprite):
 
     def __init__(self, x, terrain):
 
-        # instantiation du parent
+        # Instantiation of the parent
         super().__init__()
 
         self.X = x
-        # Attributs
-        # pour la geston des animation (inutile pour l'instant)
+        # Attributes
+        # For the animations
         self.sprite_count = 0
         self.direction = Player.NONE
 
-        # Image du joueur
+        # Image of the player
         self.image = GameConfig.STANDING_IMG
-        # mask du joueur (pour gérer les collisions)
+        # Mask of the player (to manage collisions)
         self.mask = GameConfig.STANDING_MASK
-        # le terrain afin de pouvoir gérer les collisions
+        # The ground le terrain afin de pouvoir gérer les collisions
         # il faudra essayer de mettre le terrain autre part afin de ne pas l'intégrer au joueur
-        self.terrain = terrain
+        self.ground = terrain
 
-        y = self.terrain.builder.lagrange(x)
+        y = self.ground.builder.lagrange(x)
         # Emplacement
         # on place le joueur a une coordonnée x et au y sur le graph généré
         self.rect = pg.Rect(x,
@@ -54,30 +53,30 @@ class Player(pg.sprite.Sprite):
 
     def draw(self, window):
         """
-        fonction dessinant le joueur
-        :param window: fenetre sur laquelle dessiner le joueur
+        function that draws the player
+        :param window: window where the player will be drawn
         """
         window.blit(self.image, self.rect.topleft)
 
     def on_ground(self):
         """
-        fonction testant si le joueur touche le sol ou pas
-        :return: true si le joueur touche le sol false sinon
+        function testing is the player is touching the ground or not
+        :return: true if the player's touching the ground, false otherwise
         """
-        # on utilise ici la fonction collide_mask permettant d'utiliser les mask des entitées
-        return pg.sprite.collide_mask(self, self.terrain)
+        # we use the function collide_mask allowing use masks and entities
+        return pg.sprite.collide_mask(self, self.ground)
 
     def advance_state(self, next_move):
         """
-        advance state permet d'effectuer les calculs permettant au jeu d'avancer
-        les calculs consitent en la recherche de la prochaine position du joueur en fonction
-        de sa position initiale et des vecteurs qui lui sont imposés
-        :param next_move: le mouvement choisi par l'utilisateur
+        advance state  allows to make calculations to make the player move
+        the calculations consist in searching the next position of the player depending on its initial position and
+        vectors imposed on him
+        :param next_move: the move choose by the user
         """
         # Acceleration de base a 0
         fx = 0
         fy = 0
-        # puis, l'accélération est gérer en fonction de next_move
+        # Then the acceleration is handled depending next_move
         if next_move.left:
             fx = GameConfig.FORCE_LEFT
         if next_move.right:
@@ -86,35 +85,37 @@ class Player(pg.sprite.Sprite):
             fy = GameConfig.FORCE_JUMP
             print("if next_move")
 
-        # Vitesse de base a dt/dx(accélération)
+        # Basic speed at dt/dx (acceleration)
         self.vx = fx * GameConfig.DT
-        # par défaut on imagine que le joueur descend (la gravité lui est toujours appliqué,
-        # on la lui imputera ensuite si il touche le sol
-        # cela évite des bugs d'affichage et de "bounce" faisant rebondir frénétiquement le joueur sur le sol
+        # By default we imagine that the player is going down (gravity is always applied on him)
+        # If he's touching the ground we remove the gravity vector
+        # it avoid creating bugs like the "bounce" one making frenetically bounce the player on the ground
         self.vy = self.vy + GameConfig.GRAVITY * GameConfig.DT
 
-        # Position beaucoup de tests sont effectués
-        # le x de base correspond a la gauche du rectangle du joueur
+        # Position, a lot of testing is done to find the right value
+        # x is the left of the rectangle of the player
         x = self.rect.left
-        # on définit les vitesses min et max en x
+        # We define the max and min speeds on x
         vx_min = -x / GameConfig.DT
         vx_max = (GameConfig.WINDOW_W - GameConfig.PLAYER_W - x) / GameConfig.DT
-        # et on trouve la variable soit min soit max si la valeur demandé est hors des bornes
-        # soit la valeur demandé
+        # And we find the variable :
+        # either min or max if the asked value is out of the bounds
+        # either the asked value
         self.vx = min(self.vx, vx_max)
         self.vx = max(self.vx, vx_min)
 
-        # on bouge le rectangle comme si de rien était (il n'est pas afficher
-        self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)
-        # et on regarde si sa nouvelle position touche le sol ou pas
+        # We move the rectangle with the speed found (and the time derivative)
+        self.rect = self.rect.move(self.vx * GameConfig.DT/2, self.vy * GameConfig.DT)
+        # We look if its new position is touching the ground or not
         if self.on_ground():
-            # si ou, on vérifie qu'il n'est pas dans le sol (+5 pour éviter les fausses colisions)
-            self.rect.bottom = self.terrain.builder.lagrange(self.rect.midbottom[0]) + 5
-            # et on applique la force appliqué par le joueur sur le personnage
-            # cette force pouvant etre 0 ou GameConfig.FORCE_JUMP
+            # If it is we check if the player is not inside the ground
+            # +5 is to avoid false collisions
+            self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 5
+            # And we apply the force (fy) done by the user on the player
+            # This force can be 0 or GameConfig.FORCE_JUMP if the player is jumping
             self.vy = fy * GameConfig.DT
-            # on rebouge le rectangle en y uniquement
-            self.rect = self.rect.move(0, self.vy * GameConfig.DT)
+            # We move the rectangle one last time
+            self.rect = self.rect.move(0, self.vy * GameConfig.DT/2)
 
         # if next_move.left:
         # self.direction = Player.LEFT

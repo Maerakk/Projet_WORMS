@@ -16,24 +16,32 @@ class Projectile(pg.sprite.Sprite):
 
         self.terrain = terrain
 
+        # Position t=0
+        self.x0 = 50
+        self.y0 = 50
+        # Speed t=0
         self.vx = 0
         self.vy = 0
 
+        # Coefficients
         self.coeff_vx = 2
         self.coeff_vy = 0.8
 
-        y = self.terrain.builder.lagrange(player.X)
-
-        self.rect = pg.Rect(10,10,
+        # Creation of the rectangle that contains the projectile
+        self.rect = pg.Rect(self.x0,
+                            self.y0,
                             GameConfig.BAT_W,
                             GameConfig.BAT_H)
+
+        # Variable of the
         self.arme = arme
 
     def draw(self, window):
         window.blit(self.image, self.rect.topleft)
 
     def not_thrown(self):
-        return self.rect.top == GameConfig.PLAYER_H
+        return self.rect.top == self.y0 and self.rect.left == self.x0
+
 
     def on_floor(self):
         return pg.sprite.collide_mask(self, self.terrain)
@@ -73,4 +81,4 @@ class Projectile(pg.sprite.Sprite):
             self.arme.shootFinished = True
         # if self.on_floor():
         #     print("on floor")
-        self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)
+        self.rect = self.rect.move(self.vx * GameConfig.DT/10, self.vy * GameConfig.DT/10)

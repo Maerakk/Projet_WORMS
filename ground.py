@@ -3,7 +3,7 @@ from random import randint
 import pygame as pg
 
 from game_config import GameConfig
-from terrain_builder import TerrainBuilder
+from ground_builder import TerrainBuilder
 
 
 class Terrain(pg.sprite.Sprite):

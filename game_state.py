@@ -1,8 +1,8 @@
 import pygame as pg
 from game_config import *
 from player import *
-from arme import *
-from terrain import Terrain
+from weapon import *
+from ground import Terrain
 
 
 class GameState:
@@ -20,7 +20,7 @@ class GameState:
         """
         self.terrain = Terrain()
         self.player = Player(200,self.terrain)
-        self.arme = Arme(self.player,self.terrain)
+        self.arme = Weapon(self.player, self.terrain)
 
     def draw(self, window):
         """

@@ -2,7 +2,7 @@ import pygame as pg
 from game_state import *
 from game_config import *
 from move import *
-from terrain import *
+from ground import *
 
 
 class GameScreen:

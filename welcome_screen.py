@@ -69,18 +69,20 @@ class WelcomeScreen:
     def get_next_move(self):
         """
         cette fonction permet d'analyser les entrées de l'utilisateurs
-        :return: un choix si l'entrée est prise en compte par la fenetre
         """
         keys = pg.key.get_pressed()
         if keys[pg.K_UP] or keys[pg.K_DOWN]:
             if self.choice == WelcomeScreen.START:
-                return WelcomeScreen.CREDITS
+                self.choice = WelcomeScreen.CREDITS
             else:
-                return WelcomeScreen.START
-        return self.choice
+                self.choice = WelcomeScreen.START
 
     def process(self, window):
-        keys = pg.key.get_pressed()
+        """
+        le process correspond à l'execution de la fenetre et du contenu
+        dans cette fonction on va donc appeler next move et dessiner la fenetre
+        :param window: la fenetre dans la quelle le welcomeScreen doit s'executer
+        """
         quitting = False
         while not quitting:
             # at each event we retrieve the event and analyse it
@@ -92,6 +94,5 @@ class WelcomeScreen:
                     quitting = True
                 if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
                     return self.choice
-            self.choice = self.get_next_move()
+            self.get_next_move()
             self.draw(window)
-            pg.time.delay(60)

@@ -18,3 +18,7 @@ class AppliConfig:
     def init():
         AppliConfig.BACKGROUND_IMG = pg.image.load("assets/background.png")
         AppliConfig.ARROW_IMG = pg.image.load("assets/menu_arrow.png")
+        AppliConfig.LIST_TERRAIN_IMG = []
+        for i in range(6):
+            AppliConfig.LIST_TERRAIN_IMG.append(pg.image.load(f"assets/terrains_type/terrain{str(i)}.png"))
+        AppliConfig.TERRAIN_CHOICE_IMG = pg.image.load("assets/stage_selection.png")

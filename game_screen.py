@@ -11,13 +11,14 @@ class GameScreen:
     It is on this window that the user is when they open the game
     """
 
-    def __init__(self):
+    def __init__(self,terrain_stype):
         """
         To be functioning this class need GameConfig to be instanced
         """
         # Initialisations
         self.quitting = False
         GameConfig.init()
+        self.game_state = GameState(terrain_stype)
 
     def process(self, window):
         """
@@ -39,9 +40,9 @@ class GameScreen:
 
         # initializing a local gameState
         # it will represent the current gameState
-        game_state = GameState()
+
         # we draw the window the game is initialized
-        game_state.draw(window)
+        self.game_state.draw(window)
         # the window isn't refreshed for now
         # it will be at the end of each while loop
 
@@ -65,12 +66,12 @@ class GameScreen:
 
             # we recalculate the game state
 
-            game_state.advance_state(next_move, next_move.shoot)
+            self.game_state.advance_state(next_move, next_move.shoot)
 
             # and we redraw the game
-            game_state.draw(window)
+            self.game_state.draw(window)
             if shoot:
-                game_state.draw_shoot(window)
+                self.game_state.draw_shoot(window)
             pg.display.update()
 
     def get_next_move(self):

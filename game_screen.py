@@ -11,14 +11,14 @@ class GameScreen:
     It is on this window that the user is when they open the game
     """
 
-    def __init__(self,terrain_stype):
+    def __init__(self,ground_type):
         """
         To be functioning this class need GameConfig to be instanced
         """
         # Initialisations
         self.quitting = False
         GameConfig.init()
-        self.game_state = GameState(terrain_stype)
+        self.game_state = GameState(ground_type)
 
     def process(self, window):
         """

@@ -51,18 +51,21 @@ class Projectile(pg.sprite.Sprite):
             self.projectile_thrown(self, arme_thrown)
 
     def projectile_thrown(self, projectile_thrown):
-        # Speed of the projectile
+        # Force of the projectile before it's thrown
         fx = 0
         fy = 0
-        # If the projectile is thrown then its speed is equals to the force it's thrown
+        # If the projectile is thrown then its force is equals to the force it's thrown (it is the acceleration)
         if projectile_thrown:
             fy = GameConfig.FORCE_THROWN
 
-        # Vitesse
+        # Speed
+        # If the projectile isn't thrown yet it's speed is equal to its acceleration * time derivative
         if self.not_thrown():
             self.vy = fy * GameConfig.DT * self.coeff_vy
             self.vx = fx * GameConfig.DT * self.coeff_vx
         else:
+            # If the projectile is thrown then the equation of its abscissa is the same
+            # The equation for its ordinate is its previous ordinate + the force given by the gravity and the time derivative
             self.vy = self.vy + GameConfig.GRAVITY * GameConfig.DT
             self.vx = fx + GameConfig.GRAVITY * GameConfig.DT * self.coeff_vx
 

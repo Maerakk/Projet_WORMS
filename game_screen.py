@@ -16,6 +16,7 @@ class GameScreen:
         pour fonctionner, la classe a besoin d'initier GameConfig
         """
         # Initialisations
+        self.quitting = False
         GameConfig.init()
 
     def process(self, window):
@@ -28,6 +29,7 @@ class GameScreen:
         while play:
             self.game_loop(window)
             play = False
+        return self.quitting
 
     def game_loop(self, window):
         """
@@ -43,12 +45,10 @@ class GameScreen:
         # the window isn't refreshed for now
         # it will be at the end of each while loop
 
-        quitting = False
-
         arme_thrown_1_Time = False
         shoot = False
         # this is really the game loop
-        while not quitting:
+        while not self.quitting:
 
             # at each event we retrieve the event and analyse it
             # this is used only for quit event
@@ -56,7 +56,7 @@ class GameScreen:
             for event in pg.event.get():
                 # if it's a quit event (close button) then we put quit to True the we exit the loop and return
                 if event.type == pg.QUIT:
-                    quitting = True
+                    self.quitting = True
 
             # on each loop we get the next move
             next_move = self.get_next_move()

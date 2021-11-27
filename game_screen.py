@@ -2,24 +2,32 @@ import pygame as pg
 from game_state import *
 from game_config import *
 from move import *
+from terrain import *
 
 
 class GameScreen:
+    """
+    cette classe représente la fenetre du jeu en lui même,
+    c'est sur cette fenetre que le joueur arrive au début du jeu
+    """
 
     def __init__(self):
-        pass
-
-    def process(self,window):
+        """
+        pour fonctionner, la classe a besoin d'initier GameConfig
+        """
         # Initialisations
         GameConfig.init()
-        play = True
 
+    def process(self,window):
+        """
+        le process correspond à l'execution de la fenetre et du contenu
+        dans cette fonction on va donc appeler la game loop
+        :param window: la fenetre dans la quelle le jeu doit s'executer
+        """
+        play = True
         while play:
             self.game_loop(window)
             play = False
-
-        pg.quit()
-        quit()
 
     def game_loop(self, window):
         """
@@ -58,14 +66,15 @@ class GameScreen:
 
             # and we redraw the game
             game_state.draw(window)
-            game_state.player.draw(window)
-            game_state.arme.draw(window)
             pg.display.update()
 
-            # tick
-            pg.time.delay(20)
+
 
     def get_next_move(self):
+        """
+        cette fonction permet de connaitre le prochain moumevment a effectuer selon les entrées de l'utilisateur
+        :return: un objet de type Move dont les attributs correspondent aux actions demandés par le joueur
+        """
         next_move = Move()
         keys = pg.key.get_pressed()
         if keys[pg.K_RIGHT]:
@@ -74,13 +83,15 @@ class GameScreen:
             next_move.left = True
         if keys[pg.K_UP]:
             next_move.jump = True
-
         if keys[pg.K_LCTRL]:
             next_move.shoot = True
 
         return next_move
 
 if __name__ == '__main__':
+    """
+    cette partie du programme permet de lancer directement le jeu sans passer par les écrans d'acceuil et autres
+    """
     pg.init()
     AppliConfig.init()
     pg.display.set_caption("WORMS")

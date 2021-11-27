@@ -1,6 +1,6 @@
 import time
 
-from AppliConfig import AppliConfig
+from appli_config import AppliConfig
 from game_screen import *
 from welcome_screen import *
 
@@ -50,7 +50,6 @@ def main():
             time.sleep(1)
             current_screen.displayMessage(window,"(appuie sur entrer pour revenir au menu précédent)",50,AppliConfig.WINDOW_W/2,AppliConfig.WINDOW_H/2+50)
             pg.display.update()
-            print("yeeee")
             while not quitting:
                 # at each event we retrieve the event and analyse it
                 # this is used only for quit event

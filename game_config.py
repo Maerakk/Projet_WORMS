@@ -3,7 +3,7 @@ import pygame as pg
 
 class GameConfig:
     WINDOW_H = 800
-    WINDOW_W = 1000
+    WINDOW_W = 1400
 
     Y_PLATEFORM = 716
 

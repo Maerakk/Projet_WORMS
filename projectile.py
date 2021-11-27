@@ -21,14 +21,14 @@ def projectile_thrown(arme, projectile_thrown):
 
     # Position
     x = arme.rect.left
-    vx_max = (arme.player.rect.left + x) / GameConfig.DT
+    vx_max = 200
+    #vx_max = (arme.player.rect.left + x) / GameConfig.DT
     arme.vx = min(arme.vx, vx_max)
 
     y = arme.rect.top
-    vy_max = (arme.player.rect.top - y) / GameConfig.DT
+    vy_max = arme.rect.top - y / GameConfig.DT
+    #vy_max = (arme.player.rect.top - y) / GameConfig.DT
     arme.vy = min(arme.vy, vy_max)
-    print(arme.rect.top)
-    print(GameConfig.Y_PLATEFORM)
     if arme.rect.bottom == GameConfig.Y_PLATEFORM:
         print ("ok")
         arme.shootFinished = True

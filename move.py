@@ -1,6 +1,6 @@
 class Move:
     """
-    class permettant de définir les mouvement du joueur
+    Class allowing to define the movements chosen by the user
     """
     def __init__(self):
         self.left = False

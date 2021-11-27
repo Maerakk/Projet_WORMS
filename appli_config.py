@@ -4,10 +4,10 @@ import pygame as pg
 class AppliConfig:
 
     """
-    Définis plusieurs variable nécessaire au bon fonctionnement du jeu afin de ne pas les redéfinir a chaque fois et éviter des erreurs
-    Les dimensions de la fenetre, les couleurs, les images
-    On notera que la définition des images se fait dans une fonction a part puisqu'elle doivent etre définis après l'initialisation de pygame
-    De plus, on notera la présence d'un fichier game_config ne concernant la configuration que pour la game screen
+    Define several variables or constants needed for the proper functioning of the game so we do not need to define them
+    everytime we use them and void errors
+    The definition of the images is done in a function because they only need to be defined after the initialisation of
+    pygame
     """
 
     WINDOW_W = 1400

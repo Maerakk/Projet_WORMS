@@ -7,13 +7,13 @@ from ground import *
 
 class GameScreen:
     """
-    cette classe représente la fenetre du jeu en lui même,
-    c'est sur cette fenetre que le joueur arrive au début du jeu
+    Class that represent the window of the game in itself
+    It is on this window that the user is when they open the game
     """
 
     def __init__(self):
         """
-        pour fonctionner, la classe a besoin d'initier GameConfig
+        To be functioning this class need GameConfig to be instanced
         """
         # Initialisations
         self.quitting = False
@@ -21,9 +21,9 @@ class GameScreen:
 
     def process(self, window):
         """
-        le process correspond à l'execution de la fenetre et du contenu
-        dans cette fonction on va donc appeler la game loop
-        :param window: la fenetre dans la quelle le jeu doit s'executer
+        The process equals the execution of the window and its contents
+        We will call game_loop in this function
+        :param window: window where the game will play
         """
         play = True
         while play:
@@ -75,8 +75,8 @@ class GameScreen:
 
     def get_next_move(self):
         """
-        cette fonction permet de connaitre le prochain moumevment a effectuer selon les entrées de l'utilisateur
-        :return: un objet de type Move dont les attributs correspondent aux actions demandés par le joueur
+        Recongnize every next move to be make according to the entries of the user
+        :return: Move type object whose attributes equals the actions asked by the user
         """
         next_move = Move()
         keys = pg.key.get_pressed()
@@ -94,7 +94,7 @@ class GameScreen:
 
 if __name__ == '__main__':
     """
-    cette partie du programme permet de lancer directement le jeu sans passer par les écrans d'acceuil et autres
+    This part of the program allows to launch the game without seeing the welcome screen
     """
     pg.init()
     AppliConfig.init()

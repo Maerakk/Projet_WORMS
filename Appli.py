@@ -5,51 +5,53 @@ from game_screen import *
 from welcome_screen import *
 
 """
-Ceci correspond à l'application principale,
-c'est par ce programme qu'on lancera le jeu
-Ce programme apellera tour a tout et selon les besoins l'écran d'arrivée, de préparation du jeu et du jeu
+This is the main application
+This is by this program that we will launch the game
+This program will wall by tunrs and according to our needs the walcome scree, setting screen, main game screen
 """
 
 
 def main():
-
-    # on initialise pygame
+    # Pygame Initialisation
     pg.init()
-    # AppliConfig a besoin de déclarer certaines variables après l'initialisation de pygame (les images)
+    # AppliConfig needs to declare some variables after pygame initialisation (for instance the images)
     AppliConfig.init()
-    # on met un titre a la fenetre
+    # We give our window a caption
     pg.display.set_caption("Tout Cat-sser")
-    # on creer la fenetre (de type pg.display)
+    # We create the window (pg.display type)
     window = pg.display.set_mode((GameConfig.WINDOW_W, GameConfig.WINDOW_H))
 
     again = True
     while again:
-        # et on démare par le Welcome screen
+        # We start by the welcome screen
         current_screen = WelcomeScreen()
-        # on dessine le premier état du Welcome Screen
+        # We draw the first state of welcome screen
         current_screen.draw(window)
-        # et on process la fenetre ( on effectue les actions en fonction des entrées de l'utilisateur
+        # And we process the window
         next_screen = current_screen.process(window)
 
-        # une fois le process finis (l'utilisateur a appuyé sur entrée ou a quitté)
-        # on regarde la valeur de retour pour voir le choix effectuer par l'utilisateur
-        # c'est l'application qui fait le lien entre le Welcome Screen et le Game_Preparation_Screen
-        # le lien n'est pas direct
+        '''
+        Once the process is done (the user pushed entree or quite) we look the return value to see the choice done
+        This is the app that do the link between Welcome Screen and Game_Preparation_Screen
+        The link is not direct
+        '''
         if next_screen == WelcomeScreen.START:
-            # on change le current_screen
+            # We change the curren_screen
             current_screen = GameScreen()
-            # et a nouveau on le process
+            # And we process it again
             again = not current_screen.process(window)
 
 
         elif next_screen == WelcomeScreen.CREDITS:
-            window.blit(AppliConfig.BACKGROUND_IMG,(0,0))
-            current_screen.displayMessage(window,"ooops, c'est pas encore dévelloper sorry",50,AppliConfig.WINDOW_W/2,AppliConfig.WINDOW_H/2-50);
+            window.blit(AppliConfig.BACKGROUND_IMG, (0, 0))
+            current_screen.displayMessage(window, "ooops, c'est pas encore dévelloper sorry", 50,
+                                          AppliConfig.WINDOW_W / 2, AppliConfig.WINDOW_H / 2 - 50)
             pg.display.update()
             keys = pg.key.get_pressed()
             quitting = False
             time.sleep(1)
-            current_screen.displayMessage(window,"(appuie sur entrer pour revenir au menu précédent)",50,AppliConfig.WINDOW_W/2,AppliConfig.WINDOW_H/2+50)
+            current_screen.displayMessage(window, "(appuie sur entrer pour revenir au menu précédent)", 50,
+                                          AppliConfig.WINDOW_W / 2, AppliConfig.WINDOW_H / 2 + 50)
             pg.display.update()
             while not quitting:
                 # at each event we retrieve the event and analyse it
@@ -62,10 +64,10 @@ def main():
                         again = False
                     if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
                         quitting = True
-        else :
+        else:
             again = False
 
-    # a la fin de l'execution on quite pygame et le programme
+    # At the end of the execution we quit pygame and the program
     pg.quit()
     quit()
 

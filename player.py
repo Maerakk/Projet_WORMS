@@ -15,7 +15,7 @@ class Player(pg.sprite.Sprite):
 
     X = 0
 
-    def __init__(self, x, terrain):
+    def __init__(self, x, ground):
 
         # Instantiation of the parent
         super().__init__()
@@ -30,21 +30,21 @@ class Player(pg.sprite.Sprite):
         self.image = GameConfig.STANDING_IMG
         # Mask of the player (to manage collisions)
         self.mask = GameConfig.STANDING_MASK
-        # The ground le terrain afin de pouvoir gérer les collisions
-        # il faudra essayer de mettre le terrain autre part afin de ne pas l'intégrer au joueur
-        self.ground = terrain
+        # The ground to manage collisions
+        # We will need to put the ground somewhere else
+        self.ground = ground
 
         y = self.ground.builder.lagrange(x)
-        # Emplacement
-        # on place le joueur a une coordonnée x et au y sur le graph généré
+        # Location
+        # We put the player on the coordinates x and y on the generate graph
         self.rect = pg.Rect(x,
                             y - GameConfig.PLAYER_H,
                             GameConfig.PLAYER_W,
                             GameConfig.PLAYER_H
                             )
 
-        # Vitesse
-        # au départ le joueur de bouge pas
+        # Speed
+        # At the beginning the player isn't moving
         self.vx = 0
         self.vy = 0
 

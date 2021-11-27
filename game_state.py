@@ -7,45 +7,45 @@ from ground import Terrain
 
 class GameState:
     """
-    la classe GameState représente l'état du jeu a un moment précis (la position des joueurs, et autres)
+    Class that represent the state of the game at some point (player position etc.)
     """
 
     def __init__(self):
         """
-        lors de l'initialisation,
-        on place 3 attributs (ils changeront plus tard)
-        le terrain
-        le joueur (changera en liste de joueur ou deux joueurs)
-        les armes (peut etres enlever pour laisser uniquement en attribut de joueur ?)
+        During the initialisation
+        We place 3 attributes that will change later
+        The ground
+        The player (will be changed for a list of players)
+        The weapons (can be removed to be only player's attribute ?)
         """
-        self.terrain = Terrain()
-        self.player = Player(200,self.terrain)
-        self.arme = Weapon(self.player, self.terrain)
+        self.ground = Terrain()
+        self.player = Player(200, self.ground)
+        self.arme = Weapon(self.player, self.ground)
 
     def draw(self, window):
         """
-        cette fonction est appelé pour dessiner l'état du jeu
-        elle appelle la fonction draw de tout ses attributs
-        :param window: la fenetre dans laquelle dessiner
+        Called to draw the state of the game
+        Call every draw functions
+        :param window: the window where it's gonna be drawn
         """
-        # on empile les images donc le background en premier
+        # We pile the images so the background first
         window.blit(GameConfig.BACKGROUND_IMG, (0, 0))
-        # puis l'eau
-        # puis le terrain
-        window.blit(self.terrain.image,(0,0))
-        # puis le joueur
+        # Then water
+        # Then the ground
+        window.blit(self.ground.image, (0, 0))
+        # Then the player
         self.player.draw(window)
-        # puis les armes
-    def draw_shoot(self,window):
+
+    # We need an alone function to draw the weapons because they aren't always on screen
+    def draw_shoot(self, window):
         self.arme.projectile.draw(window)
-    def advance_state(self, next_move,arme_thrown):
+
+    def advance_state(self, next_move, arme_thrown):
         """
-        advance state permet d'effectuer les calculs pour faire avancer le jeu
-        cette méthode fait appel aux méthodes advance state des différent objets
+        Advance state allows to calculate needed to make the game furthers
+        This method call every others advance_state methods of all the objects
         :param next_move:
         :param arme_thrown:
-        :return:
         """
         self.player.advance_state(next_move)
         self.arme.advance_state(arme_thrown)
-

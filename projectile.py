@@ -28,8 +28,7 @@ def projectile_thrown(arme, projectile_thrown):
     y = arme.rect.top
     vy_max = arme.rect.top - y / GameConfig.DT
     #vy_max = (arme.player.rect.top - y) / GameConfig.DT
-    arme.vy = min(arme.vy, vy_max)
+    #arme.vy = min(arme.vy, vy_max)
     if arme.rect.bottom == GameConfig.Y_PLATEFORM:
-        print ("ok")
         arme.shootFinished = True
     arme.rect = arme.rect.move(arme.vx * GameConfig.DT, arme.vy * GameConfig.DT)

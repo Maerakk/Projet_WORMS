@@ -37,8 +37,5 @@ class Arme:
 
     def advance_state(self, arme_thrown):
         # Acceleration
-
-        if arme_thrown:
-            projectile_thrown(self, self.not_thrown())
         if not self.shootFinished:
-            projectile_thrown(self, self.not_thrown())
+            projectile_thrown(self, arme_thrown)

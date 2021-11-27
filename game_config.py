@@ -25,7 +25,7 @@ class GameConfig:
 
     #Jump
     GRAVITY = 9.81
-    FORCE_JUMP = -100
+    FORCE_JUMP = -80
 
     BAT_H = 32
     BAT_W = 32

@@ -97,3 +97,4 @@ class WelcomeScreen:
                     return self.choice
             self.get_next_move()
             self.draw(window)
+            pg.time.delay(60)

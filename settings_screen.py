@@ -63,7 +63,7 @@ class SettingScreen:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*20/60-5, AppliConfig.WINDOW_H*8/10-4))
         elif self.ground_choice == SettingScreen.GROUND3:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*30/60-5, AppliConfig.WINDOW_H*8/10-4))
-        elif self.ground_choice == SettingScreen.TERRAIN4:
+        elif self.ground_choice == SettingScreen.GROUND4:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*40/60-5, AppliConfig.WINDOW_H*8/10-4))
         elif self.ground_choice == SettingScreen.GROUND5:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*50/60-5, AppliConfig.WINDOW_H*8/10-4))
@@ -80,8 +80,6 @@ class SettingScreen:
         Recongnize every next move to be make according to the entries of the user
         """
         keys = pg.key.get_pressed()
-        print(keys[pg.K_LEFT])
-        print(keys[pg.K_RIGHT])
         if keys[pg.K_LEFT]:
             self.ground_choice -= 1
         if keys[pg.K_RIGHT]:
@@ -107,6 +105,5 @@ class SettingScreen:
                 if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
                     return self.ground_choice
             self.get_next_move()
-            print(self.ground_choice)
             self.draw(window)
-            pg.time.delay(40)
+            pg.time.delay(60)

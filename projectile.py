@@ -42,7 +42,6 @@ class Projectile(pg.sprite.Sprite):
     def not_thrown(self):
         return self.rect.top == self.y0 and self.rect.left == self.x0
 
-
     def on_floor(self):
         return pg.sprite.collide_mask(self, self.terrain)
 
@@ -81,4 +80,4 @@ class Projectile(pg.sprite.Sprite):
             self.arme.shootFinished = True
         # if self.on_floor():
         #     print("on floor")
-        self.rect = self.rect.move(self.vx * GameConfig.DT/10, self.vy * GameConfig.DT/10)
+        self.rect = self.rect.move(self.vx * GameConfig.DT / 10, self.vy * GameConfig.DT / 10)

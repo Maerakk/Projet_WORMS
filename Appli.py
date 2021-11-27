@@ -33,7 +33,7 @@ def main():
         '''
         Once the process is done (the user pushed entree or quite) we look the return value to see the choice done
         This is the app that do the link between Welcome Screen and Game_Preparation_Screen
-        The link is not direct
+        The link is not direct 
         '''
         if next_screen == WelcomeScreen.START:
             # We change the curren_screen

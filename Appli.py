@@ -39,7 +39,8 @@ def main():
             # on change le current_screen
             current_screen = GameScreen()
             # et a nouveau on le process
-            current_screen.process(window)
+            again = not current_screen.process(window)
+
 
         elif next_screen == WelcomeScreen.CREDITS:
             window.blit(AppliConfig.BACKGROUND_IMG,(0,0))

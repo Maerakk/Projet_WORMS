@@ -16,6 +16,7 @@ class GameScreen:
         pour fonctionner, la classe a besoin d'initier GameConfig
         """
         # Initialisations
+        self.quitting = False
         GameConfig.init()
 
     def process(self, window):
@@ -28,6 +29,7 @@ class GameScreen:
         while play:
             self.game_loop(window)
             play = False
+        return self.quitting
 
     def game_loop(self, window):
         """
@@ -42,9 +44,6 @@ class GameScreen:
         game_state.draw(window)
         # the window isn't refreshed for now
         # it will be at the end of each while loop
-
-
-        self.quitting = False
 
         arme_thrown_1_Time = False
         shoot = False

@@ -2,7 +2,7 @@ import pygame as pg
 from game_config import *
 from player import *
 from weapon import *
-from ground import Terrain
+from ground import Ground
 
 
 class GameState:
@@ -10,7 +10,7 @@ class GameState:
     Class that represent the state of the game at some point (player position etc. )
     """
 
-    def __init__(self):
+    def __init__(self,ground_type):
         """
         During the initialisation
         We place 3 attributes that will change later
@@ -18,8 +18,8 @@ class GameState:
         The player (will be changed for a list of players)
         The weapons (can be removed to be only player's attribute ?)
         """
-        self.ground = Terrain()
-        self.player = Player(200, self.ground)
+        self.ground = Ground(ground_type)
+        self.player = Player(200,self.ground)
         self.arme = Weapon(self.player, self.ground)
 
     def draw(self, window):

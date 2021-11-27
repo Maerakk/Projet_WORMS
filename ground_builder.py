@@ -5,7 +5,7 @@ import pygame as pg
 from game_config import GameConfig
 
 
-class TerrainBuilder:
+class GroundBuilder:
 
 	def __init__(self, terrain_type):
 		list_point = []
@@ -54,7 +54,7 @@ class TerrainBuilder:
 	def lagrange(self, x):
 		"""
 		this function calculates f(x) such as f is a function that passes by all list_point
-		we use lagrange polynome for this
+		we use lagrange polynomial for this
 		:param x: the x value
 		:return: f(x)
 		"""
@@ -74,19 +74,34 @@ class TerrainBuilder:
 
 	def build(self):
 
-		# on va construire un masque a appliquer sur l'image de terre
-		mask = Image.new(mode='RGBA', size=(GameConfig.WINDOW_W, GameConfig.WINDOW_H), color=(0, 0, 0, 0))
-		# ce masque correspond a une courbe dont on a posé des points données pendant l'initialisation
+		# we are going to build a mask to put on top of a dirt and a grass image to construct the ground
+		mask_grass = Image.new(mode='RGBA', size=(GameConfig.WINDOW_W, GameConfig.WINDOW_H), color=(0, 0, 0, 0))
+		mask_dirt = Image.new(mode='RGBA', size=(GameConfig.WINDOW_W, GameConfig.WINDOW_H), color=(0, 0, 0, 0))
+		# this mask is a graph constructed from the lagrange func
+		# we will color each pixel one by one whether or not they are under the graph
 		for pixel_x in range(GameConfig.WINDOW_W):
+			# as we travel from columns to columns, we can generate the graph for each column instead of for each pixel
 			y_graph = self.lagrange(pixel_x)
 			for pixel_y in range(GameConfig.WINDOW_H):
+				# as the positives are going towards the bottom we look if pixel_y is greater than y_graph
 				if pixel_y > y_graph:
-					mask.putpixel((pixel_x, pixel_y), (255, 255, 255))
+					mask_grass.putpixel((pixel_x, pixel_y), (255, 255, 255))
+				if pixel_y > y_graph+10:
+					mask_dirt.putpixel((pixel_x, pixel_y), (255, 255, 255))
 
-		ground = Image.open("assets/ground.png")
-		terrain = Image.new(mode='RGBA', size=(GameConfig.WINDOW_W, GameConfig.WINDOW_H), color=(0, 0, 0, 0))
-		terrain.paste(ground, (0, 0), mask)
-		terrain.save('./assets/terrain.png', format='png')
+		# we create a new image which will be the final ground
+		ground = Image.new(mode='RGBA', size=(GameConfig.WINDOW_W, GameConfig.WINDOW_H), color=(0, 0, 0, 0))
+
+		# then we create the grass py pasting a grass pictures and applying the grass mask
+		grass = Image.open("assets/grass.png")
+		ground.paste(grass, (0, 0), mask_grass)
+
+		# and create the dirt the same way
+		dirt = Image.open("assets/dirt.png")
+		ground.paste(dirt, (0, 0), mask_dirt)
+
+		# finally we save the image
+		ground.save('./assets/ground.png', format='png')
 
 
 if __name__ == '__main__':
@@ -99,9 +114,9 @@ if __name__ == '__main__':
 	window = pg.display.set_mode((WIDTH, HEIGHT))
 	choice = randint(0, 5)
 	print(choice)
-	builder = TerrainBuilder(window, choice);
+	builder = GroundBuilder(choice);
 	builder.build()
-	to_blit = pg.image.load('assets/terrain.png')
+	to_blit = pg.image.load('assets/ground.png')
 	window.blit(GameConfig.BACKGROUND_IMG, (0, 0))
 	window.blit(to_blit, (0, 0))
 	pg.display.update()

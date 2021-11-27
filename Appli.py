@@ -2,12 +2,13 @@ import time
 
 from appli_config import AppliConfig
 from game_screen import *
+from settings_screen import SettingScreen
 from welcome_screen import *
 
 """
 This is the main application
 This is by this program that we will launch the game
-This program will show by turns and according to our needs the welcome screen, setting screen, main game screen
+This program will show by tunrs and according to our needs the walcome scree, setting screen, main game screen
 """
 
 
@@ -37,9 +38,14 @@ def main():
         '''
         if next_screen == WelcomeScreen.START:
             # We change the curren_screen
-            current_screen = GameScreen()
+            current_screen = SettingScreen()
             # And we process it again
-            again = not current_screen.process(window)
+            terrain_type = current_screen.process(window)
+            if terrain_type == 6:
+                again = False
+            else:
+                current_screen = GameScreen(terrain_type)
+                again = not current_screen.process(window)
 
 
         elif next_screen == WelcomeScreen.CREDITS:

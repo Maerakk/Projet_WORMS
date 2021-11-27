@@ -3,22 +3,23 @@ from random import randint
 import pygame as pg
 
 from game_config import GameConfig
-from ground_builder import TerrainBuilder
+from ground_builder import GroundBuilder
 
 
-class Terrain(pg.sprite.Sprite):
+class Ground(pg.sprite.Sprite):
     """
-    cette classe définit un terrain et fait appel a un TerrainBuilder pour etre construite
-    elle hérite de la classe Sprite afin de gérer les collisions
+    this class defines a ground and calls a GroundBuilder to be built
+    it inherits from the Sprite class to generate mask and compute collisions
     """
-    def __init__(self):
-        # on initialise le parent
+    def __init__(self,ground_type):
+        # parents initiation
         super().__init__()
-        # on crée le réctangle (toute la fenetre)
+        # rect creation (the whole window)
         self.rect = (0,0,GameConfig.WINDOW_W,GameConfig.WINDOW_H)
-        # on construit le terrain en fonction du mode choisi (aléatoire pour l'instant)
-        self.builder = TerrainBuilder(0)
+        # building the ground given a ground_type
+        self.builder = GroundBuilder(ground_type)
         self.builder.build()
-        # on load l'image et le mask pour les collisions
-        self.image = pg.image.load("assets/terrain.png")
+        # loading the image and storing it
+        self.image = pg.image.load("assets/ground.png")
+        # creating mask from image for collision
         self.mask = pg.mask.from_surface(self.image)

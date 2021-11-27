@@ -7,7 +7,7 @@ from welcome_screen import *
 """
 This is the main application
 This is by this program that we will launch the game
-This program will wall by tunrs and according to our needs the walcome scree, setting screen, main game screen
+This program will show by turns and according to our needs the welcome screen, setting screen, main game screen
 """
 
 

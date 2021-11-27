@@ -7,7 +7,7 @@ from ground import Terrain
 
 class GameState:
     """
-    Class that represent the state of the game at some point (player position etc.)
+    Class that represent the state of the game at some point (player position etc. )
     """
 
     def __init__(self):

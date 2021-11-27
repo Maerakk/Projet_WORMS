@@ -1,9 +1,16 @@
 import pygame as pg
 
+from appli_config import AppliConfig
+
 
 class GameConfig:
-    WINDOW_H = 800
-    WINDOW_W = 1400
+    """
+    Définis plusieurs variable nécessaire au bon fonctionnement du jeu afin de ne pas les redéfinir a chaque fois et éviter des erreurs
+    Les dimensions de la fenetre, les couleurs, les images
+    On notera que la définition des images se fait dans une fonction a part puisqu'elle doivent etre définis après l'initialisation de pygame
+    """
+    WINDOW_W = AppliConfig.WINDOW_W
+    WINDOW_H = AppliConfig.WINDOW_H
 
     Y_PLATEFORM = 716
 
@@ -25,6 +32,8 @@ class GameConfig:
 
     @staticmethod
     def init():
-        GameConfig.BACKGROUND_IMG = pg.image.load('assets/samoyed.png')
+        AppliConfig.init()
+        GameConfig.BACKGROUND_IMG = AppliConfig.BACKGROUND_IMG
         GameConfig.STANDING_IMG = pg.image.load('assets/standing.png')
+        GameConfig.STANDING_MASK = pg.mask.from_surface(GameConfig.STANDING_IMG)
         GameConfig.BAT_IMG = pg.image.load('assets/bat1.png')

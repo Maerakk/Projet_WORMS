@@ -1,6 +1,6 @@
-from projectile import *
+from weapon import *
 
 
-class Grenade(Projectile):
+class Sheep(Weapon):
     def init(self):
-        self.mass = 0.0005
+        self.shootFinished = False

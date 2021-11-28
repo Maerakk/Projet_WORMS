@@ -3,6 +3,7 @@ from game_config import *
 from player import *
 from weapon import *
 from ground import Ground
+from weapons import *
 
 
 class GameState:
@@ -21,6 +22,7 @@ class GameState:
         self.ground = Ground(ground_type)
         self.player = Player(200,self.ground)
         self.weapon = Weapon(self.player, self.ground)
+        self.bazooka = Bazooka(self.player,self.ground)
 
     def draw(self, window):
         """
@@ -42,10 +44,11 @@ class GameState:
 
     def advance_state(self, next_move, arme_thrown):
         """
-        Advance state allows to calculate needed to make the game furthers
+        Advance state allows to calculate needed variables to make the game furthers
         This method call every others advance_state methods of all the objects
         :param next_move:
         :param arme_thrown:
         """
         self.player.advance_state(next_move)
-        self.weapon.advance_state(arme_thrown)
+        self.bazooka.advance_state(next_move.weapon_bazooka)
+

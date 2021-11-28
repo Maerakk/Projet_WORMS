@@ -63,6 +63,8 @@ class GameScreen:
             next_move = self.get_next_move()
             if next_move.shoot:
                 shoot = True
+            if next_move.weapon_grenade:
+                print("grenade")
 
             # we recalculate the game state
 
@@ -90,6 +92,14 @@ class GameScreen:
             next_move.left = True
         if keys[pg.K_UP]:
             next_move.jump = True
+        if keys[pg.K_1]:
+            next_move.weapon_grenade = True
+        if keys[pg.K_2]:
+            next_move.weapon_bazooka = True
+        if keys[pg.K_3]:
+            next_move.weapon_sheep = True
+        if keys[pg.K_4]:
+            next_move.weapon_sheep_controlled = True
         if keys[pg.K_LCTRL]:
             next_move.shoot = True
 

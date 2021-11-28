@@ -9,9 +9,9 @@ from game_state import *
 class Projectile(pg.sprite.Sprite):
     def __init__(self, player, weapon, ground):
         # Sprite
-        self.shootFinished = None
         self.sprite_count = 0
         super().__init__()
+        self.shootFinished = None
 
         self.image = GameConfig.BAT_IMG
         self.mask = GameConfig.BAT_MASK
@@ -30,10 +30,7 @@ class Projectile(pg.sprite.Sprite):
         self.coeff_vy = 0
 
         # Creation of the rectangle that contains the projectile
-        self.rect = pg.Rect(self.x0,
-                            self.y0,
-                            GameConfig.BAT_W,
-                            GameConfig.BAT_H)
+        self.rect = pg.rect.Rect(0,0,0,0)
 
         # Variable of the projectile
         self.weapon = weapon
@@ -43,10 +40,8 @@ class Projectile(pg.sprite.Sprite):
         self.fx = 0
         self.fy = 0
 
-        self.bounce = 8
         # elasticity
-        self.k = 0.9
-
+        self.k = 0
 
     def draw(self, window):
         window.blit(self.image, self.rect.topleft)
@@ -93,9 +88,9 @@ class Projectile(pg.sprite.Sprite):
         #     print("on floor")
         self.rect = self.rect.move(self.vx, self.vy)
         # If if would wand to do the things right we could add a parameter that checks the gradient of the ground to add a multiplying factor according to its degree
-        if pg.sprite.collide_mask(self,self.ground):
+        if pg.sprite.collide_mask(self, self.ground):
             self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
-            if abs(self.vy)>5:
+            if abs(self.vy) > 5:
                 first_point = self.ground.builder.lagrange(self.rect.midbottom[0])
                 second_point = self.ground.builder.lagrange(self.rect.right + 10)
                 if self.vx < 0:
@@ -118,10 +113,8 @@ class Projectile(pg.sprite.Sprite):
                 if self.on_floor():
                     self.vx = self.fx
                     self.vy = self.fy
-                else :
+                else:
                     self.vx = self.vx
                     self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
-                self.bounce-=1
             else:
                 self.weapon.shootFinished = True
-

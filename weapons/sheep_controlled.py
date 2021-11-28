@@ -1,6 +1,6 @@
 from weapon import *
 
 
-class SheepTeleguided(Weapon):
+class SheepControlled(Weapon):
     def init(self):
         self.shootFinished = False

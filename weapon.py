@@ -14,7 +14,7 @@ class Weapon:
         self.shootFinished = False
         self.projectile = None
         self.image = None
-        self.rect =
+        self.rect = None
 
 
     def draw(self, window):

@@ -1,5 +1,5 @@
 from weapon import *
 
-class GrenadeWeapon(Weapon):
+class Grenade(Weapon):
     def init(self):
         self.shootFinished = False

@@ -3,7 +3,11 @@ from game_config import *
 from player import *
 from weapon import *
 from ground import Ground
-from weapons import *
+from weapons import Bazooka
+from weapons import Grenade
+from weapons import Gun
+from weapons import Sheep
+from weapons import SheepControlled
 
 
 class GameState:
@@ -23,6 +27,9 @@ class GameState:
         self.player = Player(200,self.ground)
         self.weapon = Weapon(self.player, self.ground)
         self.bazooka = Bazooka(self.player,self.ground)
+        self.grenade = Grenade(self.player,self.ground)
+        self.sheep = Sheep(self.player, self.ground)
+        self.sheep_controlled = SheepControlled(self.player, self.ground)
 
     def draw(self, window):
         """
@@ -42,6 +49,16 @@ class GameState:
     def draw_shoot(self, window):
         self.weapon.projectile.draw(window)
 
+    def draw_weapon(self, window,move):
+        if move.weapon_grenade:
+            self.grenade.draw(window)
+        if move.weapon_bazooka:
+            self.bazooka.draw(window)
+        if move.weapon_sheep:
+            self.sheep.draw(window)
+        if move.weapon_sheep_controlled:
+            self.sheep_controlled.draw(window)
+
     def advance_state(self, next_move, arme_thrown):
         """
         Advance state allows to calculate needed variables to make the game furthers
@@ -50,5 +67,4 @@ class GameState:
         :param arme_thrown:
         """
         self.player.advance_state(next_move)
-        self.bazooka.advance_state(next_move.weapon_bazooka)
 

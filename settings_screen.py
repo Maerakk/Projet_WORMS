@@ -5,27 +5,28 @@ from appli_config import AppliConfig
 
 class SettingScreen:
     """
-    Cette classe représente la fenetre de choix avant le jeu
-    6 variables staiques représentants les valeurs associés aux choix des terrains
+    Class that represent the Setting Screen
+    It is on this window that the user is when they click on start
+    the next 6 variables defines value for type of ground
     """
 
-    TERRAIN0 = 0
-    TERRAIN1 = 1
-    TERRAIN2 = 2
-    TERRAIN3 = 3
-    TERRAIN4 = 4
-    TERRAIN5 = 5
+    GROUND0 = 0
+    GROUND1 = 1
+    GROUND2 = 2
+    GROUND3 = 3
+    GROUND4 = 4
+    GROUND5 = 5
 
     def __init__(self):
         """
-        lors de l'instanciation on met le choix a TERRAIN0
+        initialisation we put ground choice to 0
         """
-        self.terrain_choice = SettingScreen.TERRAIN0
+        self.ground_choice = SettingScreen.GROUND0
 
     def draw(self, window):
         """
-        cette fonction permet de dessiner la fenetre
-        :param window: la fenetre dans laquelle dessiner le settingScreen
+        this function draws the window
+        :param window: window which we should draw in
         """
         window.blit(AppliConfig.BACKGROUND_IMG,(0,0))
         self.displayMessage(window, "Tout Cat-sser", 150, AppliConfig.WINDOW_W / 2, AppliConfig.WINDOW_H / 5)
@@ -34,14 +35,14 @@ class SettingScreen:
 
     def displayMessage(self, window, text, fontSize, x, y, color=AppliConfig.DARK_YELLOW):
         """
-        cette fonction permet d'afficher
-        :param window: dans la fenetre windown
-        :param text: un text text
-        :param fontSize: de taille fontSize
-        :param x: au coordonnées x
+        this function displays
+        :param window: in a window
+        :param text: a text
+        :param fontSize: of size fontSize
+        :param x: at coordinates x
         :param y: y
-        :param color: et de couleur color (DARK_YELLOW par défaut)
-        cette fonction est récupérée du tp1
+        :param color: of color color (DARK_YELLOW by default)
+        took from tp1
         """
         font = pg.font.Font('assets/BradBunR.ttf', fontSize)
         img = font.render(text, True, color)
@@ -50,17 +51,21 @@ class SettingScreen:
         window.blit(img, displayRect)
 
     def choose(self, window):
-        if self.terrain_choice == SettingScreen.TERRAIN0:
+        """
+        this function has for job to put the black square behind the right ground type
+        :param window:
+        """
+        if self.ground_choice == SettingScreen.GROUND0:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W/60-5, AppliConfig.WINDOW_H*8/10-4))
-        elif self.terrain_choice == SettingScreen.TERRAIN1:
+        elif self.ground_choice == SettingScreen.GROUND1:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*10/60-5, AppliConfig.WINDOW_H*8/10-4))
-        elif self.terrain_choice == SettingScreen.TERRAIN2:
+        elif self.ground_choice == SettingScreen.GROUND2:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*20/60-5, AppliConfig.WINDOW_H*8/10-4))
-        elif self.terrain_choice == SettingScreen.TERRAIN3:
+        elif self.ground_choice == SettingScreen.GROUND3:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*30/60-5, AppliConfig.WINDOW_H*8/10-4))
-        elif self.terrain_choice == SettingScreen.TERRAIN4:
+        elif self.ground_choice == SettingScreen.GROUND4:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*40/60-5, AppliConfig.WINDOW_H*8/10-4))
-        elif self.terrain_choice == SettingScreen.TERRAIN5:
+        elif self.ground_choice == SettingScreen.GROUND5:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*50/60-5, AppliConfig.WINDOW_H*8/10-4))
 
         window.blit(AppliConfig.LIST_TERRAIN_IMG[0], (AppliConfig.WINDOW_W/60, AppliConfig.WINDOW_H*8/10))
@@ -72,37 +77,33 @@ class SettingScreen:
 
     def get_next_move(self):
         """
-        cette fonction permet d'analyser les entrées de l'utilisateurs
-        :return: un choix si l'entrée est prise en compte par la fenetre
+        Recongnize every next move to be make according to the entries of the user
         """
         keys = pg.key.get_pressed()
-        print(keys[pg.K_LEFT])
-        print(keys[pg.K_RIGHT])
         if keys[pg.K_LEFT]:
-            self.terrain_choice -= 1
+            self.ground_choice -= 1
         if keys[pg.K_RIGHT]:
-            self.terrain_choice += 1
+            self.ground_choice += 1
 
-        if self.terrain_choice < 0:
-            self.terrain_choice = SettingScreen.TERRAIN5
-        if self.terrain_choice > 5:
-            self.terrain_choice = SettingScreen.TERRAIN0
+        if self.ground_choice < 0:
+            self.ground_choice = SettingScreen.GROUND5
+        if self.ground_choice > 5:
+            self.ground_choice = SettingScreen.GROUND0
 
     def process(self,window):
         """
-        le process correspond à l'execution de la fenetre et du contenu
-        dans cette fonction on va donc appeler next move et dessiner la fenetre
-        :param window: la fenetre dans la quelle le settingScreen doit s'executer
+        The process equals the execution of the window and its contents
+        We will call next move and draw
+        :param window: window where the settingScreen will display
         """
         quitting = False
         while not quitting:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     quitting = True
-                    self.terrain_choice = 6
+                    self.ground_choice = 6
                 if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
-                    return self.terrain_choice
+                    return self.ground_choice
             self.get_next_move()
-            print(self.terrain_choice)
             self.draw(window)
-            pg.time.delay(40)
+            pg.time.delay(60)

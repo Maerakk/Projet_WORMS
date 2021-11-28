@@ -10,8 +10,7 @@ class Weapon:
     def __init__(self, player,terrain):
         self.player = player
         self.terrain = terrain
-
-        self.nb_usages = 2
+        self.nb_usages = 0
         self.shootFinished = False
         self.projectile = Projectile(self.player,self,self.terrain)
 

@@ -35,9 +35,20 @@ class GameConfig:
 
     @staticmethod
     def init():
+        # Initialisations of all the images needed
         AppliConfig.init()
+        #Background
         GameConfig.BACKGROUND_IMG = AppliConfig.BACKGROUND_IMG
+
+        # Players
         GameConfig.STANDING_IMG = pg.image.load('assets/standing.png')
         GameConfig.STANDING_MASK = pg.mask.from_surface(GameConfig.STANDING_IMG)
+        #Weapons
         GameConfig.BAT_IMG = pg.image.load('assets/bat1.png')
         GameConfig.BAT_MASK = pg.mask.from_surface(GameConfig.BAT_IMG)
+
+        GameConfig.FISH_1_IMG = pg.image.load('assets/fish_1.png')
+        GameConfig.FISH_1_MASK = pg.mask.from_surface(GameConfig.FISH_1_IMG)
+        GameConfig.FISH_2_IMG = pg.image.load('assets/fish_2.png')
+        GameConfig.FISH_2_MASK = pg.mask.from_surface(GameConfig.FISH_2_IMG)
+

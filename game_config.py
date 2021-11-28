@@ -60,8 +60,14 @@ class GameConfig:
         #Weapons
         GameConfig.BAT_IMG = pg.image.load('assets/bat1.png')
         GameConfig.BAT_MASK = pg.mask.from_surface(GameConfig.BAT_IMG)
-        GameConfig.BAZOOKA_IMG = pg.image.load('assets/bazooka.png')
-        GameConfig.BAZOOKA_MASK = pg.mask.from_surface(GameConfig.BAZOOKA_IMG)
+
+        GameConfig.BAZOOKA_IMG = []
+        GameConfig.BAZOOKA_IMG.append(pg.image.load("assets/bazooka_1.png"))
+        GameConfig.BAZOOKA_IMG.append(pg.image.load("assets/bazooka_2.png"))
+        GameConfig.BAZOOKA_MASK = []
+        GameConfig.BAZOOKA_MASK.append(pg.mask.from_surface(GameConfig.BAZOOKA_IMG[0]))
+        GameConfig.BAZOOKA_MASK.append(pg.mask.from_surface(GameConfig.BAZOOKA_IMG[1]))
+
 
         GameConfig.FISHES_IMG = []
         GameConfig.FISHES_MASK = []

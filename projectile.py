@@ -92,17 +92,29 @@ class Projectile(pg.sprite.Sprite):
         # if self.on_floor():
         #     print("on floor")
         self.rect = self.rect.move(self.vx, self.vy)
-
+        # If if would wand to do the things right we could add a parameter that checks the gradient of the ground to add a multiplying factor according to its degree
         if pg.sprite.collide_mask(self,self.ground):
             self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
             if abs(self.vy)>5:
-                print (abs(self.vx))
-                print (abs(self.vy))
-                print("ok")
-                # first_point = self.ground.builder.lagrange(self.rect.left)
-                # second_point = self.ground.builder.lagrange(self.rect.right)
-                self.fx = self.vx * self.k
-                self.fy = -self.vy * self.k
+                first_point = self.ground.builder.lagrange(self.rect.midbottom[0])
+                second_point = self.ground.builder.lagrange(self.rect.right + 10)
+                if self.vx < 0:
+                    if first_point > second_point:
+                        self.fx = self.vx * self.k
+                        self.fy = -self.vy * self.k
+                    elif first_point < second_point:
+                        self.fx = - self.vx * self.k
+                        self.fy = -self.vy * self.k
+                if self.vx > 0:
+                    if first_point > second_point:
+                        self.fx = -self.vx * self.k
+                        self.fy = -self.vy * self.k
+                    elif first_point < second_point:
+                        self.fx = self.vx * self.k
+                        self.fy = -self.vy * self.k
+                elif first_point == second_point:
+                    self.fx = 0
+                    self.fy = 0
                 if self.on_floor():
                     self.vx = self.fx
                     self.vy = self.fy

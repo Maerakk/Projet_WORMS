@@ -15,6 +15,21 @@ class Player(pg.sprite.Sprite):
 
     X = 0
 
+    @staticmethod
+    def init_sprites(cat_type):
+
+        Player.IMAGES = {
+            Player.LEFT: GameConfig.WALK_LEFT_IMG,
+            Player.RIGHT: GameConfig.WALK_RIGHT_IMG,
+            Player.NONE: GameConfig.STANDING_IMG
+        }
+
+        Player.MASKS = {
+            Player.LEFT: GameConfig.WALK_LEFT_MASKS,
+            Player.RIGHT: GameConfig.WALK_RIGHT_MASKS,
+            Player.NONE: GameConfig.STANDING_MASKS
+        }
+
     def __init__(self, x, ground):
 
         # Instantiation of the parent
@@ -27,14 +42,14 @@ class Player(pg.sprite.Sprite):
         self.direction = Player.NONE
 
         # Image of the player
-        self.image = GameConfig.STANDING_IMG
+        self.image = Player.IMAGES[self.direction][self.sprite_count // 3]
         # Mask of the player (to manage collisions)
-        self.mask = GameConfig.STANDING_MASK
+        self.mask = Player.MASKS[self.direction][self.sprite_count // 3]
         # The ground to manage collisions
         # We will need to put the ground somewhere else
         self.ground = ground
 
-        y = self.ground.builder.lagrange(x)
+        y = self.ground.builder.lagrange(x) + 10
         # Location
         # We put the player on the coordinates x and y on the generate graph
         self.rect = pg.Rect(x,
@@ -48,8 +63,9 @@ class Player(pg.sprite.Sprite):
         self.vx = 0
         self.vy = 0
 
-        # Sprite
-        # pg.sprite.Sprite.__init__(self)
+        # Weapons
+        # the player start with no weapon in the hand
+        self.has_weapon = False
 
     def draw(self, window):
         """
@@ -73,6 +89,9 @@ class Player(pg.sprite.Sprite):
         vectors imposed on him
         :param next_move: the move choose by the user
         """
+
+        # ~~~~~~~~~~~~~~~~~~~~~DÉPLACEMENT~~~~~~~~~~~~~~~~~~~~~
+
         # Acceleration de base a 0
         fx = 0
         fy = 0
@@ -83,7 +102,6 @@ class Player(pg.sprite.Sprite):
             fx = GameConfig.FORCE_RIGHT
         if next_move.jump:
             fy = GameConfig.FORCE_JUMP
-            print("if next_move")
 
         # Basic speed at dt/dx (acceleration)
         self.vx = fx * GameConfig.DT
@@ -105,31 +123,32 @@ class Player(pg.sprite.Sprite):
         self.vx = max(self.vx, vx_min)
 
         # We move the rectangle with the speed found (and the time derivative)
-        self.rect = self.rect.move(self.vx * GameConfig.DT/2, self.vy * GameConfig.DT)
+        self.rect = self.rect.move(self.vx * GameConfig.DT / 2, self.vy * GameConfig.DT)
         # We look if its new position is touching the ground or not
         if self.on_ground():
             # If it is we check if the player is not inside the ground
             # +5 is to avoid false collisions
-            self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 5
+            self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
             # And we apply the force (fy) done by the user on the player
             # This force can be 0 or GameConfig.FORCE_JUMP if the player is jumping
-            self.vy = fy * GameConfig.DT / 2 # We want it to be less speed so we divide it by 2
+            self.vy = fy * GameConfig.DT / 2  # We want it to be less speed so we divide it by 2
             # We move the rectangle one last time
             self.rect = self.rect.move(0, self.vy)
 
-        # if next_move.left:
-        # self.direction = Player.LEFT
-        # elif next_move.right:
-        # self.direction = Player.RIGHT
-        # else:
-        # self.direction = Player.NONE
+        # ~~~~~~~~~~~~~~~~~~~~~sprite~~~~~~~~~~~~~~~~~~~~~
+        if next_move.left:
+            self.direction = Player.LEFT
+        elif next_move.right:
+            self.direction = Player.RIGHT
+        else:
+            self.direction = Player.NONE
 
-        # self.sprite_count += 1
-        # if self.sprite_count >= GameConfig.NB_FRAMES_PER_SPRITE_PLAYER*len(Player.IMAGES[self.direction]):
-        #     self.sprite_count = 0
-        # self.image = Player.IMAGES[self.direction][
-        #     self.sprite_count // GameConfig.NB_FRAMES_PER_SPRITE_PLAYER
-        #     ]
-        # self.mask = Player.MASKS[self.direction][
-        #     self.sprite_count // GameConfig.NB_FRAMES_PER_SPRITE_PLAYER
-        #     ]
+        self.sprite_count += 1
+        if self.sprite_count >= 3 * len(Player.IMAGES[self.direction]):
+            self.sprite_count = 0
+        self.image = Player.IMAGES[self.direction][
+            self.sprite_count // 3
+            ]
+        self.mask = Player.MASKS[self.direction][
+            self.sprite_count // 3
+            ]

@@ -12,5 +12,9 @@ class Move:
         self.weapon_grenade = False
         self.weapon_sheep = False
         self.weapon_sheep_controlled = False
+        self.weapon = self.weapon_bazooka or \
+                      self.weapon_grenade or \
+                      self.weapon_sheep or \
+                      self.weapon_sheep_controlled
         self.shoot = False
         self.shootFinished = False

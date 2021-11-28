@@ -125,7 +125,7 @@ class SettingScreen:
                     quitting = True
                     self.ground_choice = 6
                 if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
-                    return self.ground_choice
+                    return self.ground_choice, self.cat_choice
             self.get_next_move()
             self.draw(window)
             pg.time.delay(60)

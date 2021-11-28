@@ -3,7 +3,6 @@ from game_state import *
 from game_config import *
 from move import *
 from ground import *
-from weapon_active import *
 
 
 class GameScreen:
@@ -12,13 +11,14 @@ class GameScreen:
     It is on this window that the user is when they open the game
     """
 
-    def __init__(self, ground_type):
+    def __init__(self, ground_type, cat_type):
         """
         To be functioning this class need GameConfig to be instanced
         """
         # Initialisations
         self.quitting = False
-        GameConfig.init()
+        GameConfig.init(cat_type)
+        Player.init_sprites(cat_type)
         self.game_state = GameState(ground_type)
 
     def process(self, window):
@@ -63,26 +63,15 @@ class GameScreen:
                     self.quitting = True
 
             # on each loop we get the next move
-            next_move = self.get_next_move(weapon_active)
-            if next_move.weapon_grenade == True or next_move.weapon_bazooka == True or next_move.weapon_sheep == True or next_move.weapon_sheep_controlled == True:
-                weapon_used = True
-            if next_move.shoot:
-                shoot = True
+            next_move = self.get_next_move()
 
             # we recalculate the game state
 
-            self.game_state.advance_state(next_move, next_move.shoot)
+            self.game_state.advance_state(next_move)
 
             # and we redraw the game
             self.game_state.draw(window)
 
-            if shoot:
-                # self.game_state.weapon.projectile.x0 = self.game_state.player.rect.top
-                # self.game_state.weapon.projectile.y0 = self.game_state.player.rect.left
-                self.game_state.draw_shoot(window)
-            if weapon_used:
-                self.game_state.draw_weapon(window, next_move)
-            pg.display.update()
 
     def get_next_move(self, weapon_active):
         """

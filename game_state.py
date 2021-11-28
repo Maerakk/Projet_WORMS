@@ -3,6 +3,7 @@ from game_config import *
 from player import *
 from weapon import *
 from ground import Ground
+from weapon import Weapon
 from weapons import Bazooka
 from weapons import Grenade
 from weapons import Gun
@@ -76,4 +77,11 @@ class GameState:
             self.weapon = self.sheep
         if move.weapon_sheep_controlled:
             self.weapon = self.sheep
+
+        if next_move.shoot:
+            self.game_state.weapon.projectile.x0 = self.game_state.player.rect.top
+            self.game_state.weapon.projectile.y0 = self.game_state.player.rect.left
+            self.game_state.draw_shoot(window)
+        if weapon_used:
+            self.game_state.draw_weapon(window, next_move)
 

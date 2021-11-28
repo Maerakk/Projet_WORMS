@@ -113,9 +113,9 @@ class Player(pg.sprite.Sprite):
             self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 5
             # And we apply the force (fy) done by the user on the player
             # This force can be 0 or GameConfig.FORCE_JUMP if the player is jumping
-            self.vy = fy * GameConfig.DT
+            self.vy = fy * GameConfig.DT / 2 # We want it to be less speed so we divide it by 2
             # We move the rectangle one last time
-            self.rect = self.rect.move(0, self.vy * GameConfig.DT/2)
+            self.rect = self.rect.move(0, self.vy)
 
         # if next_move.left:
         # self.direction = Player.LEFT

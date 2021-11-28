@@ -20,7 +20,7 @@ class GameState:
         """
         self.ground = Ground(ground_type)
         self.player = Player(200,self.ground)
-        self.arme = Weapon(self.player, self.ground)
+        self.weapon = Weapon(self.player, self.ground)
 
     def draw(self, window):
         """
@@ -38,7 +38,7 @@ class GameState:
 
     # We need an alone function to draw the weapons because they aren't always on screen
     def draw_shoot(self, window):
-        self.arme.projectile.draw(window)
+        self.weapon.projectile.draw(window)
 
     def advance_state(self, next_move, arme_thrown):
         """
@@ -48,4 +48,4 @@ class GameState:
         :param arme_thrown:
         """
         self.player.advance_state(next_move)
-        self.arme.advance_state(arme_thrown)
+        self.weapon.advance_state(arme_thrown)

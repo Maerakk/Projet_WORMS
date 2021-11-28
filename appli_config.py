@@ -22,3 +22,7 @@ class AppliConfig:
         for i in range(6):
             AppliConfig.LIST_TERRAIN_IMG.append(pg.image.load(f"assets/terrains_type/terrain{str(i)}.png"))
         AppliConfig.TERRAIN_CHOICE_IMG = pg.image.load("assets/stage_selection.png")
+
+        AppliConfig.LIST_CAT_IMG = []
+        for i in range(3):
+            AppliConfig.LIST_CAT_IMG.append(pg.image.load(f"assets/cats/{str(i)}/standing0.png"))

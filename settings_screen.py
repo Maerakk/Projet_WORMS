@@ -22,6 +22,7 @@ class SettingScreen:
         initialisation we put ground choice to 0
         """
         self.ground_choice = SettingScreen.GROUND0
+        self.cat_choice = 0
 
     def draw(self, window):
         """
@@ -30,7 +31,8 @@ class SettingScreen:
         """
         window.blit(AppliConfig.BACKGROUND_IMG,(0,0))
         self.displayMessage(window, "Tout Cat-sser", 150, AppliConfig.WINDOW_W / 2, AppliConfig.WINDOW_H / 5)
-        self.choose(window)
+        self.choose_ground(window)
+        self.choose_cat(window)
         pg.display.update()
 
     def displayMessage(self, window, text, fontSize, x, y, color=AppliConfig.DARK_YELLOW):
@@ -50,7 +52,15 @@ class SettingScreen:
         displayRect.center = (x, y)
         window.blit(img, displayRect)
 
-    def choose(self, window):
+    def choose_cat(self,window):
+        """
+        this function must handle the display of the cat choosen by the user
+        :param window:
+        """
+        ## add down and up arrow
+        window.blit(AppliConfig.LIST_CAT_IMG[self.cat_choice],(AppliConfig.WINDOW_W/10,AppliConfig.WINDOW_H/2))
+
+    def choose_ground(self, window):
         """
         this function has for job to put the black square behind the right ground type
         :param window:
@@ -58,15 +68,15 @@ class SettingScreen:
         if self.ground_choice == SettingScreen.GROUND0:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W/60-5, AppliConfig.WINDOW_H*8/10-4))
         elif self.ground_choice == SettingScreen.GROUND1:
-            window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*10/60-5, AppliConfig.WINDOW_H*8/10-4))
+            window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*11/60-5, AppliConfig.WINDOW_H*8/10-4))
         elif self.ground_choice == SettingScreen.GROUND2:
-            window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*20/60-5, AppliConfig.WINDOW_H*8/10-4))
+            window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*21/60-5, AppliConfig.WINDOW_H*8/10-4))
         elif self.ground_choice == SettingScreen.GROUND3:
-            window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*30/60-5, AppliConfig.WINDOW_H*8/10-4))
+            window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*31/60-5, AppliConfig.WINDOW_H*8/10-4))
         elif self.ground_choice == SettingScreen.GROUND4:
-            window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*40/60-5, AppliConfig.WINDOW_H*8/10-4))
+            window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*41/60-5, AppliConfig.WINDOW_H*8/10-4))
         elif self.ground_choice == SettingScreen.GROUND5:
-            window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*50/60-5, AppliConfig.WINDOW_H*8/10-4))
+            window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*51/60-5, AppliConfig.WINDOW_H*8/10-4))
 
         window.blit(AppliConfig.LIST_TERRAIN_IMG[0], (AppliConfig.WINDOW_W/60, AppliConfig.WINDOW_H*8/10))
         window.blit(AppliConfig.LIST_TERRAIN_IMG[1], (AppliConfig.WINDOW_W*10/60, AppliConfig.WINDOW_H*8/10))
@@ -89,6 +99,16 @@ class SettingScreen:
             self.ground_choice = SettingScreen.GROUND5
         if self.ground_choice > 5:
             self.ground_choice = SettingScreen.GROUND0
+
+        if keys[pg.K_UP]:
+            self.cat_choice += 1
+        if keys[pg.K_DOWN]:
+            self.cat_choice -= 1
+
+        if self.cat_choice < 0:
+            self.cat_choice = 2
+        if self.cat_choice > 2:
+            self.cat_choice = 0
 
     def process(self,window):
         """

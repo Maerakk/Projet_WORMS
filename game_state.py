@@ -52,24 +52,28 @@ class GameState:
 
     def draw_weapon(self, window,move):
         if move.weapon_grenade:
-            self.weapon = self.grenade
             self.grenade.draw(window)
         if move.weapon_bazooka:
-            self.weapon = self.bazooka
             self.bazooka.draw(window)
         if move.weapon_sheep:
-            self.weapon = self.sheep
             self.sheep.draw(window)
         if move.weapon_sheep_controlled:
-            self.weapon = self.sheep
             self.sheep_controlled.draw(window)
 
-    def advance_state(self, next_move, arme_thrown):
+    def advance_state(self, move, arme_thrown):
         """
         Advance state allows to calculate needed variables to make the game furthers
         This method call every others advance_state methods of all the objects
-        :param next_move:
+        :param move:
         :param arme_thrown:
         """
-        self.player.advance_state(next_move)
+        self.player.advance_state(move)
+        if move.weapon_grenade:
+            self.weapon = self.grenade
+        if move.weapon_bazooka:
+            self.weapon = self.bazooka
+        if move.weapon_sheep:
+            self.weapon = self.sheep
+        if move.weapon_sheep_controlled:
+            self.weapon = self.sheep
 

@@ -65,7 +65,8 @@ class Player(pg.sprite.Sprite):
 
         # Weapons
         # the player start with no weapon in the hand
-        self.has_weapon = False
+        self.weapon = None
+        self.has_weapon = self.weapon is not None
 
     def draw(self, window):
         """
@@ -73,6 +74,7 @@ class Player(pg.sprite.Sprite):
         :param window: window where the player will be drawn
         """
         window.blit(self.image, self.rect.topleft)
+        self.weapon.draw(window)
 
     def on_ground(self):
         """
@@ -135,7 +137,7 @@ class Player(pg.sprite.Sprite):
             # We move the rectangle one last time
             self.rect = self.rect.move(0, self.vy)
 
-        # ~~~~~~~~~~~~~~~~~~~~~sprite~~~~~~~~~~~~~~~~~~~~~
+        # ~~~~~~~~~~~~~~~~~~~~~Sprite~~~~~~~~~~~~~~~~~~~~~
         if next_move.left:
             self.direction = Player.LEFT
         elif next_move.right:
@@ -152,3 +154,17 @@ class Player(pg.sprite.Sprite):
         self.mask = Player.MASKS[self.direction][
             self.sprite_count // 3
             ]
+
+        # ~~~~~~~~~~~~~~~~~~~~~Weapon~~~~~~~~~~~~~~~~~~~~~
+
+        if next_move.weapon:
+            if next_move.weapon_grenade:
+                self.weapon = self.grenade
+            if next_move.weapon_bazooka:
+                self.weapon = self.bazooka
+            if next_move.weapon_sheep:
+                self.weapon = self.sheep
+            if next_move.weapon_sheep_controlled:
+                self.weapon = self.sheep
+
+        self.weapon.advance_state()

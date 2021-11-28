@@ -24,3 +24,8 @@ class Weapon:
         # Acceleration
         if not self.shootFinished:
             self.projectile.projectile_thrown(weapon_used)
+            # to place in weapon
+        if next_move.shoot:
+            self.projectile.x0 = self.game_state.player.rect.top
+            self.projectile.y0 = self.game_state.player.rect.left
+            self.draw_shoot(window)

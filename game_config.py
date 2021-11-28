@@ -18,6 +18,9 @@ class GameConfig:
     PLAYER_W = 64
     PLAYER_H = 64
 
+    CATS_W = 47
+    CATS_H = 47
+
     DT = 1
     FORCE_LEFT = -20
     FORCE_RIGHT = -FORCE_LEFT
@@ -37,6 +40,11 @@ class GameConfig:
     BAZOOKA_H = 23
     BAZOOKA_W = 66
 
+    FISH_H = 18
+    FISH_W = 38
+
+
+
     @staticmethod
     def init():
         # Initialisations of all the images needed
@@ -47,10 +55,13 @@ class GameConfig:
         # Players
         GameConfig.STANDING_IMG = pg.image.load('assets/standing.png')
         GameConfig.STANDING_MASK = pg.mask.from_surface(GameConfig.STANDING_IMG)
+
+
         #Weapons
         GameConfig.BAT_IMG = pg.image.load('assets/bat1.png')
         GameConfig.BAT_MASK = pg.mask.from_surface(GameConfig.BAT_IMG)
         GameConfig.BAZOOKA_IMG = pg.image.load('assets/bazooka.png')
+        GameConfig.BAZOOKA_MASK = pg.mask.from_surface(GameConfig.BAZOOKA_IMG)
 
         GameConfig.FISHES_IMG = []
         GameConfig.FISHES_MASK = []
@@ -58,4 +69,3 @@ class GameConfig:
         GameConfig.FISHES_IMG.append(pg.image.load('assets/fish_2.png'))
         GameConfig.FISHES_MASK.append(pg.mask.from_surface(GameConfig.FISHES_IMG[0]))
         GameConfig.FISHES_MASK.append(pg.mask.from_surface(GameConfig.FISHES_IMG[1]))
-

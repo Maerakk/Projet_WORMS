@@ -60,11 +60,11 @@ class WelcomeScreen:
         this function (like the next one) should put the arrow in front of the good word
         :param window: la fenetre dans la quelle afficher
         """
-        window.blit(AppliConfig.ARROW_IMG,
+        window.blit(AppliConfig.ARROW_RIGHT_IMG,
                     (AppliConfig.WINDOW_W / 2 - 220, AppliConfig.WINDOW_H / 2 - 20))
 
     def choose_credits(self, window):
-        window.blit(AppliConfig.ARROW_IMG,
+        window.blit(AppliConfig.ARROW_RIGHT_IMG,
                     (AppliConfig.WINDOW_W / 2 - 250, AppliConfig.WINDOW_H * 2 / 3 - 20))
 
     def get_next_move(self):

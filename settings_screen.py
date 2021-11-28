@@ -31,6 +31,7 @@ class SettingScreen:
         """
         window.blit(AppliConfig.BACKGROUND_IMG,(0,0))
         self.displayMessage(window, "Tout Cat-sser", 150, AppliConfig.WINDOW_W / 2, AppliConfig.WINDOW_H / 5)
+        self.displayMessage(window,"Player 1",50,AppliConfig.WINDOW_W/8,AppliConfig.WINDOW_H/3)
         self.choose_ground(window)
         self.choose_cat(window)
         pg.display.update()
@@ -57,8 +58,9 @@ class SettingScreen:
         this function must handle the display of the cat choosen by the user
         :param window:
         """
-        ## add down and up arrow
+        window.blit(AppliConfig.ARROW_UP_IMG,(AppliConfig.WINDOW_W/10,AppliConfig.WINDOW_H/2-47+5))
         window.blit(AppliConfig.LIST_CAT_IMG[self.cat_choice],(AppliConfig.WINDOW_W/10,AppliConfig.WINDOW_H/2))
+        window.blit(AppliConfig.ARROW_DOWN_IMG,(AppliConfig.WINDOW_W/10,AppliConfig.WINDOW_H/2+47+10))
 
     def choose_ground(self, window):
         """
@@ -79,11 +81,11 @@ class SettingScreen:
             window.blit(AppliConfig.TERRAIN_CHOICE_IMG, (AppliConfig.WINDOW_W*51/60-5, AppliConfig.WINDOW_H*8/10-4))
 
         window.blit(AppliConfig.LIST_TERRAIN_IMG[0], (AppliConfig.WINDOW_W/60, AppliConfig.WINDOW_H*8/10))
-        window.blit(AppliConfig.LIST_TERRAIN_IMG[1], (AppliConfig.WINDOW_W*10/60, AppliConfig.WINDOW_H*8/10))
-        window.blit(AppliConfig.LIST_TERRAIN_IMG[2], (AppliConfig.WINDOW_W*20/60, AppliConfig.WINDOW_H*8/10))
-        window.blit(AppliConfig.LIST_TERRAIN_IMG[3], (AppliConfig.WINDOW_W*30/60, AppliConfig.WINDOW_H*8/10))
-        window.blit(AppliConfig.LIST_TERRAIN_IMG[4], (AppliConfig.WINDOW_W*40/60, AppliConfig.WINDOW_H*8/10))
-        window.blit(AppliConfig.LIST_TERRAIN_IMG[5], (AppliConfig.WINDOW_W*50/60, AppliConfig.WINDOW_H*8/10))
+        window.blit(AppliConfig.LIST_TERRAIN_IMG[1], (AppliConfig.WINDOW_W*11/60, AppliConfig.WINDOW_H*8/10))
+        window.blit(AppliConfig.LIST_TERRAIN_IMG[2], (AppliConfig.WINDOW_W*21/60, AppliConfig.WINDOW_H*8/10))
+        window.blit(AppliConfig.LIST_TERRAIN_IMG[3], (AppliConfig.WINDOW_W*31/60, AppliConfig.WINDOW_H*8/10))
+        window.blit(AppliConfig.LIST_TERRAIN_IMG[4], (AppliConfig.WINDOW_W*41/60, AppliConfig.WINDOW_H*8/10))
+        window.blit(AppliConfig.LIST_TERRAIN_IMG[5], (AppliConfig.WINDOW_W*51/60, AppliConfig.WINDOW_H*8/10))
 
     def get_next_move(self):
         """

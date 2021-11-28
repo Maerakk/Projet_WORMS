@@ -1,9 +1,17 @@
 from weapon import *
 from game_config import *
+from random import randint
+from projectiles import *
 
 
 class Bazooka(Weapon):
-    def __init__(self, player, terrain):
-        super().__init__(player, terrain)
+    def __init__(self, player, ground):
+        super().__init__(player, ground)
+        number = randint(0, 1)
+        self.projectile = BazookaProjectile(player, self, ground, number)
         self.image = GameConfig.BAZOOKA_IMG
         self.projectile.image = GameConfig.BAZOOKA_IMG
+        self.rect = pg.rect.Rect(self.player.rect.top,
+                                 self.player.rect.left,
+                                 GameConfig.BAZOOKA_W,
+                                 GameConfig.BAZOOKA_H)

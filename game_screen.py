@@ -48,6 +48,7 @@ class GameScreen:
 
         arme_thrown_1_Time = False
         shoot = False
+        weapon_used = False
         # this is really the game loop
         while not self.quitting:
 
@@ -61,10 +62,10 @@ class GameScreen:
 
             # on each loop we get the next move
             next_move = self.get_next_move()
+            if next_move.weapon_grenade == True or next_move.weapon_bazooka == True or next_move.weapon_sheep == True or next_move.weapon_sheep_controlled ==True:
+                weapon_used = True
             if next_move.shoot:
                 shoot = True
-            if next_move.weapon_grenade:
-                print("grenade")
 
             # we recalculate the game state
 
@@ -77,6 +78,8 @@ class GameScreen:
                 self.game_state.weapon.projectile.x0 = self.game_state.player.rect.top
                 self.game_state.weapon.projectile.y0 = self.game_state.player.rect.left
                 self.game_state.draw_shoot(window)
+            if weapon_used:
+                self.game_state.draw_weapon(window,next_move)
             pg.display.update()
 
     def get_next_move(self):

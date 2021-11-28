@@ -18,6 +18,7 @@ class Weapon:
 
 
     def draw(self, window):
+
         window.blit(self.image, self.rect.topleft)
 
     def advance_state(self, weapon_used):

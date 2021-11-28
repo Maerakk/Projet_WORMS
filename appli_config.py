@@ -18,8 +18,8 @@ class AppliConfig:
     def init():
         AppliConfig.BACKGROUND_IMG = pg.image.load("assets/background.png")
         AppliConfig.ARROW_RIGHT_IMG = pg.image.load("assets/right_arrow.png")
-        AppliConfig.ARROW_UP_IMG = pg.image.load("assets/up_arrow.png")
-        AppliConfig.ARROW_DOWN_IMG = pg.image.load("assets/down_arrow.png")
+        # AppliConfig.ARROW_UP_IMG = pg.image.load("assets/up_arrow.png")
+        # AppliConfig.ARROW_DOWN_IMG = pg.image.load("assets/down_arrow.png")
 
         AppliConfig.LIST_TERRAIN_IMG = []
         for i in range(6):

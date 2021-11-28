@@ -13,8 +13,8 @@ class Projectile(pg.sprite.Sprite):
         super().__init__()
         self.shootFinished = None
 
-        self.image = GameConfig.BAT_IMG
-        self.mask = GameConfig.BAT_MASK
+        self.image = None
+        self.mask = None
 
         self.ground = ground
 

@@ -47,16 +47,21 @@ class GameState:
 
     # We need an alone function to draw the weapons because they aren't always on screen
     def draw_shoot(self, window):
+        self.weapon.projectile.init()
         self.weapon.projectile.draw(window)
 
     def draw_weapon(self, window,move):
         if move.weapon_grenade:
+            self.weapon = self.grenade
             self.grenade.draw(window)
         if move.weapon_bazooka:
+            self.weapon = self.bazooka
             self.bazooka.draw(window)
         if move.weapon_sheep:
+            self.weapon = self.sheep
             self.sheep.draw(window)
         if move.weapon_sheep_controlled:
+            self.weapon = self.sheep
             self.sheep_controlled.draw(window)
 
     def advance_state(self, next_move, arme_thrown):

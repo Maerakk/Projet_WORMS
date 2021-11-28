@@ -3,6 +3,7 @@ from game_state import *
 from game_config import *
 from move import *
 from ground import *
+from weapon_active import *
 
 
 class GameScreen:
@@ -11,7 +12,7 @@ class GameScreen:
     It is on this window that the user is when they open the game
     """
 
-    def __init__(self,ground_type):
+    def __init__(self, ground_type):
         """
         To be functioning this class need GameConfig to be instanced
         """
@@ -49,6 +50,7 @@ class GameScreen:
         arme_thrown_1_Time = False
         shoot = False
         weapon_used = False
+        weapon_active = WeaponActive()
         # this is really the game loop
         while not self.quitting:
 
@@ -61,8 +63,8 @@ class GameScreen:
                     self.quitting = True
 
             # on each loop we get the next move
-            next_move = self.get_next_move()
-            if next_move.weapon_grenade == True or next_move.weapon_bazooka == True or next_move.weapon_sheep == True or next_move.weapon_sheep_controlled ==True:
+            next_move = self.get_next_move(weapon_active)
+            if next_move.weapon_grenade == True or next_move.weapon_bazooka == True or next_move.weapon_sheep == True or next_move.weapon_sheep_controlled == True:
                 weapon_used = True
             if next_move.shoot:
                 shoot = True
@@ -75,19 +77,20 @@ class GameScreen:
             self.game_state.draw(window)
 
             if shoot:
-                self.game_state.weapon.projectile.x0 = self.game_state.player.rect.top
-                self.game_state.weapon.projectile.y0 = self.game_state.player.rect.left
+                # self.game_state.weapon.projectile.x0 = self.game_state.player.rect.top
+                # self.game_state.weapon.projectile.y0 = self.game_state.player.rect.left
                 self.game_state.draw_shoot(window)
             if weapon_used:
-                self.game_state.draw_weapon(window,next_move)
+                self.game_state.draw_weapon(window, next_move)
             pg.display.update()
 
-    def get_next_move(self):
+    def get_next_move(self, weapon_active):
         """
         Recongnize every next move to be make according to the entries of the user
         :return: Move type object whose attributes equals the actions asked by the user
         """
         next_move = Move()
+
         keys = pg.key.get_pressed()
         if keys[pg.K_RIGHT]:
             next_move.right = True
@@ -97,12 +100,16 @@ class GameScreen:
             next_move.jump = True
         if keys[pg.K_1]:
             next_move.weapon_grenade = True
+            weapon_active.grenade = True
         if keys[pg.K_2]:
             next_move.weapon_bazooka = True
+            weapon_active.bazooka = True
         if keys[pg.K_3]:
             next_move.weapon_sheep = True
+            weapon_active.sheep = True
         if keys[pg.K_4]:
             next_move.weapon_sheep_controlled = True
+            weapon_active.sheep_controlled = True
         if keys[pg.K_LCTRL]:
             next_move.shoot = True
 

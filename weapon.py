@@ -12,7 +12,13 @@ class Weapon:
         self.terrain = terrain
         self.nb_usages = 0
         self.shootFinished = False
-        self.projectile = Projectile(self.player,self,self.terrain)
+        self.projectile = None
+        self.image = None
+        self.rect =
+
+
+    def draw(self, window):
+        window.blit(self.image, self.rect.topleft)
 
     def advance_state(self, weapon_used):
         # Acceleration

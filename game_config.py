@@ -33,6 +33,10 @@ class GameConfig:
 
     PI = 3.14
 
+    #Weapons
+    BAZOOKA_H = 23
+    BAZOOKA_W = 66
+
     @staticmethod
     def init():
         # Initialisations of all the images needed
@@ -46,7 +50,7 @@ class GameConfig:
         #Weapons
         GameConfig.BAT_IMG = pg.image.load('assets/bat1.png')
         GameConfig.BAT_MASK = pg.mask.from_surface(GameConfig.BAT_IMG)
-        GameConfig.BAZOOKA_IMG = pg.image.load('assets/bazooka')
+        GameConfig.BAZOOKA_IMG = pg.image.load('assets/bazooka.png')
 
         GameConfig.FISHES_IMG = []
         GameConfig.FISHES_MASK = []

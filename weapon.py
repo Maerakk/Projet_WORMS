@@ -7,7 +7,7 @@ from projectile import *
 
 class Weapon:
 
-    def __init__(self, player,terrain):
+    def __init__(self, player, terrain):
         self.player = player
         self.terrain = terrain
         self.nb_usages = 0
@@ -15,7 +15,6 @@ class Weapon:
         self.projectile = None
         self.image = None
         self.rect = None
-
 
     def draw(self, window):
         window.blit(self.image, self.rect.topleft)

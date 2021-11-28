@@ -40,11 +40,11 @@ def main():
             # We change the curren_screen
             current_screen = SettingScreen()
             # And we process it again
-            terrain_type = current_screen.process(window)
+            terrain_type, cat_choice = current_screen.process(window)
             if terrain_type == 6:
                 again = False
             else:
-                current_screen = GameScreen(terrain_type)
+                current_screen = GameScreen(terrain_type,cat_choice)
                 again = not current_screen.process(window)
 
 

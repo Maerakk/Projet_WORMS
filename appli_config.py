@@ -28,4 +28,4 @@ class AppliConfig:
 
         AppliConfig.LIST_CAT_IMG = []
         for i in range(3):
-            AppliConfig.LIST_CAT_IMG.append(pg.image.load(f"assets/cats/{str(i)}/standing0.png"))
+            AppliConfig.LIST_CAT_IMG.append(pg.image.load(f"assets/cats/{str(i)}/standing_0.png"))

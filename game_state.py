@@ -3,6 +3,7 @@ from game_config import *
 from player import *
 from weapon import *
 from ground import Ground
+from weapon import Weapon
 from weapons import Bazooka
 from weapons import Grenade
 from weapons import Gun

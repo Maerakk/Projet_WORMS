@@ -27,7 +27,7 @@ class GameConfig:
 
     FORCE_THROWN = -5
 
-    #Jump
+    # Jump
     GRAVITY = 9.81
     FORCE_JUMP = -80
 
@@ -36,28 +36,45 @@ class GameConfig:
 
     PI = 3.14
 
-    #Weapons
+    # Weapons
     BAZOOKA_H = 23
     BAZOOKA_W = 66
 
     FISH_H = 18
     FISH_W = 38
 
-
-
     @staticmethod
-    def init():
+    def init(cat_type):
         # Initialisations of all the images needed
         AppliConfig.init()
-        #Background
+        # Background
         GameConfig.BACKGROUND_IMG = AppliConfig.BACKGROUND_IMG
 
-        # Players
-        GameConfig.STANDING_IMG = pg.image.load('assets/standing.png')
-        GameConfig.STANDING_MASK = pg.mask.from_surface(GameConfig.STANDING_IMG)
+        # Player
+        GameConfig.WALK_RIGHT_IMG = [
+            pg.image.load(f"assets/cats/{str(cat_type)}/right_{str(i)}.png").convert_alpha()
+            for i in range(1, 3)
+        ]
+        GameConfig.WALK_LEFT_IMG = [
+            pg.image.load(f"assets/cats/{str(cat_type)}/left_{str(i)}.png").convert_alpha()
+            for i in range(1, 3)
+        ]
+        GameConfig.STANDING_IMG = [
+            pg.image.load(f"assets/cats/{str(cat_type)}/standing_{str(i)}.png").convert_alpha()
+            for i in range(1, 3)
+        ]
 
+        GameConfig.WALK_RIGHT_MASKS = [
+            pg.mask.from_surface(im) for im in GameConfig.WALK_RIGHT_IMG
+        ]
+        GameConfig.WALK_LEFT_MASKS = [
+            pg.mask.from_surface(im) for im in GameConfig.WALK_LEFT_IMG
+        ]
+        GameConfig.STANDING_MASKS = [
+            pg.mask.from_surface(im) for im in GameConfig.STANDING_IMG
+        ]
 
-        #Weapons
+        # Weapons
         GameConfig.BAT_IMG = pg.image.load('assets/bat1.png')
         GameConfig.BAT_MASK = pg.mask.from_surface(GameConfig.BAT_IMG)
 
@@ -67,7 +84,6 @@ class GameConfig:
         GameConfig.BAZOOKA_MASK = []
         GameConfig.BAZOOKA_MASK.append(pg.mask.from_surface(GameConfig.BAZOOKA_IMG[0]))
         GameConfig.BAZOOKA_MASK.append(pg.mask.from_surface(GameConfig.BAZOOKA_IMG[1]))
-
 
         GameConfig.FISHES_IMG = []
         GameConfig.FISHES_MASK = []

@@ -9,8 +9,8 @@ class Bazooka(Weapon):
         super().__init__(player, ground)
         number = randint(0, 1)
         self.projectile = BazookaProjectile(player, self, ground, number)
-        self.image = GameConfig.BAZOOKA_IMG[randint(0,1)]
-        self.projectile.image = GameConfig.FISHES_IMG[randint(0,1)]
+        self.image = GameConfig.BAZOOKA_IMG[randint(0, 1)]
+        self.projectile.image = GameConfig.FISHES_IMG[randint(0, 1)]
         self.rect = pg.rect.Rect(self.player.rect.top,
                                  self.player.rect.left,
                                  GameConfig.BAZOOKA_W,

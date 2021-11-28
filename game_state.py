@@ -60,12 +60,18 @@ class GameState:
         if move.weapon_sheep_controlled:
             self.sheep_controlled.draw(window)
 
-    def advance_state(self, next_move, arme_thrown):
+    def advance_state(self, next_move):
         """
         Advance state allows to calculate needed variables to make the game furthers
         This method call every others advance_state methods of all the objects
         :param next_move:
-        :param arme_thrown:
         """
         self.player.advance_state(next_move)
+
+        if next_move.shoot:
+            self.game_state.weapon.projectile.x0 = self.game_state.player.rect.top
+            self.game_state.weapon.projectile.y0 = self.game_state.player.rect.left
+            self.game_state.draw_shoot(window)
+        if weapon_used:
+            self.game_state.draw_weapon(window, next_move)
 

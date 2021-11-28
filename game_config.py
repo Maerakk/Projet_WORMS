@@ -22,7 +22,7 @@ class GameConfig:
     FORCE_LEFT = -20
     FORCE_RIGHT = -FORCE_LEFT
 
-    FORCE_THROWN = -100
+    FORCE_THROWN = -5
 
     #Jump
     GRAVITY = 9.81
@@ -30,6 +30,8 @@ class GameConfig:
 
     BAT_H = 32
     BAT_W = 32
+
+    PI = 3.14
 
     @staticmethod
     def init():

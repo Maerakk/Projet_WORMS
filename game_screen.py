@@ -70,7 +70,10 @@ class GameScreen:
 
             # and we redraw the game
             self.game_state.draw(window)
+
             if shoot:
+                self.game_state.weapon.projectile.x0 = self.game_state.player.rect.top
+                self.game_state.weapon.projectile.y0 = self.game_state.player.rect.left
                 self.game_state.draw_shoot(window)
             pg.display.update()
 
@@ -101,5 +104,5 @@ if __name__ == '__main__':
     AppliConfig.init()
     pg.display.set_caption("WORMS")
     window = pg.display.set_mode((GameConfig.WINDOW_W, GameConfig.WINDOW_H))
-    game = GameScreen()
+    game = GameScreen(0)
     game.process(window)

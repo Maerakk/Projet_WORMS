@@ -5,9 +5,9 @@ from game_config import *
 
 class BazookaProjectile(Projectile):
     def __init__(self, weapon, ground, style):
-        super().__init__(weapon, ground)
         self.weapon = weapon
         self.ground = ground
+        super().__init__(weapon, ground)
         self.style = style
         self.mass = 0.0005
         self.rect = pg.rect.Rect(self.weapon.rect.top,

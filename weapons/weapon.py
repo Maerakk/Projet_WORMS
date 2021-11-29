@@ -12,7 +12,9 @@ class Weapon(ABC, pg.sprite.Sprite):
         self.projectile = None
         self.image = None
         self.rect = None
-        self.direction = self.player.RIGHT
+        self.RIGHT = self.player.RIGHT
+        self.LEFT = self.player.LEFT
+        self.direction = self.RIGHT
 
     def draw(self, window):
         if self.player.direction != self.direction and self.player.direction != self.player.NONE:

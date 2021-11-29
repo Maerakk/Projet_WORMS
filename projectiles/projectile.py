@@ -64,7 +64,7 @@ class Projectile(ABC, pg.sprite.Sprite):
             self.x0 = self.weapon.rect.top
             self.y0 = self.weapon.rect.left
 
-        # If the player drop the shot button then the weapon is charged and ready to shoot the projectile
+        # If the player drops the shot button then the weapon is charged and ready to shoot the projectile
         if not self.is_shot and self.weapon.is_shot:
             # First, before the projectile is thrown we need to initialize the variables
             # We tell the program that the shoot is shot
@@ -113,138 +113,95 @@ class Projectile(ABC, pg.sprite.Sprite):
 
                 # If yes we put the projectile on the top of the ground at the same abscissa (to avoid the projectile IN the ground)
                 self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
-
-<<<<<<< HEAD
-                # If the speed is higher than 5 then we do a bounce
-                # BOUNCE EXPLANATION :
-                # We juste take the same vector (vx and vy) that the projectile has when it arrives on the floor and take the symmetrical from the floor
-                # So if the vector v = (a, b) is the one of the projectile before the bounce v' = (a, -b) is the one after the bounce
-                # To create the effect of the energy taken by the bounce on the floor we apply a constant (k, the elasticity)
-                # So in reality the new vector is v' = k * (a, -b)
-
-                if abs(self.vy) > 5:
-                    # We consider the impact point is the bottom middle of the projectile for the moment
-                    # the impact point will be i (xi, yi)
-                    # We take 2 points that will be at the same pixel apart from the middle of the projectile
-                    # We will approach the equation of the tangent by a straight line that go through 2 points : a and b
-                    # When we find it we will find the parallel line that goes through the middle point of the projectile
-                    ya = self.ground.builder.lagrange(self.rect.bottomleft)
-                    xa = self.rect.bottomleft[0]
-                    yb = self.ground.builder.lagrange(self.rect.bottomright)
-                    xb = self.rect.bottomright[1]
-                    xi = self.rect.midbottom[0]
-                    yi = self.rect.midbottom[1]
-
-                    # THE TANGENT
-                    # With a vector v = (-b,a), the equation of the tangent is " delta : a(x - xi) + b(y - yi) = 0"
-                    # The vector that is determined by the 2 points is : v = (xb-xa, - (yb-ya))
-                    v = np.array([[xb - xa], [(yb - ya)]])
-                    b = -v[0]
-                    a = v[1]
-                    # So now we have the equation of the tangent with a = v[0] and b = v[1], t : a(x-xi) + b(y-yi) = 0
-
-                    # NORMAL VECTOR OF THE TANGENT
-                    # The normal vector of the tangent is u(a,b)
-                    u = np.array([[a], [b]])
-                    # So the equation of t' is t' : -b(x - xi) + a(y-yi) = 0
-
-                    # THE VECTOR THAT ARRIVES TO THE GROUND
-                    # We need to find the equation of the vector that arrives to the ground
-                    # The vector is w = (self.vx, self.vy)
-                    # If we take a point d from the straight line created by w the point here is to find and equation
-                    # that as the symmetrical point of d from t'
-
-                    # For the point d we can do : xd = -w + (xi,yi)
-                    # So xd = xi - w[0] and yd = yi - w[1]
-                    w = np.array([[self.vx], [self.vy]])
-                    xd = xi - w[0]
-                    yd = yi - w[1]
-
-                    # We need to find w'
-                    # We admit that w = (xd-xi, yd-yi)
-                    #                 = alpha(a,b) + beta(-b,a)
-                    #                 =  (alpha*a - beta*b, alpha*b + beta*a)
-                    # So w' = alpha(a,b) - beta(-b,a)
-
-                    # RESOLVE THE EQUATION TO FIND ALPHA AND BETA
-                    # We have a system of 2 equations here :
-                    # { alpha * a - beta * b = xd - xi
-                    # { beta*alpha + alpha * b) = yd - yi
-                    # this is equal to the equation of matrices :
-                    # (a -b) (alpha) = (xb-xa)
-                    # (b a) (beta) = (yb - ya)
-                    # If we divide by the matrix ( [[a,-b] [b,a]]) we will have the equation for the matrix ([[alpha][beta]])
-                    # The opposite of this matrix is i / (a² * b²) :
-                    #       Verification of the opposite of the matrix
-                    #       1/(a² + b²) * [[a,b][-b, a]] * [[a,-b][b,a]]
-                    #      = 1/(a² + b²) * [[a²+b², 0][0, a² + b²] = [[0,1][1,0]]
-                    # So at the end, [[alpha][beta]] = 1/(a² + b²) * [[a,b][-b,a]] * [[xd - xi][yd - yi]]
-                    alpha_beta = np.array([[alpha][beta]])
-
-                    if self.vx < 0:
-                        # If the projectile goes to the right
-                        if ya > yb:
-                            # If the ground goes down then the projectile will be going on the right
-                            self.fx = self.vx * self.k
-                            self.fy = -self.vy * self.k
-                        elif ya < yb:
-                            # If the ground goes up then the projectile will be going on the left
-                            self.fx = - self.vx * self.k
-                            self.fy = -self.vy * self.k
-                    if self.vx > 0:
-                        # If the projectile goes to the left
-                        if ya > yb:
-                            # If the ground goes down then the projectile will be going on the left
-                            self.fx = -self.vx * self.k
-                            self.fy = -self.vy * self.k
-                        elif ya < yb:
-                            # If the ground goes up then the projectile will be going on the right
-                            self.fx = self.vx * self.k
-                            self.fy = -self.vy * self.k
-                    elif ya == yb:
-                        # If it is a flat ground then is stops
-                        self.fx = 0
-                        self.fy = 0
-                    if self.on_floor():
-                        # if the projectile is on the floor then  we give its speed the force that the ground has given to it after the bounce (fx and fy that have changed)
-                        self.vx = self.fx
-                        self.vy = self.fy
-=======
-                if self.bounce :
+                if self.bounce:
                     # If the speed is higher than 5 then we do a bounce
                     # BOUNCE EXPLANATION :
                     # We juste take the same vector (vx and vy) that the projectile has when it arrives on the floor and take the symmetrical from the floor
                     # So if the vector v = (a, b) is the one of the projectile before the bounce v' = (a, -b) is the one after the bounce
                     # To create the effect of the energy taken by the bounce on the floor we apply a constant (k, the elasticity)
                     # So in reality the new vector is v' = k * (a, -b)
+
                     if abs(self.vy) > 5:
+                        # We consider the impact point is the bottom middle of the projectile for the moment
+                        # the impact point will be i (xi, yi)
+                        # We take 2 points that will be at the same pixel apart from the middle of the projectile
+                        # We will approach the equation of the tangent by a straight line that go through 2 points : a and b
+                        # When we find it we will find the parallel line that goes through the middle point of the projectile
+                        ya = self.ground.builder.lagrange(self.rect.bottomleft)
+                        xa = self.rect.bottomleft[0]
+                        yb = self.ground.builder.lagrange(self.rect.bottomright)
+                        xb = self.rect.bottomright[1]
+                        xi = self.rect.midbottom[0]
+                        yi = self.rect.midbottom[1]
 
-                        # We take 2 points that will be the middle of the projectile and another one 10 pixel apart the right of the projectile
-                        first_point = self.ground.builder.lagrange(self.rect.midbottom[0])
-                        second_point = self.ground.builder.lagrange(self.rect.right + 10)
+                        # THE TANGENT
+                        # With a vector v = (-b,a), the equation of the tangent is " delta : a(x - xi) + b(y - yi) = 0"
+                        # The vector that is determined by the 2 points is : v = (xb-xa, - (yb-ya))
+                        v = np.array([[xb - xa], [(yb - ya)]])
+                        b = -v[0]
+                        a = v[1]
+                        # So now we have the equation of the tangent with a = v[0] and b = v[1], t : a(x-xi) + b(y-yi) = 0
 
+                        # NORMAL VECTOR OF THE TANGENT
+                        # The normal vector of the tangent is u(a,b)
+                        u = np.array([[a], [b]])
+                        # So the equation of t' is t' : -b(x - xi) + a(y-yi) = 0
+
+                        # THE VECTOR THAT ARRIVES TO THE GROUND
+                        # We need to find the equation of the vector that arrives to the ground
+                        # The vector is w = (self.vx, self.vy)
+                        # If we take a point d from the straight line created by w the point here is to find and equation
+                        # that as the symmetrical point of d from t'
+
+                        # For the point d we can do : xd = -w + (xi,yi)
+                        # So xd = xi - w[0] and yd = yi - w[1]
+                        w = np.array([[self.vx], [self.vy]])
+                        xd = xi - w[0]
+                        yd = yi - w[1]
+
+                        # We need to find w'
+                        # We admit that w = (xd-xi, yd-yi)
+                        #                 = alpha(a,b) + beta(-b,a)
+                        #                 =  (alpha*a - beta*b, alpha*b + beta*a)
+                        # So w' = alpha(a,b) - beta(-b,a)
+                        alpha = 0
+                        beta = 0
+                        # RESOLVE THE EQUATION TO FIND ALPHA AND BETA
+                        # We have a system of 2 equations here :
+                        # { alpha * a - beta * b = xd - xi
+                        # { beta*alpha + alpha * b) = yd - yi
+                        # this is equal to the equation of matrices :
+                        # (a -b) (alpha) = (xb-xa)
+                        # (b a) (beta) = (yb - ya)
+                        # If we divide by the matrix ( [[a,-b] [b,a]]) we will have the equation for the matrix ([[alpha][beta]])
+                        # The opposite of this matrix is i / (a² * b²) :
+                        #       Verification of the opposite of the matrix
+                        #       1/(a² + b²) * [[a,b][-b, a]] * [[a,-b][b,a]]
+                        #      = 1/(a² + b²) * [[a²+b², 0][0, a² + b²] = [[0,1][1,0]]
+                        # So at the end, [[alpha][beta]] = 1/(a² + b²) * [[a,b][-b,a]] * [[xd - xi][yd - yi]]
+                        alpha_beta = np.array([[alpha][beta]])
 
                         if self.vx < 0:
                             # If the projectile goes to the right
-                            if first_point > second_point:
+                            if ya > yb:
                                 # If the ground goes down then the projectile will be going on the right
                                 self.fx = self.vx * self.k
                                 self.fy = -self.vy * self.k
-                            elif first_point < second_point:
+                            elif ya < yb:
                                 # If the ground goes up then the projectile will be going on the left
                                 self.fx = - self.vx * self.k
                                 self.fy = -self.vy * self.k
                         if self.vx > 0:
                             # If the projectile goes to the left
-                            if first_point > second_point:
+                            if ya > yb:
                                 # If the ground goes down then the projectile will be going on the left
                                 self.fx = -self.vx * self.k
                                 self.fy = -self.vy * self.k
-                            elif first_point < second_point:
+                            elif ya < yb:
                                 # If the ground goes up then the projectile will be going on the right
                                 self.fx = self.vx * self.k
                                 self.fy = -self.vy * self.k
-                        elif first_point == second_point:
+                        elif ya == yb:
                             # If it is a flat ground then is stops
                             self.fx = 0
                             self.fy = 0
@@ -256,16 +213,16 @@ class Projectile(ABC, pg.sprite.Sprite):
                             # Else we apply the same scenario than before the first bounce with the gravity and the DT
                             self.vx = self.vx
                             self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
->>>>>>> origin/main
                     else:
                         # If the speed of the projectile is too low we stop it from bouncing
                         self.shootFinished = True
                         print("finished")
-                else :
+                else:
                     self.shootFinished = True
-                    self.ground.explode(self.rect.x,self.rect.y)
+                    self.ground.explode(self.rect.x, self.rect.y)
                     # pass
                     self.weapon.shot_end = True
+
         elif self.shootFinished:
             pass
         # Here it means that the projectile isn't on the screen but we still move it given the weapon position

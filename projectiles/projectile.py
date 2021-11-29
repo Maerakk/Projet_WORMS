@@ -56,14 +56,16 @@ class Projectile(ABC, pg.sprite.Sprite):
     def advance_state(self, next_move):
 
         # if the next move is to shoot and it wasnt shot before, we have to start the shot
-        if next_move.shoot and not self.is_shot:
+        if next_move.shoot and not self.weapon.is_shot:
+            print("ok")
+            self.weapon.force += -1
             self.x0 = self.weapon.rect.top
             self.y0 = self.weapon.rect.left
-
+        if not self.is_shot and self.weapon.is_shot:
             self.is_shot = True
 
-            self.fx = - GameConfig.FORCE_THROWN
-            self.fy = GameConfig.FORCE_THROWN
+            self.fx = - self.weapon.force
+            self.fy = self.weapon.force
 
             # Speed
             if self.weapon.direction == self.weapon.RIGHT:
@@ -97,7 +99,6 @@ class Projectile(ABC, pg.sprite.Sprite):
             # If if would want to do the things right we could add a parameter that checks the gradient of the ground to add a multiplying factor according to its degree
             if pg.sprite.collide_mask(self, self.ground):
                 self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
-                print(abs (self.vy))
                 if abs(self.vy) > 5:
                     first_point = self.ground.builder.lagrange(self.rect.midbottom[0])
                     second_point = self.ground.builder.lagrange(self.rect.right + 10)

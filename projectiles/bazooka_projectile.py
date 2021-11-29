@@ -1,4 +1,4 @@
-from projectile import *
+from projectiles.projectile import *
 
 
 class BazookaProjectile(Projectile):

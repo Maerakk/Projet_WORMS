@@ -25,7 +25,6 @@ class GameConfig:
 
     FORCE_MIN = -10
     FORCE_MAX = -60
-    FORCE_THROWN = -60
 
     # Jump
     GRAVITY = 9.81

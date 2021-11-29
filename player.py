@@ -67,6 +67,7 @@ class Player(pg.sprite.Sprite):
         self.weapon = None
         self.has_weapon = False
 
+
     def draw(self, window):
         """
         function that draws the player

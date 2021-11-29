@@ -147,6 +147,37 @@ class Player(pg.sprite.Sprite):
         :param next_move: the move choose by the user
         """
         self.has_shot = False
+        # ~~~~~~~~~~~~~~~~~~~~~Weapon~~~~~~~~~~~~~~~~~~~~~
+
+        if next_move.weapon:
+            try:
+                if next_move.weapon_grenade:
+                    self.current_weapon = random.choice(self.weapon_available[0])
+                if next_move.weapon_bazooka:
+                    self.current_weapon = random.choice(self.weapon_available[1])
+                if next_move.weapon_sheep:
+                    self.current_weapon = random.choice(self.weapon_available[2])
+                if next_move.weapon_sheep_controlled:
+                    self.current_weapon = random.choice(self.weapon_available[3])
+                self.has_weapon = True
+            except IndexError:
+                self.current_weapon = None
+                self.has_shot = True
+        if self.has_weapon:
+            self.current_weapon.advance_state(next_move)
+            if self.current_weapon.shot_end:
+                if isinstance(self.current_weapon, Grenade):
+                    self.weapon_available[0].remove(self.current_weapon)
+                if isinstance(self.current_weapon, Bazooka):
+                    self.weapon_available[1].remove(self.current_weapon)
+                if isinstance(self.current_weapon, Mouse):
+                    self.weapon_available[2].remove(self.current_weapon)
+                if isinstance(self.current_weapon, MouseControlled):
+                    self.weapon_available[3].remove(self.current_weapon)
+                self.current_weapon = None
+                self.has_weapon = False
+                self.has_shot = True
+
         # ~~~~~~~~~~~~~~~~~~~~~DÉPLACEMENT~~~~~~~~~~~~~~~~~~~~~
 
         # Acceleration de base a 0
@@ -180,17 +211,32 @@ class Player(pg.sprite.Sprite):
         self.vx = max(self.vx, vx_min)
 
         # We move the rectangle with the speed found (and the time derivative)
-        self.rect = self.rect.move(self.vx * GameConfig.DT / 2, self.vy * GameConfig.DT)
-        # We look if its new position is touching the ground or not
-        if self.on_ground():
-            # If it is we check if the player is not inside the ground
-            # +5 is to avoid false collisions
-            self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 5
-            # And we apply the force (fy) done by the user on the player
-            # This force can be 0 or GameConfig.FORCE_JUMP if the player is jumping
-            self.vy = fy * GameConfig.DT / 2  # We want it to be less speed so we divide it by 2
-            # We move the rectangle one last time
-            self.rect = self.rect.move(0, self.vy)
+        if self.current_weapon is not None:
+            if self.current_weapon.shot_end:
+                self.rect = self.rect.move(self.vx * GameConfig.DT / 2, self.vy * GameConfig.DT)
+                # We look if its new position is touching the ground or not
+                if self.on_ground():
+                    # If it is we check if the player is not inside the ground
+                    # +5 is to avoid false collisions
+                    self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 5
+                    # And we apply the force (fy) done by the user on the player
+                    # This force can be 0 or GameConfig.FORCE_JUMP if the player is jumping
+                    self.vy = fy * GameConfig.DT / 2  # We want it to be less speed so we divide it by 2
+                    # We move the rectangle one last time
+                    self.rect = self.rect.move(0, self.vy)
+        else:
+            self.rect = self.rect.move(self.vx * GameConfig.DT / 2, self.vy * GameConfig.DT)
+            # We look if its new position is touching the ground or not
+            if self.on_ground():
+                # If it is we check if the player is not inside the ground
+                # +5 is to avoid false collisions
+                self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 5
+                # And we apply the force (fy) done by the user on the player
+                # This force can be 0 or GameConfig.FORCE_JUMP if the player is jumping
+                self.vy = fy * GameConfig.DT / 2  # We want it to be less speed so we divide it by 2
+                # We move the rectangle one last time
+                self.rect = self.rect
+
 
         # ~~~~~~~~~~~~~~~~~~~~~Sprite~~~~~~~~~~~~~~~~~~~~~
         if next_move.left:
@@ -210,36 +256,7 @@ class Player(pg.sprite.Sprite):
             self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER
             ]
 
-        # ~~~~~~~~~~~~~~~~~~~~~Weapon~~~~~~~~~~~~~~~~~~~~~
 
-        if next_move.weapon:
-            try:
-                if next_move.weapon_grenade:
-                    self.current_weapon = random.choice(self.weapon_available[0])
-                if next_move.weapon_bazooka:
-                    self.current_weapon = random.choice(self.weapon_available[1])
-                if next_move.weapon_sheep:
-                    self.current_weapon = random.choice(self.weapon_available[2])
-                if next_move.weapon_sheep_controlled:
-                    self.current_weapon = random.choice(self.weapon_available[3])
-                self.has_weapon = True
-            except IndexError:
-                self.current_weapon = None
-                self.has_shot = True
-        if self.has_weapon:
-            self.current_weapon.advance_state(next_move)
-            if self.current_weapon.shot_end:
-                if isinstance(self.current_weapon, Grenade):
-                    self.weapon_available[0].remove(self.current_weapon)
-                if isinstance(self.current_weapon, Bazooka):
-                    self.weapon_available[1].remove(self.current_weapon)
-                if isinstance(self.current_weapon, Mouse):
-                    self.weapon_available[2].remove(self.current_weapon)
-                if isinstance(self.current_weapon, MouseControlled):
-                    self.weapon_available[3].remove(self.current_weapon)
-                self.current_weapon = None
-                self.has_weapon = False
-                self.has_shot = True
 
     def loose_life(self, explosion):
         if pg.sprite.collide_mask(self, explosion):

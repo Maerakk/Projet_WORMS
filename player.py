@@ -75,7 +75,6 @@ class Player(pg.sprite.Sprite):
         self.current_weapon = None
         self.has_weapon = False
 
-
     def draw(self, window):
         """
         function that draws the player
@@ -168,14 +167,29 @@ class Player(pg.sprite.Sprite):
         # ~~~~~~~~~~~~~~~~~~~~~Weapon~~~~~~~~~~~~~~~~~~~~~
 
         if next_move.weapon:
-            if next_move.weapon_grenade:
-                self.current_weapon = random.choice(self.weapon_available[0])
-            if next_move.weapon_bazooka:
-                self.current_weapon = random.choice(self.weapon_available[1])
-            if next_move.weapon_sheep:
-                self.current_weapon = random.choice(self.weapon_available[2])
-            if next_move.weapon_sheep_controlled:
-                self.current_weapon = random.choice(self.weapon_available[3])
-            self.has_weapon = True
+            try:
+                if next_move.weapon_grenade:
+                    self.current_weapon = random.choice(self.weapon_available[0])
+                if next_move.weapon_bazooka:
+                    self.current_weapon = random.choice(self.weapon_available[1])
+                if next_move.weapon_sheep:
+                    self.current_weapon = random.choice(self.weapon_available[2])
+                if next_move.weapon_sheep_controlled:
+                    self.current_weapon = random.choice(self.weapon_available[3])
+                self.has_weapon = True
+            except IndexError:
+                self.current_weapon = None
         if self.has_weapon:
             self.current_weapon.advance_state(next_move)
+
+            if self.current_weapon.shot_end:
+                if isinstance(self.current_weapon,Grenade):
+                    self.weapon_available[0].remove(self.current_weapon)
+                if isinstance(self.current_weapon,Bazooka):
+                    self.weapon_available[1].remove(self.current_weapon)
+                if isinstance(self.current_weapon,Mouse):
+                    self.weapon_available[2].remove(self.current_weapon)
+                if isinstance(self.current_weapon,MouseControlled):
+                    self.weapon_available[3].remove(self.current_weapon)
+                self.current_weapon = None
+                self.has_weapon = False

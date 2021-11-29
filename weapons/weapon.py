@@ -19,6 +19,8 @@ class Weapon(ABC, pg.sprite.Sprite):
         self.force = GameConfig.FORCE_MIN
         self.is_shot = False
         self.is_shooting = False
+        self.shot_end = False
+
 
     def draw(self, window):
         if self.player.direction != self.direction and self.player.direction != self.player.NONE:
@@ -27,7 +29,6 @@ class Weapon(ABC, pg.sprite.Sprite):
         self.projectile.draw(window)
         window.blit(self.image, self.rect.topleft)
 
-    @abstractmethod
     def advance_state(self, next_move):
         self.rect.x = self.player.rect.x
         self.rect.y = self.player.rect.y

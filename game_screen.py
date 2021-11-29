@@ -3,7 +3,6 @@ from game_state import *
 from game_config import *
 from move import *
 from ground import *
-from weapon_active import *
 
 
 class GameScreen:

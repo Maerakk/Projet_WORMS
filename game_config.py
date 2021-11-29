@@ -42,6 +42,8 @@ class GameConfig:
     FISH_H = 18
     FISH_W = 38
 
+    NB_FRAME_EXPLOSION = 10
+
     @staticmethod
     def init(cat_type):
         # Initialisations of all the images needed
@@ -91,4 +93,4 @@ class GameConfig:
         GameConfig.FISHES_MASK.append(pg.mask.from_surface(GameConfig.FISHES_IMG[0]))
         GameConfig.FISHES_MASK.append(pg.mask.from_surface(GameConfig.FISHES_IMG[1]))
 
-
+        GameConfig.EXPLOSION_IMG = pg.image.load("assets/explosions.png")

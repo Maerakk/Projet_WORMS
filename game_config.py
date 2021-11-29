@@ -23,7 +23,7 @@ class GameConfig:
     FORCE_LEFT = -20
     FORCE_RIGHT = -FORCE_LEFT
 
-    FORCE_THROWN = -5
+    FORCE_THROWN = -30
 
     # Jump
     GRAVITY = 9.81

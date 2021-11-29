@@ -9,7 +9,10 @@ class BazookaProjectile(Projectile):
         self.ground = ground
         super().__init__(weapon, ground)
         self.style = style
-        self.mass = 0.0005
+        self.mass = 0.1
+        # The bazooka's projectile explodes at impact so it does not have any bounce neither elasticity
+        self.k = 0
+        self.bounce = False
         self.rect = pg.rect.Rect(self.weapon.rect.top,
                                  self.weapon.rect.left,
                                  GameConfig.FISH_W,

@@ -3,6 +3,7 @@ from game_state import *
 from game_config import *
 from move import *
 from ground import *
+from weapon_active import *
 
 
 class GameScreen:
@@ -111,5 +112,5 @@ if __name__ == '__main__':
     AppliConfig.init()
     pg.display.set_caption("WORMS")
     window = pg.display.set_mode((GameConfig.WINDOW_W, GameConfig.WINDOW_H))
-    game = GameScreen(0)
+    game = GameScreen(0,0)
     game.process(window)

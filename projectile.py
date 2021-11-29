@@ -15,6 +15,8 @@ class Projectile(pg.sprite.Sprite):
         self.image = None
         self.mask = None
 
+        self.bounce = False
+
         self.ground = ground
 
         # Position t=0
@@ -66,8 +68,13 @@ class Projectile(pg.sprite.Sprite):
             self.fy = GameConfig.FORCE_THROWN
 
             # Speed
-            self.vx = self.fx
-            self.vy = self.fy
+            if self.weapon.direction == self.weapon.RIGHT:
+                self.vx = self.fx
+                self.vy = self.fy
+            if self.weapon.direction == self.weapon.LEFT:
+                self.vx = - self.fx
+                self.vy = self.fy
+
 
         # if the shot has started and is not ended we draw the trajectories
         elif self.is_shot and not self.shootFinished :
@@ -92,6 +99,7 @@ class Projectile(pg.sprite.Sprite):
             # If if would want to do the things right we could add a parameter that checks the gradient of the ground to add a multiplying factor according to its degree
             if pg.sprite.collide_mask(self, self.ground):
                 self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
+                print(abs (self.vy))
                 if abs(self.vy) > 5:
                     first_point = self.ground.builder.lagrange(self.rect.midbottom[0])
                     second_point = self.ground.builder.lagrange(self.rect.right + 10)
@@ -120,8 +128,10 @@ class Projectile(pg.sprite.Sprite):
                         self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
                 else:
                     self.shootFinished = True
+        elif self.shootFinished:
+            pass
         # else it means that the projectile isn't on the screen but we still move it given the weapon position
-        else :
+        else:
             if self.weapon.direction == self.weapon.RIGHT:
                 self.x0 = self.weapon.rect.right
             else:

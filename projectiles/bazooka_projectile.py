@@ -1,6 +1,4 @@
 from projectile import *
-from random import randint
-from game_config import *
 
 
 class BazookaProjectile(Projectile):

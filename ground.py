@@ -21,7 +21,7 @@ class Ground(pg.sprite.Sprite):
         self.builder = GroundBuilder(ground_type)
         self.builder.build()
         # loading the image and storing it
-        self.image = pg.image.load("assets/ground.png")
+        self.image = pg.image.load("assets/ground/ground.png")
         # creating mask from image for collision
         self.mask = pg.mask.from_surface(self.image)
 

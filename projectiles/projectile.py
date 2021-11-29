@@ -87,6 +87,7 @@ class Projectile(ABC, pg.sprite.Sprite):
 
         # if the shot has started and is not ended we draw the trajectories
         elif self.is_shot and not self.shootFinished:
+            print(str(self.rect.x)+","+str(self.rect.y))
             # For the vector V = (vx, vy, x, y) it will be added the time derivate + a vector
             # DT is the time derivate and the vector is (0,-g/m, vx, vy)
             # So it will be V + DT* [0,-g/m, vx, vy]
@@ -105,6 +106,7 @@ class Projectile(ABC, pg.sprite.Sprite):
 
             # Position
             # We move the rectangle given that the new x and y are the vx and vy
+            old_rect = self.rect.copy()
             self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)
             # If we would want to do the things right we could add a parameter that checks the gradient of the ground to add a multiplying factor according to its degree
             # TODO parameter to check the gradient of the ground
@@ -121,8 +123,8 @@ class Projectile(ABC, pg.sprite.Sprite):
                     # So if the vector v = (a, b) is the one of the projectile before the bounce v' = (a, -b) is the one after the bounce
                     # To create the effect of the energy taken by the bounce on the floor we apply a constant (k, the elasticity)
                     # So in reality the new vector is v' = k * (a, -b)
-                    print (self.vy)
-                    if abs(self.vy) > 10:
+
+                    if abs(self.vy) > 5:
                         # We consider the impact point is the bottom middle of the projectile for the moment
                         # the impact point will be i (xi, yi)
                         # We take 2 points that will be at the same pixel apart from the middle of the projectile
@@ -215,13 +217,12 @@ class Projectile(ABC, pg.sprite.Sprite):
                     else:
                         # If the speed of the projectile is too low we stop it from bouncing
                         self.shootFinished = True
-                        print ("finish")
-                        self.ground.explode(self.rect.x, self.rect.y)
+                        self.ground.explode(old_rect.x, old_rect.y)
                         # pass
                         self.weapon.shot_end = True
                 else:
                     self.shootFinished = True
-                    self.ground.explode(self.rect.x, self.rect.y)
+                    self.ground.explode(old_rect.x, old_rect.y)
                     # pass
                     self.weapon.shot_end = True
 

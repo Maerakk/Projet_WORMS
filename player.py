@@ -91,7 +91,7 @@ class Player(pg.sprite.Sprite):
         # the player start with no weapon in the hand
         self.weapon_available = [
             [Grenade(self, self.ground), Grenade(self, self.ground), Grenade(self, self.ground)],
-            [Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1))],
+            [Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1)),Bazooka(self, self.ground, random.randint(0, 1))],
             [Mouse(self, self.ground)],
             [MouseControlled(self, self.ground)]
         ]
@@ -126,7 +126,7 @@ class Player(pg.sprite.Sprite):
         :param window: window where the player will be drawn
         """
         window.blit(self.image, self.rect.topleft)
-
+        self.displayMessage(window,f"{str(self.hp)} hp",20,self.rect.left+GameConfig.PLAYER_W/2,self.rect.bottom+5)
         # we draw the weapon only if the player has it in hand
         if self.has_weapon:
             self.current_weapon.draw(window)
@@ -260,4 +260,5 @@ class Player(pg.sprite.Sprite):
 
     def loose_life(self, explosion):
         if pg.sprite.collide_mask(self, explosion):
-            self.hp -= 10 // (explosion.sprite_count + 1)
+            print(20 // (explosion.sprite_count + 1))
+            self.hp -= 20 // (explosion.sprite_count + 1)

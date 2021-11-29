@@ -60,10 +60,14 @@ class SettingScreen:
         this function must handle the display of the cat choosen by the user
         :param window:
         """
+        if self.is_choosing == 0:
+            window.blit(AppliConfig.CAT_SELECT,(AppliConfig.WINDOW_W/10+3,AppliConfig.WINDOW_H/2-10))
         window.blit(AppliConfig.ARROW_UP_IMG,(AppliConfig.WINDOW_W/10,AppliConfig.WINDOW_H/2-47+5))
         window.blit(AppliConfig.LIST_CAT_IMG[self.cat_choice[0]],(AppliConfig.WINDOW_W/10,AppliConfig.WINDOW_H/2))
         window.blit(AppliConfig.ARROW_DOWN_IMG,(AppliConfig.WINDOW_W/10,AppliConfig.WINDOW_H/2+47+10))
 
+        if self.is_choosing == 1:
+            window.blit(AppliConfig.CAT_SELECT,(AppliConfig.WINDOW_W*7/8+3,AppliConfig.WINDOW_H/2-10))
         window.blit(AppliConfig.ARROW_UP_IMG,(AppliConfig.WINDOW_W*7/8,AppliConfig.WINDOW_H/2-47+5))
         window.blit(AppliConfig.LIST_CAT_IMG[self.cat_choice[1]],(AppliConfig.WINDOW_W*7/8,AppliConfig.WINDOW_H/2))
         window.blit(AppliConfig.ARROW_DOWN_IMG,(AppliConfig.WINDOW_W*7/8,AppliConfig.WINDOW_H/2+47+10))

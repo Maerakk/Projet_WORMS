@@ -44,9 +44,8 @@ def main():
             if terrain_type == 6:
                 again = False
             else:
-                current_screen = GameScreen(terrain_type,cat_choice)
+                current_screen = GameScreen(terrain_type, cat_choice)
                 again = not current_screen.process(window)
-
 
         elif next_screen == WelcomeScreen.CREDITS:
             window.blit(AppliConfig.BACKGROUND_IMG, (0, 0))

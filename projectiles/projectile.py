@@ -167,10 +167,11 @@ class Projectile(ABC, pg.sprite.Sprite):
                         print("finished")
                 else :
                     self.shootFinished = True
+                    self.ground.explode(self.rect.x,self.rect.y)
+                    # pass
+                    self.weapon.shot_end = True
         elif self.shootFinished:
-            self.ground.explode(self.rect.midbottom[0],self.rect.midbottom[1])
-            # pass
-            self.weapon.shot_end = True
+            pass
         # Here it means that the projectile isn't on the screen but we still move it given the weapon position
         # so it can appears right on the weapon when the user press the shot button
         else:

@@ -3,7 +3,6 @@ from game_state import *
 from game_config import *
 from move import *
 from ground import *
-from weapon_active import *
 
 
 class GameScreen:
@@ -18,9 +17,9 @@ class GameScreen:
         """
         # Initialisations
         self.quitting = False
-        GameConfig.init(cat_type)
-        Player.init_sprites()
-        self.game_state = GameState(ground_type)
+        GameConfig.init()
+        Explosion.init_sprites()
+        self.game_state = GameState(ground_type,cat_type)
 
     def process(self, window):
         """

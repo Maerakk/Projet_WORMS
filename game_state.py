@@ -5,8 +5,8 @@ from ground import Ground
 from weapons import Bazooka
 from weapons import Grenade
 from weapons import Gun
-from weapons import Sheep
-from weapons import SheepControlled
+from weapons import Mouse
+from weapons import MouseControlled
 
 
 class GameState:
@@ -14,7 +14,7 @@ class GameState:
     Class that represent the state of the game at some point (player position etc. )
     """
 
-    def __init__(self, ground_type):
+    def __init__(self, ground_type, cat_type):
         """
         During the initialisation
         We place 3 attributes that will change later
@@ -23,7 +23,9 @@ class GameState:
         The weapons (can be removed to be only player's attribute ?)
         """
         self.ground = Ground(ground_type)
-        self.player = Player(200, self.ground)
+        self.player = [Player(GameConfig.WINDOW_W/10, self.ground, cat_type[0]), Player(GameConfig.WINDOW_W*9/10, self.ground,cat_type[1])]
+        self.turn = 0
+        self.frame_after_turn = 0
 
     def draw(self, window):
         """
@@ -38,7 +40,8 @@ class GameState:
         self.ground.draw(window)
 
         # Then the player
-        self.player.draw(window)
+        for player in self.player:
+            player.draw(window)
 
     def advance_state(self, move):
         """
@@ -46,4 +49,7 @@ class GameState:
         This method call every others advance_state methods of all the objects
         :param move:
         """
-        self.player.advance_state(move)
+        self.ground.advance_state(self)
+        self.player[self.turn].advance_state(move)
+        if self.player[self.turn].has_shot:
+            self.turn = (self.turn + 1) % 2

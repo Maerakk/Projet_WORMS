@@ -42,36 +42,19 @@ class GameConfig:
     FISH_H = 18
     FISH_W = 38
 
+    # Explosion
+    EXPLOSION_W = 256
+    EXPLOSION_H = 256
+    NB_SPRITE_FRAME_EXPLOSION = 5
+
     @staticmethod
-    def init(cat_type):
+    def init():
         # Initialisations of all the images needed
         AppliConfig.init()
         # Background
         GameConfig.BACKGROUND_IMG = AppliConfig.BACKGROUND_IMG
 
-        # Player
-        GameConfig.WALK_RIGHT_IMG = [
-            pg.image.load(f"assets/cats/{str(cat_type)}/right_{str(i)}.png").convert_alpha()
-            for i in range(1, 3)
-        ]
-        GameConfig.WALK_LEFT_IMG = [
-            pg.image.load(f"assets/cats/{str(cat_type)}/left_{str(i)}.png").convert_alpha()
-            for i in range(1, 3)
-        ]
-        GameConfig.STANDING_IMG = [
-            pg.image.load(f"assets/cats/{str(cat_type)}/standing_{str(i)}.png").convert_alpha()
-            for i in range(1, 3)
-        ]
 
-        GameConfig.WALK_RIGHT_MASKS = [
-            pg.mask.from_surface(im) for im in GameConfig.WALK_RIGHT_IMG
-        ]
-        GameConfig.WALK_LEFT_MASKS = [
-            pg.mask.from_surface(im) for im in GameConfig.WALK_LEFT_IMG
-        ]
-        GameConfig.STANDING_MASKS = [
-            pg.mask.from_surface(im) for im in GameConfig.STANDING_IMG
-        ]
 
         # Weapons
 
@@ -91,4 +74,11 @@ class GameConfig:
         GameConfig.FISHES_MASK.append(pg.mask.from_surface(GameConfig.FISHES_IMG[0]))
         GameConfig.FISHES_MASK.append(pg.mask.from_surface(GameConfig.FISHES_IMG[1]))
 
-
+        # Explosion
+        GameConfig.EXPLOSION_IMG = [
+            pg.image.load(f"assets/explosions/explosion_{str(i)}.png").convert_alpha()
+            for i in range(1, 6)
+        ]
+        GameConfig.EXPLOSION_MASK = [
+            pg.mask.from_surface(im) for im in GameConfig.EXPLOSION_IMG
+        ]

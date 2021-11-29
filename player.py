@@ -1,7 +1,10 @@
+import random
+
 import pygame as pg
 from game_config import GameConfig
 from projectiles import Grenade
 from weapons import *
+
 
 class Player(pg.sprite.Sprite):
     """
@@ -14,23 +17,45 @@ class Player(pg.sprite.Sprite):
     RIGHT = 1
     NONE = 0
 
+    def __init__(self, x, ground, cat_type):
 
-    @staticmethod
-    def init_sprites():
+        # as the player can choose his skin we have to make images part of itself
+        # Player
+        self.WALK_RIGHT_IMG = [
+            pg.image.load(f"assets/cats/{str(cat_type)}/right_{str(i)}.png").convert_alpha()
+            for i in range(1, 3)
+        ]
+        self.WALK_LEFT_IMG = [
+            pg.image.load(f"assets/cats/{str(cat_type)}/left_{str(i)}.png").convert_alpha()
+            for i in range(1, 3)
+        ]
+        self.STANDING_IMG = [
+            pg.image.load(f"assets/cats/{str(cat_type)}/standing_{str(i)}.png").convert_alpha()
+            for i in range(1, 3)
+        ]
 
-        Player.IMAGES = {
-            Player.LEFT: GameConfig.WALK_LEFT_IMG,
-            Player.RIGHT: GameConfig.WALK_RIGHT_IMG,
-            Player.NONE: GameConfig.STANDING_IMG
+        self.WALK_RIGHT_MASKS = [
+            pg.mask.from_surface(im) for im in self.WALK_RIGHT_IMG
+        ]
+        self.WALK_LEFT_MASKS = [
+            pg.mask.from_surface(im) for im in self.WALK_LEFT_IMG
+        ]
+        self.STANDING_MASKS = [
+            pg.mask.from_surface(im) for im in self.STANDING_IMG
+        ]
+
+        self.IMAGES = {
+            Player.LEFT: self.WALK_LEFT_IMG,
+            Player.RIGHT: self.WALK_RIGHT_IMG,
+            Player.NONE: self.STANDING_IMG
         }
 
-        Player.MASKS = {
-            Player.LEFT: GameConfig.WALK_LEFT_MASKS,
-            Player.RIGHT: GameConfig.WALK_RIGHT_MASKS,
-            Player.NONE: GameConfig.STANDING_MASKS
+        self.MASKS = {
+            Player.LEFT: self.WALK_LEFT_MASKS,
+            Player.RIGHT: self.WALK_RIGHT_MASKS,
+            Player.NONE: self.STANDING_MASKS
         }
 
-    def __init__(self, x, ground):
 
         # Instantiation of the parent
         super().__init__()
@@ -41,9 +66,9 @@ class Player(pg.sprite.Sprite):
         self.direction = Player.NONE
 
         # Image of the player
-        self.image = Player.IMAGES[self.direction][self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER]
+        self.image = self.IMAGES[self.direction][self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER]
         # Mask of the player (to manage collisions)
-        self.mask = Player.MASKS[self.direction][self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER]
+        self.mask = self.MASKS[self.direction][self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER]
         # The ground to manage collisions
         # We will need to put the ground somewhere else
         self.ground = ground
@@ -64,8 +89,20 @@ class Player(pg.sprite.Sprite):
 
         # Weapons
         # the player start with no weapon in the hand
-        self.weapon = None
+        self.weapon_available = [
+            [Grenade(self, self.ground), Grenade(self, self.ground), Grenade(self, self.ground)],
+            [Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1))],
+            [Mouse(self, self.ground)],
+            [MouseControlled(self, self.ground)]
+        ]
+        self.current_weapon = None
         self.has_weapon = False
+        self.has_shot = False
+
+        # Life
+        # the player starts with 100hp
+        self.hp = 100
+
 
 
     def draw(self, window):
@@ -74,8 +111,9 @@ class Player(pg.sprite.Sprite):
         :param window: window where the player will be drawn
         """
         window.blit(self.image, self.rect.topleft)
+        # we draw the weapon only if the player has it in hand
         if self.has_weapon:
-            self.weapon.draw(window)
+            self.current_weapon.draw(window)
 
     def on_ground(self):
         """
@@ -92,7 +130,8 @@ class Player(pg.sprite.Sprite):
         vectors imposed on him
         :param next_move: the move choose by the user
         """
-
+        self.has_shot = False
+        print(self.hp)
         # ~~~~~~~~~~~~~~~~~~~~~DÉPLACEMENT~~~~~~~~~~~~~~~~~~~~~
 
         # Acceleration de base a 0
@@ -147,26 +186,46 @@ class Player(pg.sprite.Sprite):
             self.direction = Player.NONE
 
         self.sprite_count += 1
-        if self.sprite_count >= GameConfig.NB_SPRITE_FRAME_PLAYER * len(Player.IMAGES[self.direction]):
+        if self.sprite_count >= GameConfig.NB_SPRITE_FRAME_PLAYER * len(self.IMAGES[self.direction]):
             self.sprite_count = 0
-        self.image = Player.IMAGES[self.direction][
+        self.image = self.IMAGES[self.direction][
             self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER
             ]
-        self.mask = Player.MASKS[self.direction][
+        self.mask = self.MASKS[self.direction][
             self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER
             ]
 
         # ~~~~~~~~~~~~~~~~~~~~~Weapon~~~~~~~~~~~~~~~~~~~~~
 
         if next_move.weapon:
-            self.has_weapon = True
-            if next_move.weapon_grenade:
-                self.weapon = Grenade(self, self.ground)
-            if next_move.weapon_bazooka:
-                self.weapon = Bazooka(self, self.ground)
-            if next_move.weapon_sheep:
-                self.weapon = Sheep(self, self.ground)
-            if next_move.weapon_sheep_controlled:
-                self.weapon = SheepControlled(self, self.ground)
+            try:
+                if next_move.weapon_grenade:
+                    self.current_weapon = random.choice(self.weapon_available[0])
+                if next_move.weapon_bazooka:
+                    self.current_weapon = random.choice(self.weapon_available[1])
+                if next_move.weapon_sheep:
+                    self.current_weapon = random.choice(self.weapon_available[2])
+                if next_move.weapon_sheep_controlled:
+                    self.current_weapon = random.choice(self.weapon_available[3])
+                self.has_weapon = True
+            except IndexError:
+                self.current_weapon = None
+                self.has_shot = True
         if self.has_weapon:
-            self.weapon.advance_state(next_move)
+            self.current_weapon.advance_state(next_move)
+            if self.current_weapon.shot_end:
+                if isinstance(self.current_weapon, Grenade):
+                    self.weapon_available[0].remove(self.current_weapon)
+                if isinstance(self.current_weapon, Bazooka):
+                    self.weapon_available[1].remove(self.current_weapon)
+                if isinstance(self.current_weapon, Mouse):
+                    self.weapon_available[2].remove(self.current_weapon)
+                if isinstance(self.current_weapon, MouseControlled):
+                    self.weapon_available[3].remove(self.current_weapon)
+                self.current_weapon = None
+                self.has_weapon = False
+                self.has_shot = True
+
+    def loose_life(self, explosion):
+        if pg.sprite.collide_mask(self, explosion):
+            self.hp -= 10 // (explosion.sprite_count + 1)

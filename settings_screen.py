@@ -22,7 +22,8 @@ class SettingScreen:
         initialisation we put ground choice to 0
         """
         self.ground_choice = SettingScreen.GROUND0
-        self.cat_choice = 0
+        self.cat_choice = [0,0]
+        self.is_choosing = 0
 
     def draw(self, window):
         """
@@ -32,6 +33,7 @@ class SettingScreen:
         window.blit(AppliConfig.BACKGROUND_IMG,(0,0))
         self.displayMessage(window, "Tout Cat-sser", 150, AppliConfig.WINDOW_W / 2, AppliConfig.WINDOW_H / 5)
         self.displayMessage(window,"Player 1",50,AppliConfig.WINDOW_W/8,AppliConfig.WINDOW_H/3)
+        self.displayMessage(window,"Player 2",50,AppliConfig.WINDOW_W*7/8,AppliConfig.WINDOW_H/3)
         self.choose_ground(window)
         self.choose_cat(window)
         pg.display.update()
@@ -59,8 +61,13 @@ class SettingScreen:
         :param window:
         """
         window.blit(AppliConfig.ARROW_UP_IMG,(AppliConfig.WINDOW_W/10,AppliConfig.WINDOW_H/2-47+5))
-        window.blit(AppliConfig.LIST_CAT_IMG[self.cat_choice],(AppliConfig.WINDOW_W/10,AppliConfig.WINDOW_H/2))
+        window.blit(AppliConfig.LIST_CAT_IMG[self.cat_choice[0]],(AppliConfig.WINDOW_W/10,AppliConfig.WINDOW_H/2))
         window.blit(AppliConfig.ARROW_DOWN_IMG,(AppliConfig.WINDOW_W/10,AppliConfig.WINDOW_H/2+47+10))
+
+        window.blit(AppliConfig.ARROW_UP_IMG,(AppliConfig.WINDOW_W*7/8,AppliConfig.WINDOW_H/2-47+5))
+        window.blit(AppliConfig.LIST_CAT_IMG[self.cat_choice[1]],(AppliConfig.WINDOW_W*7/8,AppliConfig.WINDOW_H/2))
+        window.blit(AppliConfig.ARROW_DOWN_IMG,(AppliConfig.WINDOW_W*7/8,AppliConfig.WINDOW_H/2+47+10))
+
 
     def choose_ground(self, window):
         """
@@ -103,14 +110,14 @@ class SettingScreen:
             self.ground_choice = SettingScreen.GROUND0
 
         if keys[pg.K_UP]:
-            self.cat_choice += 1
+            self.cat_choice[self.is_choosing] += 1
         if keys[pg.K_DOWN]:
-            self.cat_choice -= 1
+            self.cat_choice[self.is_choosing] -= 1
 
-        if self.cat_choice < 0:
-            self.cat_choice = 2
-        if self.cat_choice > 2:
-            self.cat_choice = 0
+        if self.cat_choice[self.is_choosing] < 0:
+            self.cat_choice[self.is_choosing] = 2
+        if self.cat_choice[self.is_choosing] > 2:
+            self.cat_choice[self.is_choosing] = 0
 
     def process(self,window):
         """
@@ -125,7 +132,10 @@ class SettingScreen:
                     quitting = True
                     self.ground_choice = 6
                 if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
-                    return self.ground_choice, self.cat_choice
+                    if self.is_choosing == 0:
+                        self.is_choosing = 1
+                    else :
+                        return self.ground_choice, self.cat_choice
             self.get_next_move()
             self.draw(window)
             pg.time.delay(60)

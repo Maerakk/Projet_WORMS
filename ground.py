@@ -1,7 +1,7 @@
-from random import randint
-
 import pygame as pg
+from PIL import Image
 
+from explosions import Explosion
 from game_config import GameConfig
 from ground_builder import GroundBuilder
 
@@ -24,6 +24,16 @@ class Ground(pg.sprite.Sprite):
         self.image = pg.image.load("assets/ground/ground.png")
         # creating mask from image for collision
         self.mask = pg.mask.from_surface(self.image)
+        self.explosion = None
 
     def draw(self, window):
         window.blit(self.image, (0, 0))
+        if self.explosion is not None:
+            self.explosion.draw(window)
+
+    def explode(self, x, y):
+        self.explosion = Explosion(x,y)
+
+    def advance_state(self,game_state):
+        if self.explosion is not None:
+            self.explosion.advance_state(game_state)

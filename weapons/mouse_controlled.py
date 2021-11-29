@@ -1,6 +1,6 @@
 from weapons.weapon import *
 
 
-class Sheep(Weapon):
+class MouseControlled(Weapon):
     def init(self):
         self.shootFinished = False

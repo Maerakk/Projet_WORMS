@@ -114,6 +114,7 @@ class Projectile(ABC, pg.sprite.Sprite):
                 # If yes we put the projectile on the top of the ground at the same abscissa (to avoid the projectile IN the ground)
                 self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
 
+<<<<<<< HEAD
                 # If the speed is higher than 5 then we do a bounce
                 # BOUNCE EXPLANATION :
                 # We juste take the same vector (vx and vy) that the projectile has when it arrives on the floor and take the symmetrical from the floor
@@ -208,16 +209,65 @@ class Projectile(ABC, pg.sprite.Sprite):
                         # if the projectile is on the floor then  we give its speed the force that the ground has given to it after the bounce (fx and fy that have changed)
                         self.vx = self.fx
                         self.vy = self.fy
+=======
+                if self.bounce :
+                    # If the speed is higher than 5 then we do a bounce
+                    # BOUNCE EXPLANATION :
+                    # We juste take the same vector (vx and vy) that the projectile has when it arrives on the floor and take the symmetrical from the floor
+                    # So if the vector v = (a, b) is the one of the projectile before the bounce v' = (a, -b) is the one after the bounce
+                    # To create the effect of the energy taken by the bounce on the floor we apply a constant (k, the elasticity)
+                    # So in reality the new vector is v' = k * (a, -b)
+                    if abs(self.vy) > 5:
+
+                        # We take 2 points that will be the middle of the projectile and another one 10 pixel apart the right of the projectile
+                        first_point = self.ground.builder.lagrange(self.rect.midbottom[0])
+                        second_point = self.ground.builder.lagrange(self.rect.right + 10)
+
+
+                        if self.vx < 0:
+                            # If the projectile goes to the right
+                            if first_point > second_point:
+                                # If the ground goes down then the projectile will be going on the right
+                                self.fx = self.vx * self.k
+                                self.fy = -self.vy * self.k
+                            elif first_point < second_point:
+                                # If the ground goes up then the projectile will be going on the left
+                                self.fx = - self.vx * self.k
+                                self.fy = -self.vy * self.k
+                        if self.vx > 0:
+                            # If the projectile goes to the left
+                            if first_point > second_point:
+                                # If the ground goes down then the projectile will be going on the left
+                                self.fx = -self.vx * self.k
+                                self.fy = -self.vy * self.k
+                            elif first_point < second_point:
+                                # If the ground goes up then the projectile will be going on the right
+                                self.fx = self.vx * self.k
+                                self.fy = -self.vy * self.k
+                        elif first_point == second_point:
+                            # If it is a flat ground then is stops
+                            self.fx = 0
+                            self.fy = 0
+                        if self.on_floor():
+                            # if the projectile is on the floor then  we give its speed the force that the ground has given to it after the bounce (fx and fy that have changed)
+                            self.vx = self.fx
+                            self.vy = self.fy
+                        else:
+                            # Else we apply the same scenario than before the first bounce with the gravity and the DT
+                            self.vx = self.vx
+                            self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
+>>>>>>> origin/main
                     else:
-                        # Else we apply the same scenario than before the first bounce with the gravity and the DT
-                        self.vx = self.vx
-                        self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
-                else:
-                    # If the speed of the projectile is too low we stop it from bouncing
+                        # If the speed of the projectile is too low we stop it from bouncing
+                        self.shootFinished = True
+                        print("finished")
+                else :
                     self.shootFinished = True
+                    self.ground.explode(self.rect.x,self.rect.y)
+                    # pass
+                    self.weapon.shot_end = True
         elif self.shootFinished:
             pass
-
         # Here it means that the projectile isn't on the screen but we still move it given the weapon position
         # so it can appears right on the weapon when the user press the shot button
         else:

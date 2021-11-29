@@ -1,5 +1,3 @@
-from random import randint
-
 import pygame as pg
 
 from game_config import GameConfig

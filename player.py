@@ -1,7 +1,10 @@
+import random
+
 import pygame as pg
 from game_config import GameConfig
 from projectiles import Grenade
 from weapons import *
+
 
 class Player(pg.sprite.Sprite):
     """
@@ -13,7 +16,6 @@ class Player(pg.sprite.Sprite):
     LEFT = -1
     RIGHT = 1
     NONE = 0
-
 
     @staticmethod
     def init_sprites():
@@ -64,7 +66,13 @@ class Player(pg.sprite.Sprite):
 
         # Weapons
         # the player start with no weapon in the hand
-        self.weapon = None
+        self.weapon_available = [
+            [Grenade(self, self.ground), Grenade(self, self.ground), Grenade(self, self.ground)],
+            [Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1))],
+            [Mouse(self, self.ground)],
+            [MouseControlled(self, self.ground)]
+        ]
+        self.current_weapon = None
         self.has_weapon = False
 
 
@@ -74,8 +82,9 @@ class Player(pg.sprite.Sprite):
         :param window: window where the player will be drawn
         """
         window.blit(self.image, self.rect.topleft)
+        # we draw the weapon only if the player has it in hand
         if self.has_weapon:
-            self.weapon.draw(window)
+            self.current_weapon.draw(window)
 
     def on_ground(self):
         """
@@ -159,14 +168,14 @@ class Player(pg.sprite.Sprite):
         # ~~~~~~~~~~~~~~~~~~~~~Weapon~~~~~~~~~~~~~~~~~~~~~
 
         if next_move.weapon:
-            self.has_weapon = True
             if next_move.weapon_grenade:
-                self.weapon = Grenade(self, self.ground)
+                self.current_weapon = random.choice(self.weapon_available[0])
             if next_move.weapon_bazooka:
-                self.weapon = Bazooka(self, self.ground)
+                self.current_weapon = random.choice(self.weapon_available[1])
             if next_move.weapon_sheep:
-                self.weapon = Sheep(self, self.ground)
+                self.current_weapon = random.choice(self.weapon_available[2])
             if next_move.weapon_sheep_controlled:
-                self.weapon = SheepControlled(self, self.ground)
+                self.current_weapon = random.choice(self.weapon_available[3])
+            self.has_weapon = True
         if self.has_weapon:
-            self.weapon.advance_state(next_move)
+            self.current_weapon.advance_state(next_move)

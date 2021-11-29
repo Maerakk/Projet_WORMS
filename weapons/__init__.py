@@ -4,7 +4,7 @@ from . import grenade
 from .grenade import Grenade
 from . import gun
 from .gun import Gun
-from . import sheep
-from .sheep import Sheep
-from . import sheep_controlled
-from .sheep_controlled import SheepControlled
+from . import mouse
+from .mouse import Mouse
+from . import mouse_controlled
+from .mouse_controlled import MouseControlled

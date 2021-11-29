@@ -5,8 +5,8 @@ from ground import Ground
 from weapons import Bazooka
 from weapons import Grenade
 from weapons import Gun
-from weapons import Sheep
-from weapons import SheepControlled
+from weapons import Mouse
+from weapons import MouseControlled
 
 
 class GameState:

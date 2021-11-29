@@ -5,9 +5,9 @@ from weapons.weapon import Weapon
 
 
 class Bazooka(Weapon):
-    def __init__(self, player, ground):
+    def __init__(self, player, ground,style):
         super().__init__(player, ground)
-        self.style = randint(0, 1)
+        self.style = style
         self.image = GameConfig.BAZOOKA_IMG[self.style]
         self.rect = pg.rect.Rect(self.player.rect.top,
                                  self.player.rect.left,

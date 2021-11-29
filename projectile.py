@@ -1,11 +1,9 @@
-import pygame as pg
-
 from game_config import *
-from move import *
+
 from abc import ABC, abstractmethod
 
 
-class Projectile(pg.sprite.Sprite):
+class Projectile(ABC, pg.sprite.Sprite):
     def __init__(self, weapon, ground):
         # Sprite
         super().__init__()

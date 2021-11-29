@@ -93,15 +93,15 @@ class GroundBuilder:
 		ground = Image.new(mode='RGBA', size=(GameConfig.WINDOW_W, GameConfig.WINDOW_H), color=(0, 0, 0, 0))
 
 		# then we create the grass py pasting a grass pictures and applying the grass mask
-		grass = Image.open("assets/grass.png")
+		grass = Image.open("assets/ground/grass.png")
 		ground.paste(grass, (0, 0), mask_grass)
 
 		# and create the dirt the same way
-		dirt = Image.open("assets/dirt.png")
+		dirt = Image.open("assets/ground/dirt.png")
 		ground.paste(dirt, (0, 0), mask_dirt)
 
 		# finally we save the image
-		ground.save('./assets/ground.png', format='png')
+		ground.save('./assets/ground/ground.png', format='png')
 
 
 if __name__ == '__main__':
@@ -116,7 +116,7 @@ if __name__ == '__main__':
 	print(choice)
 	builder = GroundBuilder(choice);
 	builder.build()
-	to_blit = pg.image.load('assets/ground.png')
+	to_blit = pg.image.load('assets/ground/ground.png')
 	window.blit(GameConfig.BACKGROUND_IMG, (0, 0))
 	window.blit(to_blit, (0, 0))
 	pg.display.update()

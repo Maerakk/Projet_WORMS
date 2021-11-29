@@ -13,7 +13,9 @@ class GameConfig:
     WINDOW_W = AppliConfig.WINDOW_W
     WINDOW_H = AppliConfig.WINDOW_H
 
-    Y_PLATEFORM = 716
+    # Color
+    BLACK = (0,0,0)
+    DARK_YELLOW = AppliConfig.DARK_YELLOW
 
     PLAYER_W = 47
     PLAYER_H = 47

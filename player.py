@@ -103,7 +103,22 @@ class Player(pg.sprite.Sprite):
         # the player starts with 100hp
         self.hp = 100
 
-
+    def displayMessage(self, window, text, fontSize, x, y, color=GameConfig.BLACK):
+        """
+        this function displays
+        :param window: in a window
+        :param text: a text
+        :param fontSize: of size fontSize
+        :param x: at coordinates x
+        :param y: y
+        :param color: of color color (DARK_YELLOW by default)
+        took from tp1
+        """
+        font = pg.font.Font('assets/BradBunR.ttf', fontSize)
+        img = font.render(text, True, color)
+        displayRect = img.get_rect()
+        displayRect.center = (x, y)
+        window.blit(img, displayRect)
 
     def draw(self, window):
         """
@@ -111,6 +126,7 @@ class Player(pg.sprite.Sprite):
         :param window: window where the player will be drawn
         """
         window.blit(self.image, self.rect.topleft)
+
         # we draw the weapon only if the player has it in hand
         if self.has_weapon:
             self.current_weapon.draw(window)
@@ -131,7 +147,6 @@ class Player(pg.sprite.Sprite):
         :param next_move: the move choose by the user
         """
         self.has_shot = False
-        print(self.hp)
         # ~~~~~~~~~~~~~~~~~~~~~DÉPLACEMENT~~~~~~~~~~~~~~~~~~~~~
 
         # Acceleration de base a 0

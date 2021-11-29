@@ -85,16 +85,6 @@ class Projectile(ABC, pg.sprite.Sprite):
             self.vx = self.vx
             self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
             # Position
-            # x = self.rect.left
-            #
-            # y = self.rect.top
-            # vy_max = self.rect.top - y / GameConfig.DT
-            # vy_max = (arme.player.rect.top - y) / GameConfig.DT
-            # arme.vy = min(arme.vy, vy_max)
-            # if pg.sprite.collide_mask(self, self.ground):
-            #     self.weapon.shootFinished = True
-            # if self.on_floor():
-            #     print("on floor")
             self.rect = self.rect.move(self.vx, self.vy)
             # If if would want to do the things right we could add a parameter that checks the gradient of the ground to add a multiplying factor according to its degree
             if pg.sprite.collide_mask(self, self.ground):

@@ -107,7 +107,7 @@ class Projectile(ABC, pg.sprite.Sprite):
             # Position
             # We move the rectangle given that the new x and y are the vx and vy
             old_rect = self.rect.copy()
-            self.rect = self.rect.move(self.vx, self.vy)
+            self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)
             # If we would want to do the things right we could add a parameter that checks the gradient of the ground to add a multiplying factor according to its degree
             # TODO parameter to check the gradient of the ground
 
@@ -130,9 +130,9 @@ class Projectile(ABC, pg.sprite.Sprite):
                         # We take 2 points that will be at the same pixel apart from the middle of the projectile
                         # We will approach the equation of the tangent by a straight line that go through 2 points : a and b
                         # When we find it we will find the parallel line that goes through the middle point of the projectile
-                        ya = self.ground.builder.lagrange(self.rect.bottomleft)
+                        ya = self.ground.builder.lagrange(self.rect.bottomleft[0] )
                         xa = self.rect.bottomleft[0]
-                        yb = self.ground.builder.lagrange(self.rect.bottomright)
+                        yb = self.ground.builder.lagrange(self.rect.bottomright[0] )
                         xb = self.rect.bottomright[1]
                         xi = self.rect.midbottom[0]
                         yi = self.rect.midbottom[1]
@@ -140,9 +140,9 @@ class Projectile(ABC, pg.sprite.Sprite):
                         # THE TANGENT
                         # With a vector v = (-b,a), the equation of the tangent is " delta : a(x - xi) + b(y - yi) = 0"
                         # The vector that is determined by the 2 points is : v = (xb-xa, - (yb-ya))
-                        v = np.array([[xb - xa], [(yb - ya)]])
+                        v = np.array([[xb - xa], [yb - ya]])
                         b = -v[0][0]
-                        a = v[0][1]
+                        a = v[1][0]
                         # So now we have the equation of the tangent with a = v[0] and b = v[1], t : a(x-xi) + b(y-yi) = 0
 
                         # NORMAL VECTOR OF THE TANGENT
@@ -153,14 +153,14 @@ class Projectile(ABC, pg.sprite.Sprite):
                         # THE VECTOR THAT ARRIVES TO THE GROUND
                         # We need to find the equation of the vector that arrives to the ground
                         # The vector is w = (self.vx, self.vy)
-                        # If we take a point d from the straight line created by w the point here is to find and equation
+                        # If we take a point d from the straight line created by w the pointè here is to find and equation
                         # that as the symmetrical point of d from t'
 
                         # For the point d we can do : xd = -w + (xi,yi)
                         # So xd = xi - w[0] and yd = yi - w[1]
                         w = np.array([[self.vx], [self.vy]])
-                        xd = xi - w[0]
-                        yd = yi - w[1]
+                        xd = xi - w[0][0] * 2
+                        yd = yi - w[1][0] * 2
 
                         # We need to find w'
                         # We admit that w = (xd-xi, yd-yi)
@@ -188,47 +188,35 @@ class Projectile(ABC, pg.sprite.Sprite):
                         alpha_beta = (1/(pow(a,2) + pow(b,2))) * first_matrix * second_matrix
 
                         # w' = alpha(a,b) - beta(-b,a)
-                        ab_matrix = np.array([[a][b]])
-                        minus_ba_matrix = np.array([[-b][a]])
-                        w_prime = (alpha_beta[0][0] * ab_matrix) - (alpha_beta[0][1] * minus_ba_matrix)
-                        print(w_prime)
-                        if self.vx < 0:
-                            # If the projectile goes to the right
-                            if ya > yb:
-                                # If the ground goes down then the projectile will be going on the right
-                                self.fx = self.vx * self.k
-                                self.fy = -self.vy * self.k
-                            elif ya < yb:
-                                # If the ground goes up then the projectile will be going on the left
-                                self.fx = - self.vx * self.k
-                                self.fy = -self.vy * self.k
-                        if self.vx > 0:
-                            # If the projectile goes to the left
-                            if ya > yb:
-                                # If the ground goes down then the projectile will be going on the left
-                                self.fx = -self.vx * self.k
-                                self.fy = -self.vy * self.k
-                            elif ya < yb:
-                                # If the ground goes up then the projectile will be going on the right
-                                self.fx = self.vx * self.k
-                                self.fy = -self.vy * self.k
-                        elif ya == yb:
-                            # If it is a flat ground then is stops
-                            self.fx = 0
-                            self.fy = 0
+                        ab_matrix = np.array([[a],[b]])
+                        minus_ba_matrix = np.array([[-b],[a]])
+                        w_prime = (alpha_beta[0][0] * ab_matrix) - (alpha_beta[1][0] * minus_ba_matrix)
+                        print(w_prime[0][0])
+                        print(w_prime[1][0])
+                        if ya != 0 and yb != 0:
+                            if self.weapon.direction == self.weapon.RIGHT:
+                                self.fx = w_prime[0][0] * self.k
+                            else :
+                                self.fx = - w_prime[0][0] * self.k
+                            self.fy = - w_prime[1][0] * self.k
+                            self.is_shot = True
+                        # elif ya == yb:
+                        #     # If it is a flat ground then is stops
+                        #     self.fx = 0
+                        #     self.fy = 0
                         if self.on_floor():
                             # if the projectile is on the floor then  we give its speed the force that the ground has given to it after the bounce (fx and fy that have changed)
                             self.vx = self.fx
                             self.vy = self.fy
+                            # self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)
                         else:
                             # Else we apply the same scenario than before the first bounce with the gravity and the DT
                             self.vx = self.vx
                             self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
+                            self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)
                     else:
                         # If the speed of the projectile is too low we stop it from bouncing
                         self.shootFinished = True
-                        print("finished")
-                        print(str(self.rect.x)+","+str(self.rect.y))
                         self.ground.explode(old_rect.x, old_rect.y)
                         # pass
                         self.weapon.shot_end = True

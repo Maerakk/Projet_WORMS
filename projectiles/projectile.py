@@ -71,6 +71,7 @@ class Projectile(ABC, pg.sprite.Sprite):
             self.is_shot = True
 
             # We give the projectile a force that is equal for x and y for the moment
+            # TODO When the player is shooting they can't move
             # TODO while the player is holding the shoot button they can press the left and right button to shoot where they want it to be shot
             if self.weapon.direction == self.weapon.RIGHT:
                 self.fx = - self.weapon.force
@@ -138,8 +139,8 @@ class Projectile(ABC, pg.sprite.Sprite):
                         # With a vector v = (-b,a), the equation of the tangent is " delta : a(x - xi) + b(y - yi) = 0"
                         # The vector that is determined by the 2 points is : v = (xb-xa, - (yb-ya))
                         v = np.array([[xb - xa], [(yb - ya)]])
-                        b = -v[0]
-                        a = v[1]
+                        b = -v[0][0]
+                        a = v[0][1]
                         # So now we have the equation of the tangent with a = v[0] and b = v[1], t : a(x-xi) + b(y-yi) = 0
 
                         # NORMAL VECTOR OF THE TANGENT
@@ -179,8 +180,16 @@ class Projectile(ABC, pg.sprite.Sprite):
                         #       1/(a² + b²) * [[a,b][-b, a]] * [[a,-b][b,a]]
                         #      = 1/(a² + b²) * [[a²+b², 0][0, a² + b²] = [[0,1][1,0]]
                         # So at the end, [[alpha][beta]] = 1/(a² + b²) * [[a,b][-b,a]] * [[xd - xi][yd - yi]]
-                        alpha_beta = np.array([[alpha][beta]])
+                        alpha_beta = np.array([[alpha],[beta]])
+                        first_matrix = np.array([[a,b],[-b,a]])
+                        second_matrix = np.array([[xd-xi],[yd-yi]])
+                        alpha_beta = (1/(pow(a,2) + pow(b,2))) * first_matrix * second_matrix
 
+                        # w' = alpha(a,b) - beta(-b,a)
+                        ab_matrix = np.array([[a][b]])
+                        minus_ba_matrix = np.array([[-b][a]])
+                        w_prime = (alpha_beta[0][0] * ab_matrix) - (alpha_beta[0][1] * minus_ba_matrix)
+                        print(w_prime)
                         if self.vx < 0:
                             # If the projectile goes to the right
                             if ya > yb:

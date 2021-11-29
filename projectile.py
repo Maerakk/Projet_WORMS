@@ -2,16 +2,15 @@ import pygame as pg
 
 from game_config import *
 from move import *
-from game_config import *
-from game_state import *
+from abc import ABC, abstractmethod
 
 
 class Projectile(pg.sprite.Sprite):
-    def __init__(self, player, weapon, ground):
+    def __init__(self, weapon, ground):
         # Sprite
-        self.sprite_count = 0
         super().__init__()
         self.shootFinished = None
+        self.is_shot = False
 
         self.image = None
         self.mask = None
@@ -19,8 +18,8 @@ class Projectile(pg.sprite.Sprite):
         self.ground = ground
 
         # Position t=0
-        self.x0 = player.rect.top
-        self.y0 = player.rect.left
+        self.x0 = None
+        self.y0 = None
         # Speed t=0
         self.vx = 0
         self.vy = 0
@@ -30,7 +29,7 @@ class Projectile(pg.sprite.Sprite):
         self.coeff_vy = 0
 
         # Creation of the rectangle that contains the projectile
-        self.rect = pg.rect.Rect(0,0,0,0)
+        self.rect = pg.rect.Rect(0, 0, 0, 0)
 
         # Variable of the projectile
         self.weapon = weapon
@@ -52,24 +51,23 @@ class Projectile(pg.sprite.Sprite):
     def on_floor(self):
         return pg.sprite.collide_mask(self, self.ground)
 
-    def advance_state(self, weapon_has_shoot):
-        # Acceleration
-        if not self.weapon.shootFinished:
-            self.projectile_thrown(weapon_has_shoot)
+    def advance_state(self, next_move):
 
-    def projectile_thrown(self, projectile_thrown):
-        # If the projectile is thrown then its force is equals to the force it's thrown (it is the acceleration)
-        if projectile_thrown:
+        if next_move.shoot and not self.is_shot:
+            self.x0 = self.weapon.rect.top
+            self.y0 = self.weapon.rect.left
+
+            self.is_shot = True
+
             self.fx = - GameConfig.FORCE_THROWN
             self.fy = GameConfig.FORCE_THROWN
 
-        # Speed
-        # If the projectile isn't thrown yet it's speed is equal to its acceleration * time derivative
-        if self.not_thrown():
+            # Speed
             self.vx = self.fx
             self.vy = self.fy
-        else:
-            # If the projectile is thrown then the equation of its abscissa is the same
+
+        elif self.is_shot and not self.shootFinished :
+            # If the projectile is already thrown then the equation of its abscisse is the same
             # The equation for its ordinate is its previous ordinate + the force given by the gravity and the time derivative
             # self.vx = self.vx - (GameConfig.DT * ((6 * self.R * GameConfig.PI)/self.mass) * self.vx)
             # self.vy = self.vy + (GameConfig.DT * (GameConfig.GRAVITY/self.mass + (((6 * self.R * GameConfig.PI)/self.mass) * self.vy)))
@@ -87,7 +85,7 @@ class Projectile(pg.sprite.Sprite):
         # if self.on_floor():
         #     print("on floor")
         self.rect = self.rect.move(self.vx, self.vy)
-        # If if would wand to do the things right we could add a parameter that checks the gradient of the ground to add a multiplying factor according to its degree
+        # If if would want to do the things right we could add a parameter that checks the gradient of the ground to add a multiplying factor according to its degree
         if pg.sprite.collide_mask(self, self.ground):
             self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
             if abs(self.vy) > 5:
@@ -117,4 +115,4 @@ class Projectile(pg.sprite.Sprite):
                     self.vx = self.vx
                     self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
             else:
-                self.weapon.shootFinished = True
+                self.shootFinished = True

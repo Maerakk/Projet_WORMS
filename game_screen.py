@@ -18,7 +18,7 @@ class GameScreen:
         # Initialisations
         self.quitting = False
         GameConfig.init(cat_type)
-        Player.init_sprites(cat_type)
+        Player.init_sprites()
         self.game_state = GameState(ground_type)
 
     def process(self, window):
@@ -47,10 +47,7 @@ class GameScreen:
         # the window isn't refreshed for now
         # it will be at the end of each while loop
 
-        arme_thrown_1_Time = False
-        shoot = False
-        weapon_used = False
-        weapon_active = WeaponActive()
+
         # this is really the game loop
         while not self.quitting:
 
@@ -71,9 +68,9 @@ class GameScreen:
 
             # and we redraw the game
             self.game_state.draw(window)
+            pg.display.update()
 
-
-    def get_next_move(self, weapon_active):
+    def get_next_move(self):
         """
         Recongnize every next move to be make according to the entries of the user
         :return: Move type object whose attributes equals the actions asked by the user
@@ -89,18 +86,19 @@ class GameScreen:
             next_move.jump = True
         if keys[pg.K_1]:
             next_move.weapon_grenade = True
-            weapon_active.grenade = True
         if keys[pg.K_2]:
             next_move.weapon_bazooka = True
-            weapon_active.bazooka = True
         if keys[pg.K_3]:
             next_move.weapon_sheep = True
-            weapon_active.sheep = True
         if keys[pg.K_4]:
             next_move.weapon_sheep_controlled = True
-            weapon_active.sheep_controlled = True
         if keys[pg.K_LCTRL]:
             next_move.shoot = True
+
+        next_move.weapon = next_move.weapon_bazooka or \
+                           next_move.weapon_grenade or \
+                           next_move.weapon_sheep or \
+                           next_move.weapon_sheep_controlled
 
         return next_move
 

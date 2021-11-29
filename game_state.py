@@ -1,9 +1,7 @@
 import pygame as pg
 from game_config import *
 from player import *
-from weapon import *
 from ground import Ground
-from weapon import Weapon
 from weapons import Bazooka
 from weapons import Grenade
 from weapons import Gun
@@ -16,7 +14,7 @@ class GameState:
     Class that represent the state of the game at some point (player position etc. )
     """
 
-    def __init__(self,ground_type):
+    def __init__(self, ground_type):
         """
         During the initialisation
         We place 3 attributes that will change later
@@ -25,12 +23,7 @@ class GameState:
         The weapons (can be removed to be only player's attribute ?)
         """
         self.ground = Ground(ground_type)
-        self.player = Player(200,self.ground)
-        self.weapon = Weapon(self.player, self.ground)
-        self.bazooka = Bazooka(self.player,self.ground)
-        self.grenade = Grenade(self.player,self.ground)
-        self.sheep = Sheep(self.player, self.ground)
-        self.sheep_controlled = SheepControlled(self.player, self.ground)
+        self.player = Player(200, self.ground)
 
     def draw(self, window):
         """
@@ -42,24 +35,10 @@ class GameState:
         window.blit(GameConfig.BACKGROUND_IMG, (0, 0))
         # Then water
         # Then the ground
-        window.blit(self.ground.image, (0, 0))
+        self.ground.draw(window)
+
         # Then the player
         self.player.draw(window)
-
-    # We need an alone function to draw the weapons because they aren't always on screen
-    def draw_shoot(self, window):
-        self.weapon.projectile.init()
-        self.weapon.projectile.draw(window)
-
-    def draw_weapon(self, window,move):
-        if move.weapon_grenade:
-            self.grenade.draw(window)
-        if move.weapon_bazooka:
-            self.bazooka.draw(window)
-        if move.weapon_sheep:
-            self.sheep.draw(window)
-        if move.weapon_sheep_controlled:
-            self.sheep_controlled.draw(window)
 
     def advance_state(self, move):
         """
@@ -68,5 +47,3 @@ class GameState:
         :param move:
         """
         self.player.advance_state(move)
-
-

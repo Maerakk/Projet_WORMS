@@ -4,20 +4,19 @@ from game_config import *
 
 
 class BazookaProjectile(Projectile):
-    def __init__(self, player, weapon, ground, number):
-        super().__init__(player, weapon, ground)
-        self.player = player
+    def __init__(self, weapon, ground, style):
+        super().__init__(weapon, ground)
         self.weapon = weapon
         self.ground = ground
-        self.number = number
-    def init(self):
+        self.style = style
         self.mass = 0.0005
         self.rect = pg.rect.Rect(self.weapon.rect.top,
                                  self.weapon.rect.left,
                                  GameConfig.FISH_W,
                                  GameConfig.FISH_H)
-        self.image = GameConfig.FISHES_IMG[self.number]
-        self.madk = GameConfig.FISHES_MASK[self.number]
+
+        self.image = GameConfig.FISHES_IMG[self.style]
+        self.mask = GameConfig.FISHES_MASK[self.style]
 
 
 

@@ -1,6 +1,7 @@
 import pygame as pg
 from game_config import GameConfig
-
+from projectiles import Grenade
+from weapons import *
 
 class Player(pg.sprite.Sprite):
     """
@@ -13,10 +14,9 @@ class Player(pg.sprite.Sprite):
     RIGHT = 1
     NONE = 0
 
-    X = 0
 
     @staticmethod
-    def init_sprites(cat_type):
+    def init_sprites():
 
         Player.IMAGES = {
             Player.LEFT: GameConfig.WALK_LEFT_IMG,
@@ -35,21 +35,20 @@ class Player(pg.sprite.Sprite):
         # Instantiation of the parent
         super().__init__()
 
-        self.X = x
         # Attributes
         # For the animations
         self.sprite_count = 0
         self.direction = Player.NONE
 
         # Image of the player
-        self.image = Player.IMAGES[self.direction][self.sprite_count // 3]
+        self.image = Player.IMAGES[self.direction][self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER]
         # Mask of the player (to manage collisions)
-        self.mask = Player.MASKS[self.direction][self.sprite_count // 3]
+        self.mask = Player.MASKS[self.direction][self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER]
         # The ground to manage collisions
         # We will need to put the ground somewhere else
         self.ground = ground
 
-        y = self.ground.builder.lagrange(x) + 10
+        y = self.ground.builder.lagrange(x) + 5
         # Location
         # We put the player on the coordinates x and y on the generate graph
         self.rect = pg.Rect(x,
@@ -66,7 +65,7 @@ class Player(pg.sprite.Sprite):
         # Weapons
         # the player start with no weapon in the hand
         self.weapon = None
-        self.has_weapon = self.weapon is not None
+        self.has_weapon = False
 
     def draw(self, window):
         """
@@ -74,7 +73,8 @@ class Player(pg.sprite.Sprite):
         :param window: window where the player will be drawn
         """
         window.blit(self.image, self.rect.topleft)
-        self.weapon.draw(window)
+        if self.has_weapon:
+            self.weapon.draw(window)
 
     def on_ground(self):
         """
@@ -130,7 +130,7 @@ class Player(pg.sprite.Sprite):
         if self.on_ground():
             # If it is we check if the player is not inside the ground
             # +5 is to avoid false collisions
-            self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
+            self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 5
             # And we apply the force (fy) done by the user on the player
             # This force can be 0 or GameConfig.FORCE_JUMP if the player is jumping
             self.vy = fy * GameConfig.DT / 2  # We want it to be less speed so we divide it by 2
@@ -146,25 +146,26 @@ class Player(pg.sprite.Sprite):
             self.direction = Player.NONE
 
         self.sprite_count += 1
-        if self.sprite_count >= 3 * len(Player.IMAGES[self.direction]):
+        if self.sprite_count >= GameConfig.NB_SPRITE_FRAME_PLAYER * len(Player.IMAGES[self.direction]):
             self.sprite_count = 0
         self.image = Player.IMAGES[self.direction][
-            self.sprite_count // 3
+            self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER
             ]
         self.mask = Player.MASKS[self.direction][
-            self.sprite_count // 3
+            self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER
             ]
 
         # ~~~~~~~~~~~~~~~~~~~~~Weapon~~~~~~~~~~~~~~~~~~~~~
 
         if next_move.weapon:
+            self.has_weapon = True
             if next_move.weapon_grenade:
-                self.weapon = self.grenade
+                self.weapon = Grenade(self, self.ground)
             if next_move.weapon_bazooka:
-                self.weapon = self.bazooka
+                self.weapon = Bazooka(self, self.ground)
             if next_move.weapon_sheep:
-                self.weapon = self.sheep
+                self.weapon = Sheep(self, self.ground)
             if next_move.weapon_sheep_controlled:
-                self.weapon = self.sheep
-
-        self.weapon.advance_state()
+                self.weapon = SheepControlled(self, self.ground)
+        if self.has_weapon:
+            self.weapon.advance_state(next_move)

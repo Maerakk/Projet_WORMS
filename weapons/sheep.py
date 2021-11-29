@@ -1,4 +1,4 @@
-from weapon import *
+from weapons.weapon import *
 
 
 class Sheep(Weapon):

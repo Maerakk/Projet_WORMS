@@ -15,11 +15,9 @@ class GameConfig:
 
     Y_PLATEFORM = 716
 
-    PLAYER_W = 64
-    PLAYER_H = 64
-
-    CATS_W = 47
-    CATS_H = 47
+    PLAYER_W = 47
+    PLAYER_H = 47
+    NB_SPRITE_FRAME_PLAYER = 2
 
     DT = 1
     FORCE_LEFT = -20

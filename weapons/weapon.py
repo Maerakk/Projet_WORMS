@@ -1,31 +1,28 @@
+from abc import ABC, abstractmethod
 import pygame as pg
 
-import game_config
-from game_config import *
-from projectile import *
 
-
-class Weapon:
+class Weapon(ABC, pg.sprite.Sprite):
 
     def __init__(self, player, terrain):
+        super().__init__()
         self.player = player
         self.terrain = terrain
         self.nb_usages = 0
-        self.shootFinished = False
         self.projectile = None
         self.image = None
         self.rect = None
+        self.direction = self.player.RIGHT
 
     def draw(self, window):
-
+        if self.player.direction != self.direction and self.player.direction != self.player.NONE:
+            self.image = pg.transform.flip(self.image, True, False)
+            self.direction = self.player.direction
+        self.projectile.draw(window)
         window.blit(self.image, self.rect.topleft)
 
-    def advance_state(self, weapon_used):
-        # Acceleration
-        if not self.shootFinished:
-            self.projectile.projectile_thrown(weapon_used)
-            # to place in weapon
-        if next_move.shoot:
-            self.projectile.x0 = self.game_state.player.rect.top
-            self.projectile.y0 = self.game_state.player.rect.left
-            self.draw_shoot(window)
+    @abstractmethod
+    def advance_state(self, next_move):
+        self.rect.x = self.player.rect.x
+        self.rect.y = self.player.rect.y
+        self.projectile.advance_state(next_move)

@@ -21,6 +21,8 @@ class AppliConfig:
         AppliConfig.ARROW_UP_IMG = pg.image.load("assets/up_arrow.png")
         AppliConfig.ARROW_DOWN_IMG = pg.image.load("assets/down_arrow.png")
 
+        AppliConfig.CAT_SELECT = pg.image.load("assets/cats/selection.png")
+
         AppliConfig.LIST_TERRAIN_IMG = []
         for i in range(6):
             AppliConfig.LIST_TERRAIN_IMG.append(pg.image.load(f"assets/ground/terrains_type/terrain{str(i)}.png"))

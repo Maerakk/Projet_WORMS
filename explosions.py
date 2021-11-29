@@ -17,8 +17,8 @@ class Explosion(pg.sprite.Sprite):
         self.rect = pg.Rect(
             x,
             y,
-            GameConfig.EXPLOSION_W,
-            GameConfig.EXPLOSION_H
+            0,
+            0
         )
         self.image = Explosion.IMAGES[self.sprite_count//GameConfig.NB_SPRITE_FRAME_EXPLOSION]
         self.mask = Explosion.MASKS[self.sprite_count//GameConfig.NB_SPRITE_FRAME_EXPLOSION]
@@ -28,14 +28,13 @@ class Explosion(pg.sprite.Sprite):
     def advance_state(self,game_state):
         if self.on_screen:
             self.sprite_count += 1
-            if self.sprite_count >= GameConfig.NB_SPRITE_FRAME_EXPLOSION * len(Explosion.IMAGES):
+            if self.sprite_count >= GameConfig.NB_SPRITE_FRAME_EXPLOSION * len(Explosion.IMAGES)-1:
                 self.on_screen = False
-                self.sprite_count = 0
             self.image = Explosion.IMAGES[self.sprite_count // GameConfig.NB_SPRITE_FRAME_EXPLOSION]
             self.mask = Explosion.MASKS[self.sprite_count // GameConfig.NB_SPRITE_FRAME_EXPLOSION]
 
-        for player in game_state.player:
-            player.loose_life(self)
+            for player in game_state.player:
+                player.loose_life(self)
 
     def draw(self, window):
         if self.on_screen:

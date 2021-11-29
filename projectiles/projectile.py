@@ -106,6 +106,7 @@ class Projectile(ABC, pg.sprite.Sprite):
 
             # Position
             # We move the rectangle given that the new x and y are the vx and vy
+            old_rect = self.rect.copy()
             self.rect = self.rect.move(self.vx, self.vy)
             # If we would want to do the things right we could add a parameter that checks the gradient of the ground to add a multiplying factor according to its degree
             # TODO parameter to check the gradient of the ground
@@ -228,13 +229,12 @@ class Projectile(ABC, pg.sprite.Sprite):
                         self.shootFinished = True
                         print("finished")
                         print(str(self.rect.x)+","+str(self.rect.y))
-                        self.ground.explode(self.rect.x, self.rect.y)
+                        self.ground.explode(old_rect.x, old_rect.y)
                         # pass
                         self.weapon.shot_end = True
                 else:
-                    print(str(self.rect.x)+","+str(self.rect.y))
                     self.shootFinished = True
-                    self.ground.explode(self.rect.x, self.rect.y)
+                    self.ground.explode(old_rect.x, old_rect.y)
                     # pass
                     self.weapon.shot_end = True
 

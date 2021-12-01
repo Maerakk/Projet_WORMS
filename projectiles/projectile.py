@@ -191,19 +191,36 @@ class Projectile(ABC, pg.sprite.Sprite):
                         ab_matrix = np.array([[a],[b]])
                         minus_ba_matrix = np.array([[-b],[a]])
                         w_prime = (alpha_beta[0][0] * ab_matrix) - (alpha_beta[1][0] * minus_ba_matrix)
-                        print(w_prime[0][0])
-                        print(w_prime[1][0])
+                            # print(w_prime[0][0])
+                            # print(w_prime[1][0])
                         if ya != 0 and yb != 0:
-                            if self.weapon.direction == self.weapon.RIGHT:
-                                self.fx = w_prime[0][0] * self.k
-                            else :
-                                self.fx = - w_prime[0][0] * self.k
+                            # if ya > yb:
+                            #     self.fx = -w_prime[0][0] * self.k
+                            # else :
+                            #     self.fx = w_prime[0][0] * self.k
+                            self.fx = w_prime[0][0] * self.k
                             self.fy = - w_prime[1][0] * self.k
                             self.is_shot = True
                         # elif ya == yb:
                         #     # If it is a flat ground then is stops
                         #     self.fx = 0
                         #     self.fy = 0
+                        # print (w)
+                        # print (v)
+                        if (v[0][0]-2 < w[0][0] and w[0][0] > v[0][0]+2) and (v[1][0]-2 < w[1][0] and w[1][0] > v[1][0]+2):
+                            print(v[0][0]-2)
+                            print(w[0][0])
+                            print(v[0][0]+2)
+                            print(v[1][0]-2)
+                            print(w[1][0])
+                            print(v[1][0]+2)
+                            print("finish")
+                            self.shootFinished = True
+                            self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
+
+                            self.ground.explode(self.rect.x, self.ground.builder.lagrange(self.rect.midbottom[0]) + 15)
+                            self.weapon.shot_end = True
+
                         if self.on_floor():
                             # if the projectile is on the floor then  we give its speed the force that the ground has given to it after the bounce (fx and fy that have changed)
                             self.vx = self.fx
@@ -217,12 +234,12 @@ class Projectile(ABC, pg.sprite.Sprite):
                     else:
                         # If the speed of the projectile is too low we stop it from bouncing
                         self.shootFinished = True
-                        self.ground.explode(old_rect.x, old_rect.y)
+                        self.ground.explode(self.rect.x, self.rect.y)
                         # pass
                         self.weapon.shot_end = True
                 else:
                     self.shootFinished = True
-                    self.ground.explode(old_rect.x, old_rect.y)
+                    self.ground.explode(self.rect.x, self.rect.y)
                     # pass
                     self.weapon.shot_end = True
 

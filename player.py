@@ -149,23 +149,38 @@ class Player(pg.sprite.Sprite):
         """
         self.has_shot = False
         # ~~~~~~~~~~~~~~~~~~~~~Weapon~~~~~~~~~~~~~~~~~~~~~
-
+        # if the player clicks on a key associated to weapon
         if next_move.weapon:
-            try:
-                if next_move.weapon_grenade:
-                    self.current_weapon = random.choice(self.weapon_available[0])
-                if next_move.weapon_bazooka:
-                    self.current_weapon = random.choice(self.weapon_available[1])
-                if next_move.weapon_sheep:
-                    self.current_weapon = random.choice(self.weapon_available[2])
-                if next_move.weapon_sheep_controlled:
-                    self.current_weapon = random.choice(self.weapon_available[3])
-                self.has_weapon = True
-            except IndexError:
+            # if he has a weapon and this weapon is of the same type as the one he called then we get rid of his weapon
+            if self.has_weapon and (
+                    (next_move.weapon_grenade and isinstance(self.current_weapon, Grenade)) or \
+                    (next_move.weapon_bazooka and isinstance(self.current_weapon, Bazooka)) or \
+                    (next_move.weapon_sheep and isinstance(self.current_weapon, Mouse)) or \
+                    (next_move.weapon_sheep_controled and isinstance(self.current_weapon, Grenade))
+                                    ):
                 self.current_weapon = None
-                self.has_shot = True
+                self.has_weapon = False
+            # else we simply give him the weapon he wanted
+            else:
+                try:
+                    if next_move.weapon_grenade:
+                        self.current_weapon = random.choice(self.weapon_available[0])
+                    if next_move.weapon_bazooka:
+                        self.current_weapon = random.choice(self.weapon_available[1])
+                    if next_move.weapon_sheep:
+                        self.current_weapon = random.choice(self.weapon_available[2])
+                    if next_move.weapon_sheep_controlled:
+                        self.current_weapon = random.choice(self.weapon_available[3])
+                    self.has_weapon = True
+                # if there is an index error it means that the player doesnt have this weapon anymor so we simlply
+                # get rid of it
+                except IndexError:
+                    self.current_weapon = None
+                    self.has_shot = True
+        # if he has a weapon, we have to wall it's advance_state method
         if self.has_weapon:
             self.current_weapon.advance_state(next_move)
+            # and if the shot ended, we have to get rid of the weapon
             if self.current_weapon.shot_end:
                 if isinstance(self.current_weapon, Grenade):
                     self.weapon_available[0].remove(self.current_weapon)
@@ -212,7 +227,7 @@ class Player(pg.sprite.Sprite):
             self.vx = min(self.vx, vx_max)
             self.vx = max(self.vx, vx_min)
 
-        # We move the rectangle with the speed found (and the time derivative)
+            # We move the rectangle with the speed found (and the time derivative)
             self.rect = self.rect.move(self.vx * GameConfig.DT / 2, self.vy * GameConfig.DT)
             # We look if its new position is touching the ground or not
             if self.on_ground():
@@ -242,6 +257,10 @@ class Player(pg.sprite.Sprite):
         self.mask = self.MASKS[self.direction][
             self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER
             ]
+
+        # a little delay so there is no missclick
+        pg.time.delay(20)
+
 
     def loose_life(self, explosion):
         if pg.sprite.collide_mask(self, explosion):

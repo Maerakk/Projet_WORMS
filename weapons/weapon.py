@@ -21,7 +21,6 @@ class Weapon(ABC, pg.sprite.Sprite):
         self.is_shooting = False
         self.shot_end = False
 
-
     def draw(self, window):
         if self.player.direction != self.direction and self.player.direction != self.player.NONE:
             self.image = pg.transform.flip(self.image, True, False)

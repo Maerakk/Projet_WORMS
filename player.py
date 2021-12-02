@@ -2,7 +2,6 @@ import random
 
 import pygame as pg
 from game_config import GameConfig
-from projectiles import Grenade
 from weapons import *
 
 
@@ -89,7 +88,7 @@ class Player(pg.sprite.Sprite):
         # Weapons
         # the player start with no weapon in the hand
         self.weapon_available = [
-            [Grenade(self, self.ground), Grenade(self, self.ground), Grenade(self, self.ground)],
+            [Grenade(self, self.ground, random.randint(0, 1)), Grenade(self, self.ground, random.randint(0, 1)), Grenade(self, self.ground, random.randint(0, 1))],
             [Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1)),
              Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1))],
             [Mouse(self, self.ground)],
@@ -156,7 +155,7 @@ class Player(pg.sprite.Sprite):
                     (next_move.weapon_grenade and isinstance(self.current_weapon, Grenade)) or \
                     (next_move.weapon_bazooka and isinstance(self.current_weapon, Bazooka)) or \
                     (next_move.weapon_sheep and isinstance(self.current_weapon, Mouse)) or \
-                    (next_move.weapon_sheep_controled and isinstance(self.current_weapon, Grenade))
+                    (next_move.weapon_sheep_controlled and isinstance(self.current_weapon, Grenade))
                                     ):
                 self.current_weapon = None
                 self.has_weapon = False

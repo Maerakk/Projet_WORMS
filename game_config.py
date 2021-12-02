@@ -44,6 +44,9 @@ class GameConfig:
     FISH_H = 18
     FISH_W = 38
 
+    GRENADE_H = 26
+    GRENADE_W = 26
+
     # Explosion
     EXPLOSION_W = 256
     EXPLOSION_H = 256
@@ -70,11 +73,19 @@ class GameConfig:
 
         # Bazooka Projectiles
         GameConfig.FISHES_IMG = []
-        GameConfig.FISHES_MASK = []
         GameConfig.FISHES_IMG.append(pg.image.load('assets/weapons/fish_1.png'))
         GameConfig.FISHES_IMG.append(pg.image.load('assets/weapons/fish_2.png'))
+        GameConfig.FISHES_MASK = []
         GameConfig.FISHES_MASK.append(pg.mask.from_surface(GameConfig.FISHES_IMG[0]))
         GameConfig.FISHES_MASK.append(pg.mask.from_surface(GameConfig.FISHES_IMG[1]))
+
+        # Grenade (weapon + projectile)
+        GameConfig.GRENADE_IMG = []
+        GameConfig.GRENADE_IMG.append(pg.image.load('assets/weapons/grenade_1.png'))
+        GameConfig.GRENADE_IMG.append(pg.image.load('assets/weapons/grenade_2.png'))
+        GameConfig.GRENADE_MASK = []
+        GameConfig.GRENADE_MASK.append(pg.mask.from_surface(GameConfig.GRENADE_IMG[0]))
+        GameConfig.GRENADE_MASK.append(pg.mask.from_surface(GameConfig.GRENADE_IMG[1]))
 
         # Explosion
         GameConfig.EXPLOSION_IMG = [

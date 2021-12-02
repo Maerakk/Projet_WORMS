@@ -17,39 +17,20 @@ class GameScreen:
         """
         # Initialisations
         self.quitting = False
+        # sprites and images initialisation
         GameConfig.init()
         Explosion.init_sprites()
+
+        # initializing a local gameState
+        # it will represent the current gameState
         self.game_state = GameState(ground_type,cat_type)
 
     def process(self, window):
         """
-        The process equals the execution of the window and its contents
-        We will call game_loop in this function
-        :param window: window where the game will play
-        """
-        play = True
-        while play:
-            self.game_loop(window)
-            play = False
-        return self.quitting
-
-    def game_loop(self, window):
-        """
         this is the game loop, as long as the user wants to play, the loops run
         :param window: the window which the game will run in
         """
-
-        # initializing a local gameState
-        # it will represent the current gameState
-
-        # we draw the window the game is initialized
-        self.game_state.draw(window)
-        # the window isn't refreshed for now
-        # it will be at the end of each while loop
-
-
-        # this is really the game loop
-        while not self.quitting:
+        while not self.quitting and self.game_state.is_over < 0:
 
             # at each event we retrieve the event and analyse it
             # this is used only for quit event
@@ -69,6 +50,12 @@ class GameScreen:
             # and we redraw the game
             self.game_state.draw(window)
             pg.display.update()
+
+        # if self.quitting is set to false it means the game stopped because someone won
+        self.game_state.player = []
+        self.who_won = self.game_state.is_over
+        return self.quitting
+
 
     def get_next_move(self):
         """
@@ -102,6 +89,22 @@ class GameScreen:
 
         return next_move
 
+    def displayMessage(self, window, text, fontSize, x, y, color=AppliConfig.DARK_YELLOW):
+        """
+        this function displays
+        :param window: in a window
+        :param text: a text
+        :param fontSize: of size fontSize
+        :param x: at coordinates x
+        :param y: y
+        :param color: of color color (DARK_YELLOW by default)
+        took from tp1
+        """
+        font = pg.font.Font('assets/BradBunR.ttf', fontSize)
+        img = font.render(text, True, color)
+        displayRect = img.get_rect()
+        displayRect.center = (x, y)
+        window.blit(img, displayRect)
 
 if __name__ == '__main__':
     """

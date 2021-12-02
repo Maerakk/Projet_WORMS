@@ -88,7 +88,8 @@ class Player(pg.sprite.Sprite):
         # Weapons
         # the player start with no weapon in the hand
         self.weapon_available = [
-            [Grenade(self, self.ground, random.randint(0, 1)), Grenade(self, self.ground, random.randint(0, 1)), Grenade(self, self.ground, random.randint(0, 1))],
+            [Grenade(self, self.ground, random.randint(0, 1)), Grenade(self, self.ground, random.randint(0, 1)),
+             Grenade(self, self.ground, random.randint(0, 1))],
             [Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1)),
              Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1))],
             [Mouse(self, self.ground)],
@@ -101,6 +102,8 @@ class Player(pg.sprite.Sprite):
         # Life
         # the player starts with 100hp
         self.hp = 100
+        # and isn't dead
+        self.is_dead = False
 
     def displayMessage(self, window, text, fontSize, x, y, color=GameConfig.BLACK):
         """
@@ -156,7 +159,7 @@ class Player(pg.sprite.Sprite):
                     (next_move.weapon_bazooka and isinstance(self.current_weapon, Bazooka)) or \
                     (next_move.weapon_sheep and isinstance(self.current_weapon, Mouse)) or \
                     (next_move.weapon_sheep_controlled and isinstance(self.current_weapon, Grenade))
-                                    ):
+            ):
                 self.current_weapon = None
                 self.has_weapon = False
             # else we simply give him the weapon he wanted
@@ -215,16 +218,17 @@ class Player(pg.sprite.Sprite):
             self.vy = self.vy + GameConfig.GRAVITY * GameConfig.DT
 
             # Position, a lot of testing is done to find the right value
-            # x is the left of the rectangle of the player
-            x = self.rect.left
-            # We define the max and min speeds on x
-            vx_min = -x / GameConfig.DT
-            vx_max = (GameConfig.WINDOW_W - GameConfig.PLAYER_W - x) / GameConfig.DT
-            # And we find the variable :
-            # either min or max if the asked value is out of the bounds
-            # either the asked value
-            self.vx = min(self.vx, vx_max)
-            self.vx = max(self.vx, vx_min)
+            # dont need borders
+            # # x is the left of the rectangle of the player
+            # x = self.rect.left
+            # # We define the max and min speeds on x
+            # vx_min = -x / GameConfig.DT
+            # vx_max = (GameConfig.WINDOW_W - GameConfig.PLAYER_W - x) / GameConfig.DT
+            # # And we find the variable :
+            # # either min or max if the asked value is out of the bounds
+            # # either the asked value
+            # self.vx = min(self.vx, vx_max)
+            # self.vx = max(self.vx, vx_min)
 
             # We move the rectangle with the speed found (and the time derivative)
             self.rect = self.rect.move(self.vx * GameConfig.DT / 2, self.vy * GameConfig.DT)
@@ -238,6 +242,10 @@ class Player(pg.sprite.Sprite):
                 self.vy = fy * GameConfig.DT / 2  # We want it to be less speed so we divide it by 2
                 # We move the rectangle one last time
                 self.rect = self.rect
+
+        # if it's position is over the window, then he is dead
+        if self.rect.top > GameConfig.WINDOW_H:
+            self.is_dead = True
 
         # ~~~~~~~~~~~~~~~~~~~~~Sprite~~~~~~~~~~~~~~~~~~~~~
         if next_move.left:
@@ -260,8 +268,9 @@ class Player(pg.sprite.Sprite):
         # a little delay so there is no missclick
         pg.time.delay(20)
 
-
     def loose_life(self, explosion):
         if pg.sprite.collide_mask(self, explosion):
             print(20 // (explosion.sprite_count + 1))
             self.hp -= 20 // (explosion.sprite_count + 1)
+        if self.hp == 0:
+            self.is_dead = True

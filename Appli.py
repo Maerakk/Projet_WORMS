@@ -45,7 +45,43 @@ def main():
                 again = False
             else:
                 current_screen = GameScreen(terrain_type, cat_choice)
-                again = not current_screen.process(window)
+                if current_screen.process(window):
+                    again = False
+                else:
+                    if current_screen.who_won == 0:
+                        current_screen.displayMessage(window, "GG to Player 2 !", 100, AppliConfig.WINDOW_W / 2,
+                                                      AppliConfig.WINDOW_H / 2)
+                        pg.display.update()
+                        quitting = False
+                        time.sleep(1)
+                        while not quitting:
+                            # at each event we retrieve the event and analyse it
+                            # this is used only for quit event
+                            # for the movement we will use get_next_move
+                            for event in pg.event.get():
+                                # if it's a quit event (close button) then we put quit to True the we exit the loop and return
+                                if event.type == pg.QUIT:
+                                    quitting = True
+                                    again = False
+                                if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
+                                    quitting = True
+                    else:
+                        current_screen.displayMessage(window, "GG to Player 1 !", 100, AppliConfig.WINDOW_W / 2,
+                                                      AppliConfig.WINDOW_H / 2)
+                        pg.display.update()
+                        quitting = False
+                        time.sleep(1)
+                        while not quitting:
+                            # at each event we retrieve the event and analyse it
+                            # this is used only for quit event
+                            # for the movement we will use get_next_move
+                            for event in pg.event.get():
+                                # if it's a quit event (close button) then we put quit to True the we exit the loop and return
+                                if event.type == pg.QUIT:
+                                    quitting = True
+                                    again = False
+                                if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
+                                    quitting = True
 
         elif next_screen == WelcomeScreen.CREDITS:
             window.blit(AppliConfig.BACKGROUND_IMG, (0, 0))

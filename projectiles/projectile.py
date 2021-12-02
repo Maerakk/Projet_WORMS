@@ -254,3 +254,10 @@ class Projectile(ABC, pg.sprite.Sprite):
             self.y0 = self.weapon.rect.top
             self.rect.x = self.x0
             self.rect.y = self.y0
+
+        # after all that, we look whether the projectile is over the window or not
+        # if yes, we say that the shoot is finnished to the weapon
+        if self.rect.top > GameConfig.WINDOW_H:
+            self.shootFinished = True
+            self.ground.explode(self.rect.x, self.rect.y)
+            self.weapon.shot_end = True

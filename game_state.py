@@ -13,6 +13,8 @@ class GameState:
     """
     Class that represent the state of the game at some point (player position etc. )
     """
+    WIN_PLAYER1 = 1
+    WIN_PLAYER2 = 0
 
     def __init__(self, ground_type, cat_type):
         """
@@ -26,6 +28,9 @@ class GameState:
         self.player = [Player(GameConfig.WINDOW_W/10, self.ground, cat_type[0]), Player(GameConfig.WINDOW_W*9/10, self.ground,cat_type[1])]
         self.turn = 0
         self.frame_after_turn = 0
+        # this variables is set at -1 so it tells that nobody has won yet
+        # whenever it is set to 0 or 1 it will tell that someone won
+        self.is_over = -1
 
     def draw(self, window):
         """
@@ -53,3 +58,5 @@ class GameState:
         self.player[self.turn].advance_state(move)
         if self.player[self.turn].has_shot:
             self.turn = (self.turn + 1) % 2
+        if self.player[self.turn].is_dead:
+            self.is_over = self.turn

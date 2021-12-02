@@ -56,7 +56,6 @@ class Player(pg.sprite.Sprite):
             Player.NONE: self.STANDING_MASKS
         }
 
-
         # Instantiation of the parent
         super().__init__()
 
@@ -91,7 +90,8 @@ class Player(pg.sprite.Sprite):
         # the player start with no weapon in the hand
         self.weapon_available = [
             [Grenade(self, self.ground), Grenade(self, self.ground), Grenade(self, self.ground)],
-            [Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1)),Bazooka(self, self.ground, random.randint(0, 1))],
+            [Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1)),
+             Bazooka(self, self.ground, random.randint(0, 1)), Bazooka(self, self.ground, random.randint(0, 1))],
             [Mouse(self, self.ground)],
             [MouseControlled(self, self.ground)]
         ]
@@ -126,7 +126,8 @@ class Player(pg.sprite.Sprite):
         :param window: window where the player will be drawn
         """
         window.blit(self.image, self.rect.topleft)
-        self.displayMessage(window,f"{str(self.hp)} hp",20,self.rect.left+GameConfig.PLAYER_W/2,self.rect.bottom+5)
+        self.displayMessage(window, f"{str(self.hp)} hp", 20, self.rect.left + GameConfig.PLAYER_W / 2,
+                            self.rect.bottom + 5)
         # we draw the weapon only if the player has it in hand
         if self.has_weapon:
             self.current_weapon.draw(window)
@@ -177,54 +178,41 @@ class Player(pg.sprite.Sprite):
                 self.current_weapon = None
                 self.has_weapon = False
                 self.has_shot = True
+        else:
+            # we authorise movement only if the player doesnt have a weapon
+            # ~~~~~~~~~~~~~~~~~~~~~DÉPLACEMENT~~~~~~~~~~~~~~~~~~~~~
 
-        # ~~~~~~~~~~~~~~~~~~~~~DÉPLACEMENT~~~~~~~~~~~~~~~~~~~~~
+            # Acceleration de base a 0
+            fx = 0
+            fy = 0
+            # Then the acceleration is handled depending next_move
+            if next_move.left:
+                fx = GameConfig.FORCE_LEFT
+            if next_move.right:
+                fx = GameConfig.FORCE_RIGHT
+            if next_move.jump:
+                fy = GameConfig.FORCE_JUMP
 
-        # Acceleration de base a 0
-        fx = 0
-        fy = 0
-        # Then the acceleration is handled depending next_move
-        if next_move.left:
-            fx = GameConfig.FORCE_LEFT
-        if next_move.right:
-            fx = GameConfig.FORCE_RIGHT
-        if next_move.jump:
-            fy = GameConfig.FORCE_JUMP
+            # Basic speed at dt/dx (acceleration)
+            self.vx = fx * GameConfig.DT
+            # By default we imagine that the player is going down (gravity is always applied on him)
+            # If he's touching the ground we remove the gravity vector
+            # it avoid creating bugs like the "bounce" one making frenetically bounce the player on the ground
+            self.vy = self.vy + GameConfig.GRAVITY * GameConfig.DT
 
-        # Basic speed at dt/dx (acceleration)
-        self.vx = fx * GameConfig.DT
-        # By default we imagine that the player is going down (gravity is always applied on him)
-        # If he's touching the ground we remove the gravity vector
-        # it avoid creating bugs like the "bounce" one making frenetically bounce the player on the ground
-        self.vy = self.vy + GameConfig.GRAVITY * GameConfig.DT
-
-        # Position, a lot of testing is done to find the right value
-        # x is the left of the rectangle of the player
-        x = self.rect.left
-        # We define the max and min speeds on x
-        vx_min = -x / GameConfig.DT
-        vx_max = (GameConfig.WINDOW_W - GameConfig.PLAYER_W - x) / GameConfig.DT
-        # And we find the variable :
-        # either min or max if the asked value is out of the bounds
-        # either the asked value
-        self.vx = min(self.vx, vx_max)
-        self.vx = max(self.vx, vx_min)
+            # Position, a lot of testing is done to find the right value
+            # x is the left of the rectangle of the player
+            x = self.rect.left
+            # We define the max and min speeds on x
+            vx_min = -x / GameConfig.DT
+            vx_max = (GameConfig.WINDOW_W - GameConfig.PLAYER_W - x) / GameConfig.DT
+            # And we find the variable :
+            # either min or max if the asked value is out of the bounds
+            # either the asked value
+            self.vx = min(self.vx, vx_max)
+            self.vx = max(self.vx, vx_min)
 
         # We move the rectangle with the speed found (and the time derivative)
-        if self.current_weapon is not None:
-            if self.current_weapon.shot_end:
-                self.rect = self.rect.move(self.vx * GameConfig.DT / 2, self.vy * GameConfig.DT)
-                # We look if its new position is touching the ground or not
-                if self.on_ground():
-                    # If it is we check if the player is not inside the ground
-                    # +5 is to avoid false collisions
-                    self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 5
-                    # And we apply the force (fy) done by the user on the player
-                    # This force can be 0 or GameConfig.FORCE_JUMP if the player is jumping
-                    self.vy = fy * GameConfig.DT / 2  # We want it to be less speed so we divide it by 2
-                    # We move the rectangle one last time
-                    self.rect = self.rect.move(0, self.vy)
-        else:
             self.rect = self.rect.move(self.vx * GameConfig.DT / 2, self.vy * GameConfig.DT)
             # We look if its new position is touching the ground or not
             if self.on_ground():
@@ -236,7 +224,6 @@ class Player(pg.sprite.Sprite):
                 self.vy = fy * GameConfig.DT / 2  # We want it to be less speed so we divide it by 2
                 # We move the rectangle one last time
                 self.rect = self.rect
-
 
         # ~~~~~~~~~~~~~~~~~~~~~Sprite~~~~~~~~~~~~~~~~~~~~~
         if next_move.left:
@@ -255,8 +242,6 @@ class Player(pg.sprite.Sprite):
         self.mask = self.MASKS[self.direction][
             self.sprite_count // GameConfig.NB_SPRITE_FRAME_PLAYER
             ]
-
-
 
     def loose_life(self, explosion):
         if pg.sprite.collide_mask(self, explosion):

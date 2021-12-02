@@ -87,7 +87,6 @@ class Projectile(ABC, pg.sprite.Sprite):
 
         # if the shot has started and is not ended we draw the trajectories
         elif self.is_shot and not self.shootFinished:
-            print(str(self.rect.x)+","+str(self.rect.y))
             # For the vector V = (vx, vy, x, y) it will be added the time derivate + a vector
             # DT is the time derivate and the vector is (0,-g/m, vx, vy)
             # So it will be V + DT* [0,-g/m, vx, vy]

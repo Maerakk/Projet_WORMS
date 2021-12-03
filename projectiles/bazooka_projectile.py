@@ -11,7 +11,7 @@ class BazookaProjectile(Projectile):
         # The bazooka's projectile explodes at impact so it does not have any bounce neither elasticity
         self.k = 0.8
 
-        self.bounce = False
+        self.bounce = True
         self.rect = pg.rect.Rect(self.weapon.rect.top,
                                  self.weapon.rect.left,
                                  GameConfig.FISH_W,

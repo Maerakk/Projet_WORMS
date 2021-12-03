@@ -71,7 +71,6 @@ class Projectile(ABC, pg.sprite.Sprite):
             self.is_shot = True
 
             # We give the projectile a force that is equal for x and y for the moment
-            # TODO When the player is shooting they can't move
             # TODO while the player is holding the shoot button they can press the left and right button to shoot where they want it to be shot
             if self.weapon.direction == self.weapon.RIGHT:
                 self.fx = - self.weapon.force
@@ -87,32 +86,28 @@ class Projectile(ABC, pg.sprite.Sprite):
 
         # if the shot has started and is not ended we draw the trajectories
         elif self.is_shot and not self.shootFinished:
-            # For the vector V = (vx, vy, x, y) it will be added the time derivate + a vector
-            # DT is the time derivate and the vector is (0,-g/m, vx, vy)
-            # So it will be V + DT* [0,-g/m, vx, vy]
-            # We decided to do all the variables one by one so we won't have any vector or array here
-
-            # If the projectile is already thrown then the equation of its abscisse is the same (DT * 0 = 0)
-            # The equation for its ordinate is its previous ordinate + the force given by the gravity and the time derivative
-            # We decided to put a mass at 1 for every projectile
 
             # Next comment is a try for the friction
-            # self.vx = self.vx - (GameConfig.DT * ((6 * self.R * GameConfig.PI)/self.mass) * self.vx)
-            # self.vy = self.vy + (GameConfig.DT * (GameConfig.GRAVITY/self.mass + (((6 * self.R * GameConfig.PI)/self.mass) * self.vy)))
+            self.vx = self.vx - (GameConfig.DT * ((6 * self.R * GameConfig.PI)/self.mass) * self.vx)
+            self.vy = self.vy + (GameConfig.DT * (GameConfig.GRAVITY/self.mass + (((6 * self.R * GameConfig.PI)/self.mass) * self.vy)))
 
-            self.vx = self.vx
-            self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
+            # self.vx = self.vx
+            # self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
 
             # Position
             # We move the rectangle given that the new x and y are the vx and vy
             old_rect = self.rect.copy()
             self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)
-            # If we would want to do the things right we could add a parameter that checks the gradient of the ground to add a multiplying factor according to its degree
+            # If we would want to do the things right we could add a parameter that checks the gradient of the ground to add a multiplycng factor according to its degree
             # TODO parameter to check the gradient of the ground
 
             # We check if the projectile as touch the ground
             if pg.sprite.collide_mask(self, self.ground):
-
+                collisionx, collisiony = pg.sprite.collide_mask(self,self.ground)
+                collisionx = collisionx + self.rect.left
+                collisiony = collisiony + self.rect.top
+                # print (collisionx)
+                # print (collisiony)
                 # If yes we put the projectile on the top of the ground at the same abscissa (to avoid the projectile IN the ground)
                 self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
                 if self.bounce:
@@ -123,46 +118,54 @@ class Projectile(ABC, pg.sprite.Sprite):
                     # To create the effect of the energy taken by the bounce on the floor we apply a constant (k, the elasticity)
                     # So in reality the new vector is v' = k * (a, -b)
 
+                    if self.ground.type == 5:
+                        self.fx = self.fx * self.k
+                        self.fy = -self.fy * self.k
+                        self.is_shot = True
+
+
                     if abs(self.vy) > 5:
                         # We consider the impact point is the bottom middle of the projectile for the moment
-                        # the impact point will be i (xi, yi)
+                        # the impact point will be i (xc, yc)
                         # We take 2 points that will be at the same pixel apart from the middle of the projectile
                         # We will approach the equation of the tangent by a straight line that go through 2 points : a and b
                         # When we find it we will find the parallel line that goes through the middle point of the projectile
-                        ya = self.ground.builder.lagrange(self.rect.bottomleft[0] )
-                        xa = self.rect.bottomleft[0]
-                        yb = self.ground.builder.lagrange(self.rect.bottomright[0] )
-                        xb = self.rect.bottomright[1]
-                        xi = self.rect.midbottom[0]
-                        yi = self.rect.midbottom[1]
+                        xa = collisionx - 2
+                        ya = self.ground.builder.lagrange(xa)
+                        xb = collisionx + 2
+                        yb = self.ground.builder.lagrange(xb)
+                        xc = collisionx
+                        yc = collisiony
 
                         # THE TANGENT
-                        # With a vector v = (-b,a), the equation of the tangent is " delta : a(x - xi) + b(y - yi) = 0"
-                        # The vector that is determined by the 2 points is : v = (xb-xa, - (yb-ya))
+                        # With a vector v = (-b,a), the equation of the tangent is " delta : a(x - xc) + b(y - yc) = 0"
+                        # The vector v that is determined by the 2 points (a and b) is : v = (xb-xa, - (yb-ya))
                         v = np.array([[xb - xa], [yb - ya]])
-                        b = -v[0][0]
+                        b = - v[0][0]
                         a = v[1][0]
-                        # So now we have the equation of the tangent with a = v[0] and b = v[1], t : a(x-xi) + b(y-yi) = 0
+                        # So now we have the equation of the tangent with a = v[0] and b = v[1], t : a(x-xc) + b(y-yc) = 0
 
                         # NORMAL VECTOR OF THE TANGENT
                         # The normal vector of the tangent is u(a,b)
                         u = np.array([[a], [b]])
-                        # So the equation of t' is t' : -b(x - xi) + a(y-yi) = 0
+                        # So the equation of t' is t' : -b(x - xc) + a(y-yc) = 0
 
                         # THE VECTOR THAT ARRIVES TO THE GROUND
                         # We need to find the equation of the vector that arrives to the ground
                         # The vector is w = (self.vx, self.vy)
-                        # If we take a point d from the straight line created by w the pointè here is to find and equation
+                        # If we take a point d from the straight line created by w the point here is to find and equation
                         # that as the symmetrical point of d from t'
 
-                        # For the point d we can do : xd = -w + (xi,yi)
-                        # So xd = xi - w[0] and yd = yi - w[1]
+                        # For the point d we can do : xd = -w + (xc,yc)
+                        # So xd = xc - w[0] and yd = yc - w[1]
                         w = np.array([[self.vx], [self.vy]])
-                        xd = xi - w[0][0] * 2
-                        yd = yi - w[1][0] * 2
+                        print(self.vx)
+                        print(self.vy)
+                        xd = xc - w[0][0] * 2
+                        yd = yc - w[1][0] * 2
 
                         # We need to find w'
-                        # We admit that w = (xd-xi, yd-yi)
+                        # We admit that w = (xd-xc, yd-yc)
                         #                 = alpha(a,b) + beta(-b,a)
                         #                 =  (alpha*a - beta*b, alpha*b + beta*a)
                         # So w' = alpha(a,b) - beta(-b,a)
@@ -170,20 +173,20 @@ class Projectile(ABC, pg.sprite.Sprite):
                         beta = 0
                         # RESOLVE THE EQUATION TO FIND ALPHA AND BETA
                         # We have a system of 2 equations here :
-                        # { alpha * a - beta * b = xd - xi
-                        # { beta*alpha + alpha * b) = yd - yi
+                        # { alpha * a - beta * b = xd - xc
+                        # { beta*a + alpha * b) = yd - yc
                         # this is equal to the equation of matrices :
-                        # (a -b) (alpha) = (xb-xa)
-                        # (b a) (beta) = (yb - ya)
+                        # (a -b) (alpha) = (xd-xc)
+                        # (b a) (beta) = (yd - ya)
                         # If we divide by the matrix ( [[a,-b] [b,a]]) we will have the equation for the matrix ([[alpha][beta]])
                         # The opposite of this matrix is i / (a² * b²) :
                         #       Verification of the opposite of the matrix
                         #       1/(a² + b²) * [[a,b][-b, a]] * [[a,-b][b,a]]
                         #      = 1/(a² + b²) * [[a²+b², 0][0, a² + b²] = [[0,1][1,0]]
-                        # So at the end, [[alpha][beta]] = 1/(a² + b²) * [[a,b][-b,a]] * [[xd - xi][yd - yi]]
+                        # So at the end, [[alpha][beta]] = 1/(a² + b²) * [[a,b][-b,a]] * [[xd - xc][yd - yc]]
                         alpha_beta = np.array([[alpha],[beta]])
                         first_matrix = np.array([[a,b],[-b,a]])
-                        second_matrix = np.array([[xd-xi],[yd-yi]])
+                        second_matrix = np.array([[xd-xc],[yd-yc]])
                         alpha_beta = (1/(pow(a,2) + pow(b,2))) * first_matrix * second_matrix
 
                         # w' = alpha(a,b) - beta(-b,a)
@@ -207,13 +210,14 @@ class Projectile(ABC, pg.sprite.Sprite):
                         # print (w)
                         # print (v)
                         if (v[0][0]-2 < w[0][0] and w[0][0] > v[0][0]+2) and (v[1][0]-2 < w[1][0] and w[1][0] > v[1][0]+2):
-                            print(v[0][0]-2)
-                            print(w[0][0])
-                            print(v[0][0]+2)
-                            print(v[1][0]-2)
-                            print(w[1][0])
-                            print(v[1][0]+2)
-                            print("finish")
+                            # print(v[0][0]-2)
+                            # print(w[0][0])
+                            # print(v[0][0]+2)
+                            # print(v[1][0]-2)
+                            # print(w[1][0])
+                            # print(v[1][0]+2)
+                            # print("f
+                            # inish")
                             self.shootFinished = True
                             self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
 

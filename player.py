@@ -183,18 +183,18 @@ class Player(pg.sprite.Sprite):
         if self.has_weapon:
             self.current_weapon.advance_state(next_move)
             # and if the shot ended, we have to get rid of the weapon
-            if self.current_weapon.shot_end:
-                if isinstance(self.current_weapon, Grenade):
-                    self.weapon_available[0].remove(self.current_weapon)
-                if isinstance(self.current_weapon, Bazooka):
-                    self.weapon_available[1].remove(self.current_weapon)
-                if isinstance(self.current_weapon, Mouse):
-                    self.weapon_available[2].remove(self.current_weapon)
-                if isinstance(self.current_weapon, MouseControlled):
-                    self.weapon_available[3].remove(self.current_weapon)
-                self.current_weapon = None
-                self.has_weapon = False
-                self.has_shot = True
+            # if self.current_weapon.shot_end:
+            #     if isinstance(self.current_weapon, Grenade):
+            #         self.weapon_available[0].remove(self.current_weapon)
+            #     if isinstance(self.current_weapon, Bazooka):
+            #         self.weapon_available[1].remove(self.current_weapon)
+            #     if isinstance(self.current_weapon, Mouse):
+            #         self.weapon_available[2].remove(self.current_weapon)
+            #     if isinstance(self.current_weapon, MouseControlled):
+            #         self.weapon_available[3].remove(self.current_weapon)
+            #     self.current_weapon = None
+            #     self.has_weapon = False
+            #     self.has_shot = True
         else:
             # we authorise movement only if the player doesnt have a weapon
             # ~~~~~~~~~~~~~~~~~~~~~DÉPLACEMENT~~~~~~~~~~~~~~~~~~~~~

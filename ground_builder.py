@@ -44,10 +44,12 @@ class GroundBuilder:
 			list_point.append([GameConfig.WINDOW_W / 2, uniform(GameConfig.WINDOW_H / 4, GameConfig.WINDOW_H / 2)])
 			list_point.append([GameConfig.WINDOW_W * 3 / 4, uniform(GameConfig.WINDOW_H, GameConfig.WINDOW_H + 10)])
 		elif terrain_type == 5:
-			# choice 5 is a 3 spike terrain without any water
-			list_point.append([GameConfig.WINDOW_W * 2 / 5, uniform(GameConfig.WINDOW_H * 2 / 5, GameConfig.WINDOW_H * 9 / 10)])
-			list_point.append([GameConfig.WINDOW_W / 2, uniform(list_point[1][1], list_point[1][1] + 100)])
-			list_point.append([GameConfig.WINDOW_W * 4 / 5, list_point[1][1]])
+			# # choice 5 is a 3 spike terrain without any water
+			# list_point.append([GameConfig.WINDOW_W * 2 / 5, uniform(GameConfig.WINDOW_H * 2 / 5, GameConfig.WINDOW_H * 9 / 10)])
+			# list_point.append([GameConfig.WINDOW_W / 2, uniform(list_point[1][1], list_point[1][1] + 100)])
+			# list_point.append([GameConfig.WINDOW_W * 4 / 5, list_point[1][1]])
+			# plane terrain for bounce
+			pass
 
 		self.list_point = list_point
 

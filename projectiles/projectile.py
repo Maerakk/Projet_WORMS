@@ -111,7 +111,7 @@ class Projectile(ABC, pg.sprite.Sprite):
                 # If yes we put the projectile on the top of the ground at the same abscissa (to avoid the projectile IN the ground)
                 self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
                 if self.ground.type == 5:
-                    if self.vy >3:
+                    if self.vy >5:
                         print (self.vx, self.vy)
                         self.vy = -self.vy * self.k
                         self.vx = self.vx * self.k
@@ -240,7 +240,7 @@ class Projectile(ABC, pg.sprite.Sprite):
                             self.vx = self.vx
                             self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
                             self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)
-                    """else:
+                    else:
                         # If the speed of the projectile is too low we stop it from bouncing
                         self.shootFinished = True
                         self.ground.explode(self.rect.x, self.rect.y)
@@ -250,7 +250,7 @@ class Projectile(ABC, pg.sprite.Sprite):
                     self.shootFinished = True
                     self.ground.explode(self.rect.x, self.rect.y) 
                     # pass
-                    self.weapon.shot_end = True"""
+                    self.weapon.shot_end = True
 
         elif self.shootFinished:
             pass

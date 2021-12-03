@@ -49,8 +49,8 @@ class GroundBuilder:
 			# list_point.append([GameConfig.WINDOW_W / 2, uniform(list_point[1][1], list_point[1][1] + 100)])
 			# list_point.append([GameConfig.WINDOW_W * 4 / 5, list_point[1][1]])
 			# plane terrain for bounce
-			pass
-
+			list_point[0] = [0,GameConfig.WINDOW_H*4/5]
+			list_point[1] = [GameConfig.WINDOW_W,GameConfig.WINDOW_H*4/5]
 		self.list_point = list_point
 
 	def lagrange(self, x):

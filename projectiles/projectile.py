@@ -20,6 +20,9 @@ class Projectile(ABC, pg.sprite.Sprite):
         # Position t=0
         self.x0 = self.weapon.rect.right
         self.y0 = self.weapon.rect.top
+        #Position
+        self.x = self.x0
+        self.y = self.y0
         # Speed t=0
         self.vx = 0
         self.vy = 0
@@ -34,7 +37,7 @@ class Projectile(ABC, pg.sprite.Sprite):
         # Variable of the projectile
         self.weapon = weapon
         self.mass = 0.0005
-        self.R = 0.01
+        self.R = 25
 
         self.fx = 0
         self.fy = 0
@@ -59,10 +62,11 @@ class Projectile(ABC, pg.sprite.Sprite):
 
         if next_move.shoot and not self.weapon.is_shot:
             # If the player continues to press the button without any interruption (weapon.is_shot represent it)
-            print("ok")
             self.weapon.force += -1
             self.x0 = self.weapon.rect.top
             self.y0 = self.weapon.rect.left
+            self.x = self.x0
+            self.y = self.y0
 
         # If the player drops the shot button then the weapon is charged and ready to shoot the projectile
         if not self.is_shot and self.weapon.is_shot:
@@ -87,12 +91,8 @@ class Projectile(ABC, pg.sprite.Sprite):
         # if the shot has started and is not ended we draw the trajectories
         elif self.is_shot and not self.shootFinished:
 
-            # Next comment is a try for the friction
-            self.vx = self.vx - (GameConfig.DT * ((6 * self.R * GameConfig.PI)/self.mass) * self.vx)
-            self.vy = self.vy + (GameConfig.DT * (GameConfig.GRAVITY/self.mass + (((6 * self.R * GameConfig.PI)/self.mass) * self.vy)))
-
-            # self.vx = self.vx
-            # self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
+            self.vx = self.vx
+            self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
 
             # Position
             # We move the rectangle given that the new x and y are the vx and vy
@@ -110,7 +110,15 @@ class Projectile(ABC, pg.sprite.Sprite):
                 # print (collisiony)
                 # If yes we put the projectile on the top of the ground at the same abscissa (to avoid the projectile IN the ground)
                 self.rect.bottom = self.ground.builder.lagrange(self.rect.midbottom[0]) + 15
-                if self.bounce:
+                if self.ground.type == 5:
+                    if self.vy >3:
+                        print (self.vx, self.vy)
+                        self.vy = -self.vy * self.k
+                        self.vx = self.vx * self.k
+                        # self.fx = self.vx * self.k
+                        # self.fy = self.vy * self.k
+                        self.is_shot = True
+                elif self.bounce:
                     # If the speed is higher than 5 then we do a bounce
                     # BOUNCE EXPLANATION :
                     # We juste take the same vector (vx and vy) that the projectile has when it arrives on the floor and take the symmetrical from the floor
@@ -118,10 +126,7 @@ class Projectile(ABC, pg.sprite.Sprite):
                     # To create the effect of the energy taken by the bounce on the floor we apply a constant (k, the elasticity)
                     # So in reality the new vector is v' = k * (a, -b)
 
-                    if self.ground.type == 5:
-                        self.fx = self.fx * self.k
-                        self.fy = -self.fy * self.k
-                        self.is_shot = True
+
 
 
                     if abs(self.vy) > 5:
@@ -136,6 +141,7 @@ class Projectile(ABC, pg.sprite.Sprite):
                         yb = self.ground.builder.lagrange(xb)
                         xc = collisionx
                         yc = collisiony
+
 
                         # THE TANGENT
                         # With a vector v = (-b,a), the equation of the tangent is " delta : a(x - xc) + b(y - yc) = 0"
@@ -234,7 +240,7 @@ class Projectile(ABC, pg.sprite.Sprite):
                             self.vx = self.vx
                             self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
                             self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)
-                    else:
+                    """else:
                         # If the speed of the projectile is too low we stop it from bouncing
                         self.shootFinished = True
                         self.ground.explode(self.rect.x, self.rect.y)
@@ -242,9 +248,9 @@ class Projectile(ABC, pg.sprite.Sprite):
                         self.weapon.shot_end = True
                 else:
                     self.shootFinished = True
-                    self.ground.explode(self.rect.x, self.rect.y)
+                    self.ground.explode(self.rect.x, self.rect.y) 
                     # pass
-                    self.weapon.shot_end = True
+                    self.weapon.shot_end = True"""
 
         elif self.shootFinished:
             pass

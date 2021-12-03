@@ -26,6 +26,8 @@ class Ground(pg.sprite.Sprite):
         self.mask = pg.mask.from_surface(self.image)
         self.explosion = None
 
+        self.type = ground_type
+
     def draw(self, window):
         window.blit(self.image, (0, 0))
         if self.explosion is not None:

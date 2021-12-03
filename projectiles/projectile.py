@@ -118,6 +118,19 @@ class Projectile(ABC, pg.sprite.Sprite):
                         # self.fx = self.vx * self.k
                         # self.fy = self.vy * self.k
                         self.is_shot = True
+                    else:
+                        # If the speed of the projectile is too low we stop it from bouncing
+                        self.shootFinished = True
+                        self.ground.explode(self.rect.x, self.rect.y)
+                        # pass
+                        self.weapon.shot_end = True
+                else:
+                    # If the speed of the projectile is too low we stop it from bouncing
+                    self.shootFinished = True
+                    self.ground.explode(self.rect.x, self.rect.y)
+                    # pass
+                    self.weapon.shot_end = True
+                """
                 elif self.bounce:
                     # If the speed is higher than 5 then we do a bounce
                     # BOUNCE EXPLANATION :
@@ -239,18 +252,13 @@ class Projectile(ABC, pg.sprite.Sprite):
                             # Else we apply the same scenario than before the first bounce with the gravity and the DT
                             self.vx = self.vx
                             self.vy = self.vy + (GameConfig.DT * GameConfig.GRAVITY)
-                            self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)
-                    else:
-                        # If the speed of the projectile is too low we stop it from bouncing
-                        self.shootFinished = True
-                        self.ground.explode(self.rect.x, self.rect.y)
-                        # pass
-                        self.weapon.shot_end = True
-                else:
-                    self.shootFinished = True
-                    self.ground.explode(self.rect.x, self.rect.y) 
-                    # pass
-                    self.weapon.shot_end = True
+                            self.rect = self.rect.move(self.vx * GameConfig.DT, self.vy * GameConfig.DT)"""
+
+            """else:
+                self.shootFinished = True
+                self.ground.explode(self.rect.x, self.rect.y)
+                # pass
+                self.weapon.shot_end = True"""
 
         elif self.shootFinished:
             pass

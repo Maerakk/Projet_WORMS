@@ -1,2 +1,2 @@
 # Projet_WORMS
-qslk,dklq,d
+Pour lancer le jeu il faut le faire par le fichier Appli.py
